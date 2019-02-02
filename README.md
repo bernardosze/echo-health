@@ -49,7 +49,10 @@ all we gonna work in a centralized repository, the best approach is to set the e
 3 - Install Apache http server and deploy the app
 
 
-*** Infrastructure features already implemented and tested ***
+*******************************************************************************************
+Infrastructure features already implemented and tested
+*******************************************************************************************
+
 1 - Route management, not allowing direct access to .php files through urls
 
 2 - Authentication service
@@ -79,8 +82,9 @@ Todo: Define through next group meetings:
 
 2 - Front-end form validation library;
 
-
-*** Main project folder structure ***
+*******************************************************************************************
+Main project folder structure
+*******************************************************************************************
 
 1 - controllers -> Stores all route controllers. It can be organized by subfolders
 
