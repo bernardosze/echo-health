@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME}  -f [OR]
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#ignore security for static/ directory (directory|another_directory)
+RewriteRule ^(static|user)($|/) - [L]
+#general redirect rule
+RewriteRule ^(.*)$ index.php [L,QSA]
