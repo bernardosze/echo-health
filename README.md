@@ -49,7 +49,7 @@ all we gonna work in a centralized repository, the best approach is to set the e
 3 - Install Apache http server and deploy the app
 
 
-*******************************************************************************************
+///////////////////////////////////////////////////////////////////////////////////////////
 Infrastructure features already implemented and tested
 *******************************************************************************************
 
