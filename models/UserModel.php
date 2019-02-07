@@ -9,11 +9,15 @@ namespace models {
     use PDOException;
     use \database\Database as Database;
     use \util\AppConstants as AppConstants;
+    use \util\exceptions\AuthenticationException as AuthenticationException;
+    use \util\exceptions\RegisterUserException as RegisterUserException;
 
     class UserModel
     {
 
         private const USER_REGISTER_DATA_EXCEPTION = "Not all user data was provided to be inserted.";
+        private const USER_REGISTER_AGE_EXCEPTION = "Date of birthday cannot be a future date.";
+        private const USER_REGISTER_EMAIL_DUPLICATED_EXCEPTION = "Informed email is already in use, please choose another one.";
         private const USER_AUTHENTICATION_EXCEPTION = "User data not provided.";
         private const INVALID_USER_PASSWORD_EXCEPTION = "Password not match.";
         private const USER_NOT_FOUND_EXCEPTION = "User not found into database.";
@@ -40,15 +44,18 @@ namespace models {
         public function registerUser($email, $firstName, $lastName, $hash, $birthday)
         {
             if (empty($email) || empty($firstName) || empty($lastName) || empty($hash) || empty($birthday)) {
-                throw new Exception(self::USER_REGISTER_DATA_EXCEPTION);
+                throw new RegisterUserException(self::USER_REGISTER_DATA_EXCEPTION);
             }
+
+            //General business rules
+            $this->validateUserDateOfBirth($birthday);
 
             $query = "insert into USER (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
                 "values(:email, :firstName, :lastName, :password, :birthday, :blocked, :recordCreation )";
 
-            try {
+            $db = Database::getConnection();
 
-                $db = Database::getConnection();
+            try {
 
                 $statement = $db->prepare($query);
                 $statement->bindValue(":email", $email);
@@ -61,12 +68,27 @@ namespace models {
 
                 $statement->execute();
 
-            } catch (Excetion $e) {
-                throw new Exception($e->getMessage());
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    //Email in duplicity
+                    throw new RegisterUserException(self::USER_REGISTER_EMAIL_DUPLICATED_EXCEPTION);
+                } else {
+                    throw $e;
+                }
             } finally {
                 $statement->closeCursor();
             }
 
+        }
+
+        /**
+         * A valid date cannot be a future date
+         */
+        private function validateUserDateOfBirth($birthday)
+        {
+            if (date("Y-m-d") < date("Y-m-d", strtotime($birthday))) {
+                throw new RegisterUserException(self::USER_REGISTER_AGE_EXCEPTION);
+            }
         }
 
         /**
@@ -75,7 +97,7 @@ namespace models {
         public function authenticateUser($email, $hash)
         {
             if (empty($email) || empty($hash)) {
-                throw new Exception(self::USER_AUTHENTICATION_EXCEPTION);
+                throw new AuthenticationException(self::USER_AUTHENTICATION_EXCEPTION);
             }
 
             $userData = $this->getUserPasswordFromDB($email);
@@ -94,7 +116,7 @@ namespace models {
                 return $userData;
 
             } else {
-                throw new Exception(self::INVALID_USER_PASSWORD_EXCEPTION);
+                throw new AuthenticationException(self::INVALID_USER_PASSWORD_EXCEPTION);
             }
         }
 
@@ -106,9 +128,10 @@ namespace models {
             $query = "select id, first_name, password, last_login, last_login_attempt, login_attempt " .
                 "from user where email = :email and blocked='N'";
 
+            $db = Database::getConnection();
+
             try {
 
-                $db = Database::getConnection();
                 $statement = $db->prepare($query);
                 $statement->bindValue(":email", $email);
 
@@ -126,7 +149,7 @@ namespace models {
                     return $userArray;
 
                 } else {
-                    throw new Exception(self::USER_NOT_FOUND_EXCEPTION);
+                    throw new AuthenticationException(self::USER_NOT_FOUND_EXCEPTION);
                 }
 
             } catch (PDOException $e) {
@@ -151,9 +174,10 @@ namespace models {
                 "blocked = :blocked " .
                 "where id = :userId";
 
+            $db = Database::getConnection();
+
             try {
 
-                $db = Database::getConnection();
                 $statement = $db->prepare($updateQuery);
 
                 $statement->bindValue(":userId", $userData[self::KEY_USER_ID]);
@@ -173,7 +197,7 @@ namespace models {
 
                     $statement->bindValue(":loginAttempt", $loginAttempts);
                     $statement->bindValue(":blocked", $blocked);
-                    
+
                 }
 
                 $statement->execute();
