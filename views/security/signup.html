@@ -32,37 +32,37 @@
             </div>
           </div>
           <div class="card-body">
-            <?php if (isset($userAuthenticationErrorMsg)): ?>
+            <?php if (isset($error_message)): ?>
             <div class="alert alert-danger" role="alert">
-              <?php echo $userAuthenticationErrorMsg ?>
+              <?php echo $error_message ?>
             </div>
             <?php endif;?>
-            <form id="form-signup" action="signup" method="POST" novalidate>
+            <form id="form-signup" action="signup" method="POST">
 
               <div class="row">
                 <div class="col form-group">
                   <label for="firstName">First Name:</label>
-                  <input id="firstName" class="form-control" type="text" name="firstName" required />
+                  <input id="firstName" class="form-control" type="text" name="firstName" value="<?=$firstName?>" required />
                 </div>
                 <div class="col form-group">
                   <label for="lastName">Last Name:</label>
-                  <input id="lastName" class="form-control" type="text" name="lastName" required />
+                  <input id="lastName" class="form-control" type="text" name="lastName" value="<?=$lastName?>" required />
                 </div>
               </div>
 
               <div class="row">
                 <div class="col form-group">
                   <label for="email">Email:</label>
-                  <input id="email" class="form-control" type="email" name="email" required />
+                  <input id="email" class="form-control" type="email" name="email" value="<?=$email?>" required />
                 </div>
 
                 <div class="col form-group">
                   <label for="dob">Date of Birthday:</label>
-                  <div class="input-group ">
-                    <div class="input-group-append">
+                  <div class="input-group form-group">
+                    <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="dt-birthday" name="birthday" required>
+                    <input type="text" class="form-control" id="dt-birthday" name="birthday" value="<?=$birthday?>" required>
                   </div>
                 </div>
               </div>
@@ -123,6 +123,7 @@
       $("#dt-birthday").flatpickr({
         enableTime: false,
         dateFormat: "Y-m-d",
+        maxDate: "today"
       });
 
       //It loads and apply the form validation
@@ -144,7 +145,8 @@
               maxlength: 50
             },
             birthday: {
-              required: true
+              required: true,
+              maxDate: true
             },
             password: {
               required: true,
@@ -176,6 +178,10 @@
               required: "Email is required",
               email: "Please enter a valid email address",
               maxlength: "Email is limited to 50 characters"
+            },
+            birthday: {
+              required: "Date of birthday is required",
+              maxDate: "Birthday cannot be a future date"
             },
             password: {
               required: "Password is prequired",
@@ -213,6 +219,15 @@
         });
 
       });
+
+      //specific field validation, not allowing date of birth greater than currentDate
+      $.validator.addMethod("maxDate", function (value, element) {
+        var curDate = new Date();
+        var inputDate = new Date(value);
+        if (inputDate < curDate)
+          return true;
+        return false;
+      }, "Invalid Date!");
 
     </script>
 
