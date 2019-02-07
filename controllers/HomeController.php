@@ -1,9 +1,10 @@
 <?php
 /**
  * App Home Page Controller
+ * Author: Leonardo Otoni
  */
 
-namespace controller {
+namespace controllers {
 
     use \util\AppConstants as AppConstants;
 
