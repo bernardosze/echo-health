@@ -6,44 +6,38 @@
  */
 namespace routes {
 
-    use \util\AppConstants as AppConstants;
+    use \routes\ApplicationRoutes as ApplicationRoutes;
 
-    class RouteManager
+    final class RoutesManager extends ApplicationRoutes
     {
 
-        private static $instance = null;
-        private function __construct()
-        {
-        }
-
-        public static function getInstance()
-        {
-            if (!isset(self::$instance)) {
-                self::$instance = new RouteManager();
-            }
-            return self::$instance;
-        }
-
         //Get controller from the routes class.
-        public function getControllerForRoute($route)
+        public static function getControllerForRoute($route)
         {
             $controller = null;
-            $registredRoutes = routes::getInstance()->getRoutes();
+            $registredRoutes = parent::getRoutes();
 
             /*Static resources like css and js also do requests.
              *For this cases, the controller will be the given route.*/
             if (array_key_exists($route, $registredRoutes)) {
                 //route was found
-                $controller = $registredRoutes[$route];
+                $controller = $registredRoutes[$route][0];
             } else {
                 //route not registred in the controll, it will throw 404 :)
-                $controller = AppConstants::_404_CONTROLLER;
+                $controller = parent::_404_CONTROLLER;
             }
 
             return $controller;
 
         }
 
-    }
+        /**
+         * Returns all routes registered into the application
+         */
+        public static function getApplicationRoutes()
+        {
+            return parent::getRoutes();
+        }
 
+    }
 }

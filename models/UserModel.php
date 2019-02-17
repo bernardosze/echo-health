@@ -11,8 +11,10 @@ namespace models {
     use \util\AppConstants as AppConstants;
     use \util\exceptions\AuthenticationException as AuthenticationException;
     use \util\exceptions\RegisterUserException as RegisterUserException;
+    use \util\UserSessionProfile as UserSessionProfile;
+    use \util\interfaces\ISecurityProfile as ISecurityProfile;
 
-    class UserModel
+    class UserModel implements ISecurityProfile
     {
 
         private const USER_REGISTER_DATA_EXCEPTION = "Not all user data was provided to be inserted.";
@@ -24,11 +26,13 @@ namespace models {
 
         //Array Keys
         private const KEY_USER_ID = "id";
-        private const KEY_FIRST_NAME = "firstName";
+        private const KEY_USER_EMAIL = "email";
+        private const KEY_FIRST_NAME = "first_name";
         private const KEY_PASSWD = "password";
-        private const KEY_LAST_LOGIN = "lastLogin";
-        private const KEY_LAST_LOGIN_ATTEMPT = "lastLoginAttempt";
-        private const KEY_LOGIN_ATTEMPT = "loginAttempt";
+        private const KEY_LAST_LOGIN = "last_login";
+        private const KEY_LAST_LOGIN_ATTEMPT = "last_login_attempt";
+        private const KEY_LOGIN_ATTEMPT = "login_attempt";
+        private const KEY_USER_PROFILES = "userProfiles";
 
         /**
          * Default constructor
@@ -50,14 +54,18 @@ namespace models {
             //General business rules
             $this->validateUserDateOfBirth($birthday);
 
-            $query = "insert into USER (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
+            $dmlInsertUser = "insert into USER (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
                 "values(:email, :firstName, :lastName, :password, :birthday, :blocked, :recordCreation )";
+
+            $dmlSelectUserId = "select id from user where email= :email";
 
             $db = Database::getConnection();
 
             try {
 
-                $statement = $db->prepare($query);
+                $db->beginTransaction();
+
+                $statement = $db->prepare($dmlInsertUser);
                 $statement->bindValue(":email", $email);
                 $statement->bindValue(":firstName", $firstName);
                 $statement->bindValue(":lastName", $lastName);
@@ -65,16 +73,42 @@ namespace models {
                 $statement->bindValue(":birthday", date($birthday));
                 $statement->bindValue(":blocked", "N");
                 $statement->bindValue(":recordCreation", date("Y-m-d H:i:s"));
-
                 $statement->execute();
 
+                //Get the userId previously generated
+                $statement = $db->prepare($dmlSelectUserId);
+                $statement->bindValue(":email", $email);
+                $statement->execute();
+                $resultSet = $statement->fetch();
+                $userId = $resultSet["id"];
+
+                //Get the PATIENT Id profile
+                $dmlPatientProfileId = "select id from profile where name= :name";
+                $statement = $db->prepare($dmlPatientProfileId);
+                $statement->bindValue(":name", ISecurityProfile::PATIENT);
+                $statement->execute();
+                $resultSet = $statement->fetch();
+                $defaulProfileId = $resultSet["id"];
+
+                //Register the user as a PATIENT by default
+                $dmlInsertUserProfile = "insert into user_profile (USER_ID, PROFILE_ID) values (:userId, :profileId)";
+                $statement = $db->prepare($dmlInsertUserProfile);
+                $statement->bindValue(":userId", $userId);
+                $statement->bindValue(":profileId", $defaulProfileId);
+                $statement->execute();
+
+                $db->commit();
             } catch (PDOException $e) {
+
+                $db->rollBack();
+
                 if ($e->getCode() == 23000) {
                     //Email in duplicity
                     throw new RegisterUserException(self::USER_REGISTER_EMAIL_DUPLICATED_EXCEPTION);
                 } else {
                     throw $e;
                 }
+
             } finally {
                 $statement->closeCursor();
             }
@@ -100,20 +134,28 @@ namespace models {
                 throw new AuthenticationException(self::USER_AUTHENTICATION_EXCEPTION);
             }
 
-            $userData = $this->getUserPasswordFromDB($email);
+            $userData = $this->getUserDataFromDB($email);
             $hashFromDB = $userData[self::KEY_PASSWD];
             $isAuthenticated = (isset($hashFromDB) && ($hashFromDB === $hash)) ? true : false;
             $this->registerLastLoginTime($userData, $isAuthenticated);
 
             if ($isAuthenticated) {
 
+                $userSessionProfile = new UserSessionProfile(
+                    $userData[self::KEY_USER_ID],
+                    $userData[self::KEY_USER_EMAIL],
+                    $userData[self::KEY_FIRST_NAME],
+                    $userData[self::KEY_USER_PROFILES]
+                );
+                /*
                 //remove sensitive data before make the Object available
                 unset($userData[self::KEY_PASSWD]);
                 unset($userData[self::KEY_LAST_LOGIN]);
                 unset($userData[self::KEY_LAST_LOGIN_ATTEMPT]);
                 unset($userData[self::KEY_LOGIN_ATTEMPT]);
 
-                return $userData;
+                return $userData;*/
+                return $userSessionProfile;
 
             } else {
                 throw new AuthenticationException(self::INVALID_USER_PASSWORD_EXCEPTION);
@@ -123,29 +165,49 @@ namespace models {
         /**
          * Get a user through a given email.
          */
-        private function getUserPasswordFromDB($email)
+        private function getUserDataFromDB($email)
         {
-            $query = "select id, first_name, password, last_login, last_login_attempt, login_attempt " .
+            $userData = "select id, email, first_name, password, last_login, last_login_attempt, login_attempt " .
                 "from user where email = :email and blocked='N'";
+
+            $userProfile = "select name " . 
+                "from profile p inner join user_profile up on p.id = up.profile_id " . 
+                "inner join user u on up.user_id = u.id " .
+                "where email = :email";
 
             $db = Database::getConnection();
 
             try {
 
-                $statement = $db->prepare($query);
+                $statement = $db->prepare($userData);
                 $statement->bindValue(":email", $email);
 
                 $statement->execute();
                 if ($statement->rowCount() == 1) {
                     $resultSet = $statement->fetch();
                     $userArray = array(
-                        self::KEY_USER_ID => $resultSet["id"],
-                        self::KEY_FIRST_NAME => $resultSet["first_name"],
-                        self::KEY_PASSWD => $resultSet["password"],
-                        self::KEY_LAST_LOGIN => $resultSet["last_login"],
-                        self::KEY_LAST_LOGIN_ATTEMPT => $resultSet["last_login_attempt"],
-                        self::KEY_LOGIN_ATTEMPT => $resultSet["login_attempt"],
+                        self::KEY_USER_ID => $resultSet[self::KEY_USER_ID],
+                        self::KEY_USER_EMAIL => $resultSet[self::KEY_USER_EMAIL],
+                        self::KEY_FIRST_NAME => $resultSet[self::KEY_FIRST_NAME],
+                        self::KEY_PASSWD => $resultSet[self::KEY_PASSWD],
+                        self::KEY_LAST_LOGIN => $resultSet[self::KEY_LAST_LOGIN],
+                        self::KEY_LAST_LOGIN_ATTEMPT => $resultSet[self::KEY_LAST_LOGIN_ATTEMPT],
+                        self::KEY_LOGIN_ATTEMPT => $resultSet[self::KEY_LOGIN_ATTEMPT],
                     );
+
+                    //Recover all user profiles
+                    $statement = $db->prepare($userProfile);
+                    $statement->bindValue(":email", $email);
+                    $statement->execute();
+                    $resultSet = $statement->fetchAll();
+                    
+                    $profiles = array();
+                    foreach($resultSet as $profile){
+                        $profiles[] = $profile[0];
+                    }
+
+                    $userArray[self::KEY_USER_PROFILES] = $profiles;
+
                     return $userArray;
 
                 } else {

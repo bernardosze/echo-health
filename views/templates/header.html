@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- Exclusive Page CSS -->
+    <?php if( isset($extraCSS) ) { echo $extraCSS; } ?>
+    <title><?php if( isset($pageTitle) ) { echo $pageTitle; } else { echo "EchoHealth"; } ?></title>
+</head>
+
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
+            <a class="navbar-brand" href="<?php use \util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
+                <img src="static/img/icons/hospital.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                EchoHealth
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+                <?php if (isset($appMenu) ): ?>
+                <?php foreach ( $appMenu as $menuTitle => $subMenuArray ) { ?>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?=$menuTitle?>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <?php foreach ( $subMenuArray as $subMenuItemKey => $subMenuItemValue ) { ?>
+                            <a class="dropdown-item" href="<?=$subMenuItemValue?>"><?=$subMenuItemKey?></a>
+                            <?php } ?>
+                        </div>
+                    </li>
+                </ul>
+
+                <?php } ?>
+                <?php endif; ?>
+
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?php
+                                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                                $userFirstName = $userSessionProfile->getFirstName();
+                                $userProfiles = $userSessionProfile->getProfiles();
+                            ?>
+                            <?php if( in_array("SYSADMIN", $userProfiles) ): ?>
+                            <img src="static/img/icons/sheriff" width="17" height="17" alt="">
+                            <?php endif; ?>
+                            <?php if( in_array("DOCTOR", $userProfiles) ): ?>
+                            <i class="fas fa-user-md"></i>
+                            <?php else: ?>
+                            <i class="fas fa-user-circle"></i>
+                            <?php endif;?>
+
+                            <?=$userFirstName?>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Change Password</a>
+                            <a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt">&nbsp;</i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="navbar navbar-expand-lg navbar-secondary bg-secondary mb-2">
+        </nav>
+    </header>

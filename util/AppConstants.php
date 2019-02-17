@@ -41,9 +41,6 @@ namespace util {
         //General Error Messages
         public const USER_AUTHENTICATION_ERROR_MSG = "Invalid email or password.";
 
-        //Default 404 Controller
-        public const _404_CONTROLLER = "controllers/public/_404Controller.php";
-
         //Controllers that not require session validation
         public const PUBLIC_CONTROLLERS = "controllers/public/";
 

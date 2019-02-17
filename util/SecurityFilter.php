@@ -1,14 +1,13 @@
 <?php
 
-/**
- * Singleton Security filter that verify the user session status.
- * Only authenticated users with a valid session can survive :)
- *
- * Author: Leonardo Otoni
- */
-
 namespace util {
 
+    /**
+     * Singleton Security filter that verify the user session status.
+     * Only authenticated users with a valid session can survive :)
+     *
+     * Author: Leonardo Otoni
+     */
     final class SecurityFilter
     {
         private static $instance = null;
@@ -34,7 +33,7 @@ namespace util {
 
             $userSessionData = null;
             if ($this->isUserLogged()) {
-                $userSessionData = $_SESSION[AppConstants::USER_SESSION_DATA];
+                $userSessionData = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             }
 
             if (!isset($userSessionData)) {

@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <?php if (isset($firstName)): ?>
-    <div>
-      <h4>
-        Welcome
-        <?php echo $firstName ?>, you are logged!!!
-      </h4>
-    </div>
-    <?php endif;?>
-  </body>
-</html>
+<div class="container-fluid">
+  <?php if (isset($firstName)): ?>
+  <div>
+    <h4>
+      Welcome <?=$firstName?>, you are logged!!!
+    </h4>
+    <p>You have the following profiles:
+      <ul>
+        <?php foreach($userData->getProfiles() as $profile) {?>
+        <li><?=$profile?></li>
+        <?php } ?>
+      </ul>
+    </p>
+  </div>
+  <?php endif;?>
+</div>

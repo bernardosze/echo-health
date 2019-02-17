@@ -9,8 +9,10 @@
 define("ROOT_PATH", dirname(__FILE__, 1) . "/");
 require_once ROOT_PATH . "util/ClassLoader.php";
 
-use \routes\RouteManager as RouteManager;
+use \routes\RoutesManager as RoutesManager;
 use \util\AppConstants as AppConstants;
+use \util\AuthorizationFilter as AuthorizationFilter;
+use \util\MenuManager as MenuManager;
 use \util\SecurityFilter as SecurityFilter;
 
 date_default_timezone_set(AppConstants::DEFAULT_TIME_ZONE);
@@ -44,15 +46,27 @@ function removeQueryString($requestURI)
  */
 function dispatchRoute($route)
 {
-    $controller = RouteManager::getInstance()->getControllerForRoute($route);
+    $controller = RoutesManager::getControllerForRoute($route);
     //$test = \strpos($controller, constants::PUBLIC_CONTROLLERS);
     if ((\strpos($controller, AppConstants::PUBLIC_CONTROLLERS) === false)) {
-        /* The controller is not public. Apply the SecurityFilter
-         * A redirect to login page will be done if the user not survive in the Filter. :)
+
+        /* The controller is not public.
+         * Apply the Security and Authorization Filters.
+         * On case of user not logged, not authorized, or having an invalid
+         * session will throw an automatic redirection to the login page or a 403 error.
          */
         SecurityFilter::getInstance()->validateUserSession();
+        AuthorizationFilter::validateUserAuthorization($route);
+
+        //Filter the User Menu considering the profiles defined for the routes
+        $appMenu = MenuManager::getFiltredMenus();
     }
 
-    require_once ROOT_PATH . "/" . $controller;
+    //The controller file must exists
+    if (file_exists(ROOT_PATH . "/" . $controller)) {
+        require_once ROOT_PATH . "/" . $controller;
+    } else {
+        require_once ROOT_PATH . "/" . RoutesManager::_404_CONTROLLER;
+    }
 
 }
