@@ -8,6 +8,7 @@ namespace controllers\publicControllers {
 
     use Exception;
     use \models\UserModel as UserModel;
+    use \routes\RoutesManager as RoutesManager;
     use \util\AppConstants as AppConstants;
     use \util\exceptions\AuthenticationException as AuthenticationException;
     use \util\SecurityFilter as SecurityFilter;
@@ -33,7 +34,7 @@ namespace controllers\publicControllers {
             $userModel = new UserModel();
             $userData = $userModel->authenticateUser($email, $hash);
             session_start();
-            $_SESSION[AppConstants::USER_SESSION_DATA] = $userData;
+            $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userData);
             $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
             header("Location: " . AppConstants::HOME_PAGE_INTRANET);
         } catch (AuthenticationException $e) {
@@ -41,7 +42,7 @@ namespace controllers\publicControllers {
             $userAuthenticationErrorMsg = AppConstants::USER_AUTHENTICATION_ERROR_MSG;
         } catch (Exception $e) {
             //Exception not expected from model
-            require_once "_500Controller.php";
+            require_once RoutesManager::_500_CONTROLLER;
             exit();
         }
 

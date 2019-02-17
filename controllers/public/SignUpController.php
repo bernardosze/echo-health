@@ -9,6 +9,7 @@ namespace controllers\publicControllers {
 
     use Exception;
     use \models\UserModel as UserModel;
+    use \routes\RoutesManager as RoutesManager;
     use \util\AppConstants as AppConstants;
     use \util\exceptions\RegisterUserException as RegisterUserException;
 
@@ -35,7 +36,7 @@ namespace controllers\publicControllers {
             $error_message = "Invalid Registration: " . $e->getMessage();
             require_once SIGN_UP_VIEW;
         } catch (Exception $e) {
-            require_once "_500Controller.php";
+            require_once RoutesManager::_500_CONTROLLER;
             exit();
         }
     }
