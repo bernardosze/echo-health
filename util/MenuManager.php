@@ -31,6 +31,13 @@ namespace util {
                 "Test 2" => "test2",
                 "test 3" => "seeprescriptions",
             ],
+            "Administration" =>
+            [
+                "Set Doctor" => "admin/setdoctor",
+                "Set Doctor Schedule" => "admin/setdoctorschedule",
+                "Set Working Days" => "admin/setworkingdays",
+            ],
+
         ];
 
         /**

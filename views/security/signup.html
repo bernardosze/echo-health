@@ -37,7 +37,7 @@
               <?php echo $error_message ?>
             </div>
             <?php endif;?>
-            <form id="form-signup" action="signup" method="POST">
+            <form id="hashform" action="signup" method="POST">
 
               <div class="row">
                 <div class="col form-group">
@@ -129,7 +129,7 @@
       //It loads and apply the form validation
       $(document).ready(function () {
 
-        $("#form-signup").validate({
+        $("#hashform").validate({
           rules: {
             firstName: {
               required: true,
@@ -147,11 +147,6 @@
             birthday: {
               required: true,
               maxDate: true
-            },
-            password: {
-              required: true,
-              minlength: 6,
-              maxlength: 20
             },
             password: {
               required: true,
@@ -184,12 +179,12 @@
               maxDate: "Birthday cannot be a future date"
             },
             password: {
-              required: "Password is prequired",
+              required: "Password is required",
               minlength: "Password must be at least 6 characters long",
               maxlength: "Password is limited to 20 characters"
             },
             confirmPassword: {
-              required: "Password is prequired",
+              required: "Password is required",
               minlength: "Password must be at least 6 characters long",
               maxlength: "Password is limited to 20 characters",
               equalTo: "Password confirmed does not match."

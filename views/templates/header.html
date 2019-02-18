@@ -5,6 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="static/img/cardiogram.png" type="image/x-icon" />
+    <link rel="stylesheet" href="static/css/main.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -14,7 +16,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <!-- Exclusive Page CSS -->
-    <?php if( isset($extraCSS) ) { echo $extraCSS; } ?>
+    <?php 
+        if( isset($extraCSS) ) {
+            foreach($extraCSS as $css){
+                echo "<link rel=\"stylesheet\" href=\"$css\">";
+            }
+        }
+    ?>
     <title><?php if( isset($pageTitle) ) { echo $pageTitle; } else { echo "EchoHealth"; } ?></title>
 </head>
 
@@ -28,6 +36,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Menu Section -->
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
                 <?php if (isset($appMenu) ): ?>
@@ -69,13 +78,28 @@
                             <?=$userFirstName?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Change Password</a>
+                            <a class="dropdown-item" href="changepasswd">Change Password</a>
                             <a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt">&nbsp;</i>Logout</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
-        <nav class="navbar navbar-expand-lg navbar-secondary bg-secondary mb-2">
+        <nav class="navbar navbar-expand-lg navbar-light justify-content-center pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
+            <span class="text-secondary"><?php if(isset($pageTitle)){ echo $pageTitle; } else { echo "Set a pageTitle variable on your controller"; }?></span>
         </nav>
+        <!-- Alert Section -->
+        <?php if (isset($alertSuccessMessage)) : ?>
+        <div class=" alert alert-primary border-primary" role="alert">
+            <?=$alertSuccessMessage?>
+        </div>
+        <?php elseif(isset($alertErrorMessage)) : ?>
+        <div class=" alert alert-danger border-danger" role="alert">
+            <?=$alertErrorMessage?>
+        </div>
+        <?php elseif(isset($alertWarningMessage)) : ?>
+        <div class=" alert alert-warning border-warning" role="alert">
+            <?=$alertWarningMessage?>
+        </div>
+        <?php endif;?>
     </header>

@@ -11,8 +11,9 @@ namespace models {
     use \util\AppConstants as AppConstants;
     use \util\exceptions\AuthenticationException as AuthenticationException;
     use \util\exceptions\RegisterUserException as RegisterUserException;
-    use \util\UserSessionProfile as UserSessionProfile;
+    use \util\exceptions\UpdateUserDataException as UpdateUserDataException;
     use \util\interfaces\ISecurityProfile as ISecurityProfile;
+    use \util\UserSessionProfile as UserSessionProfile;
 
     class UserModel implements ISecurityProfile
     {
@@ -23,6 +24,8 @@ namespace models {
         private const USER_AUTHENTICATION_EXCEPTION = "User data not provided.";
         private const INVALID_USER_PASSWORD_EXCEPTION = "Password not match.";
         private const USER_NOT_FOUND_EXCEPTION = "User not found into database.";
+        private const UPDATE_USER_PASSWD_INVALID_ARGUMENTS = "Impossible to update user password. Data is missing.";
+        private const UPDATE_USER_PASSWD_ERROR = "An error occurred trying to update the user's password: ";
 
         //Array Keys
         private const KEY_USER_ID = "id";
@@ -147,14 +150,7 @@ namespace models {
                     $userData[self::KEY_FIRST_NAME],
                     $userData[self::KEY_USER_PROFILES]
                 );
-                /*
-                //remove sensitive data before make the Object available
-                unset($userData[self::KEY_PASSWD]);
-                unset($userData[self::KEY_LAST_LOGIN]);
-                unset($userData[self::KEY_LAST_LOGIN_ATTEMPT]);
-                unset($userData[self::KEY_LOGIN_ATTEMPT]);
-
-                return $userData;*/
+                
                 return $userSessionProfile;
 
             } else {
@@ -170,8 +166,8 @@ namespace models {
             $userData = "select id, email, first_name, password, last_login, last_login_attempt, login_attempt " .
                 "from user where email = :email and blocked='N'";
 
-            $userProfile = "select name " . 
-                "from profile p inner join user_profile up on p.id = up.profile_id " . 
+            $userProfile = "select name " .
+                "from profile p inner join user_profile up on p.id = up.profile_id " .
                 "inner join user u on up.user_id = u.id " .
                 "where email = :email";
 
@@ -200,9 +196,9 @@ namespace models {
                     $statement->bindValue(":email", $email);
                     $statement->execute();
                     $resultSet = $statement->fetchAll();
-                    
+
                     $profiles = array();
-                    foreach($resultSet as $profile){
+                    foreach ($resultSet as $profile) {
                         $profiles[] = $profile[0];
                     }
 
@@ -215,7 +211,7 @@ namespace models {
                 }
 
             } catch (PDOException $e) {
-                throw $e->getMessage();
+                throw $e;
             } finally {
                 $statement->closeCursor();
             }
@@ -268,6 +264,32 @@ namespace models {
                 throw $e;
             } catch (Exception $e) {
                 throw $e;
+            } finally {
+                $statement->closeCursor();
+            }
+
+        }
+
+        /**
+         * Update the user password for a given userId
+         */
+        public function updateUserPassword($userId, $hash)
+        {
+
+            if (empty($userId) || empty($hash)) {
+                throw new UpdateUserDataException(self::UPDATE_USER_PASSWD_INVALID_ARGUMENTS);
+            }
+
+            $updateQuery = "update user set password = :password where id = :userId";
+            $db = Database::getConnection();
+
+            try {
+                $statement = $db->prepare($updateQuery);
+                $statement->bindValue(":password", $hash);
+                $statement->bindValue(":userId", $userId);
+                $statement->execute();
+            } catch (Exception $e) {
+                throw new UpdateUserDataException(self::UPDATE_USER_PASSWD_ERROR . $e->getMessage());
             } finally {
                 $statement->closeCursor();
             }

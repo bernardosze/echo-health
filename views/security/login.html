@@ -35,7 +35,7 @@
                             <?php echo $userAuthenticationErrorMsg ?>
                         </div>
                         <?php endif;?>
-                        <form id="form-login" action="login" method="POST" class="needs-validation" novalidate>
+                        <form id="hashform" action="login" method="POST" class="needs-validation" novalidate>
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -77,12 +77,15 @@
         <script src="static/js/sha1.min.js"></script>
         <script src="static/js/security.js"></script>
 
+        <!--jQuery Validate -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/additional-methods.min.js"></script>
 
         <script>
 
             $(document).ready(function () {
 
-                $("#form-login").validate({
+                $("#hashform").validate({
                     rules: {
                         email: {
                             required: true,

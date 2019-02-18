@@ -19,14 +19,23 @@ namespace routes {
             "login" => ["controllers/public/LoginController.php"],
             "logout" => ["controllers/public/LogoutController.php"],
             "signup" => ["controllers/public/SignUpController.php"],
-            "home" => ["controllers/HomeController.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR],
-            ],
+            "changepasswd" => ["controllers/ChangeUserPasswordController.php", [ISecurityProfile::PATIENT]],
+            "home" => ["controllers/HomeController.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+
+            //routes for patients
             "appointment" => ["controllers/MustDefineOne.php", []],
             "cancelappointment" => ["controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
             "seeprescriptions" => ["controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+
+            //routes for doctors
             "myschedule" => ["controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
             "test2" => ["controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
             "seeprescriptions" => ["controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+
+            //routes for Administration
+            "admin/setdoctor" => ["controllers/setdoctor.php", [ISecurityProfile::SYSADMIN]],
+            "admin/setdoctorschedule" => ["controllers/setdoctorschedule.php", [ISecurityProfile::SYSADMIN]],
+            "admin/setworkingdays" => ["controllers/setworkingdays.php", [ISecurityProfile::SYSADMIN]],
 
         ];
 
@@ -35,6 +44,7 @@ namespace routes {
         public const _404_CONTROLLER = "controllers/public/_404Controller.php";
         public const _500_CONTROLLER = "controllers/public/_500Controller.php";
 
+        //returns all routes registred
         protected static function getRoutes()
         {
             return self::$routes;
