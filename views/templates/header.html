@@ -26,7 +26,7 @@
     <title><?php if( isset($pageTitle) ) { echo $pageTitle; } else { echo "EchoHealth"; } ?></title>
 </head>
 
-<body class="bg-light">
+<body class="container-fluid bg-light">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
             <a class="navbar-brand" href="<?php use \util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
@@ -88,18 +88,20 @@
         <nav class="navbar navbar-expand-lg navbar-light justify-content-center pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
             <span class="text-secondary"><?php if(isset($pageTitle)){ echo $pageTitle; } else { echo "Set a pageTitle variable on your controller"; }?></span>
         </nav>
+    </header>
+    <div>
         <!-- Alert Section -->
         <?php if (isset($alertSuccessMessage)) : ?>
-        <div class=" alert alert-primary border-primary" role="alert">
+        <div class=" alert alert-primary border-primary mb-1" role="alert">
             <?=$alertSuccessMessage?>
         </div>
         <?php elseif(isset($alertErrorMessage)) : ?>
-        <div class=" alert alert-danger border-danger" role="alert">
+        <div class=" alert alert-danger border-danger mb-1" role="alert">
             <?=$alertErrorMessage?>
         </div>
         <?php elseif(isset($alertWarningMessage)) : ?>
-        <div class=" alert alert-warning border-warning" role="alert">
+        <div class=" alert alert-warning border-warning mb-1" role="alert">
             <?=$alertWarningMessage?>
         </div>
         <?php endif;?>
-    </header>
+    </div>
