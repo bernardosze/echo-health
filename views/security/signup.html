@@ -94,8 +94,6 @@
                   </div>
                 </div>
               </div>
-
-              <input type="hidden" name="hash" id="hash">
             </form>
           </div>
         </div>
@@ -209,7 +207,12 @@
           },
           unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass(errorClass).addClass(validClass);
-          }
+          },
+          submitHandler: function (form) {
+            //generate a hash SHA1
+            $("#password").val(generateSHA1Hash($("#email").val() + $("#password").val()));
+            form.submit();
+          },
 
         });
 

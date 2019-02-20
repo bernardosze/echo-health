@@ -52,7 +52,6 @@
                                 <input id="submitBtn" class="btn btn-primary btn-block" type="submit" value="Login">
                                 <a href="signup" class="btn btn-danger btn-block">Sign-up</a>
                             </div>
-                            <input type="hidden" name="hash" id="hash">
                         </form>
                     </div>
                 </div>
@@ -129,8 +128,12 @@
                     },
                     unhighlight: function (element, errorClass, validClass) {
                         $(element).removeClass(errorClass).addClass(validClass);
-                    }
-
+                    },
+                    submitHandler: function (form) {
+                        //generate a hash SHA1
+                        $("#password").val(generateSHA1Hash($("#email").val() + $("#password").val()));
+                        form.submit();
+                    },
                 });
 
             });

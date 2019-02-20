@@ -7,13 +7,13 @@
  */
 
 define("ROOT_PATH", dirname(__FILE__, 1) . "/");
-require_once ROOT_PATH . "util/ClassLoader.php";
+require_once ROOT_PATH . "classes/util/ClassLoader.php";
 
+use classes\util\AppConstants as AppConstants;
+use \classes\util\AuthorizationFilter as AuthorizationFilter;
+use \classes\util\MenuManager as MenuManager;
+use \classes\util\SecurityFilter as SecurityFilter;
 use \routes\RoutesManager as RoutesManager;
-use \util\AppConstants as AppConstants;
-use \util\AuthorizationFilter as AuthorizationFilter;
-use \util\MenuManager as MenuManager;
-use \util\SecurityFilter as SecurityFilter;
 
 date_default_timezone_set(AppConstants::DEFAULT_TIME_ZONE);
 
@@ -63,10 +63,10 @@ function dispatchRoute($route)
     }
 
     //The controller file must exists
-    if (file_exists(ROOT_PATH . "/" . $controller)) {
-        require_once ROOT_PATH . "/" . $controller;
+    if (file_exists(ROOT_PATH . $controller)) {
+        require_once ROOT_PATH . $controller;
     } else {
-        require_once ROOT_PATH . "/" . RoutesManager::_404_CONTROLLER;
+        require_once ROOT_PATH . RoutesManager::_404_CONTROLLER;
     }
 
 }

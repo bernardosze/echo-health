@@ -29,7 +29,7 @@
 <body class="container-fluid bg-light">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
-            <a class="navbar-brand" href="<?php use \util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
+            <a class="navbar-brand" href="<?php use \classes\util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
                 <img src="static/img/icons/hospital.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 EchoHealth
             </a>
@@ -78,6 +78,7 @@
                             <?=$userFirstName?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="changeemail">Change Email</a>
                             <a class="dropdown-item" href="changepasswd">Change Password</a>
                             <a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt">&nbsp;</i>Logout</a>
                         </div>
