@@ -227,9 +227,9 @@ namespace classes\dao {
                 "from profile p, user u " .
                 "where p.name = :profileName and u.id = :userId";
 
-            try {
+            $db = Database::getConnection();
 
-                $db = Database::getConnection();
+            try {
 
                 /* It is necessary to guarantee that a User and UserProfile are saved
                  * in the same transaction. All users initially has a PATIENT profile
