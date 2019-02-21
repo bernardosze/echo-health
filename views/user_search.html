@@ -1,0 +1,42 @@
+<form id="userSearchForm" action="searchuser" method="GET">
+    <div class="form-row d-flex justify-content-between">
+        <div class="col-sm-3 my-1">
+            <label class="sr-only" for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+        </div>
+        <div class="col-sm-3 my-1">
+            <label class="sr-only" for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name">
+        </div>
+        <div class="col-sm-3 my-1">
+            <label class="sr-only" for="lastName">Lirst Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name">
+        </div>
+
+        <div class="col-auto my-1">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="blocked" name="blocked">
+                <label class="form-check-label" for="blocked">
+                    Blocked User
+                </label>
+            </div>
+        </div>
+        <div class="col-auto my-1">
+            <button type="button" id="btn-search" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="card mt-1">
+    <div class="card-body">
+        <table class="table-striped table-bordered table-sm" id="table" data-togle="table" data-pagination="true" data-search="true" hidden>
+            <thead class="thead-light">
+                <tr>
+                    <th class="col-4" data-sortable="true" data-halign="center" data-field="email">Email</th>
+                    <th class="col-4" data-sortable="true" data-halign="center" data-field="firstName">First Name</th>
+                    <th class="col-4" data-sortable="true" data-halign="center" data-field="lastName">Last Name</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

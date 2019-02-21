@@ -2,7 +2,9 @@
 
 namespace classes\models {
 
-    class UserModel
+    use JsonSerializable;
+
+    class UserModel implements JsonSerializable
     {
         private $id;
         private $email;
@@ -186,6 +188,33 @@ namespace classes\models {
         public function passwordsAreBlank()
         {
             return (empty($this->getPassword())) || (empty($this->getNewPassword()));
+        }
+
+        public function jsonSerialize()
+        {
+
+            $json = [];
+            if (!empty($this->getId())) {
+                $json["id"] = $this->getId();
+            }
+
+            if (!empty($this->getFirstName())) {
+                $json["firstName"] = $this->getFirstName();
+            }
+
+            if (!empty($this->getLastName())) {
+                $json["lastName"] = $this->getLastName();
+            }
+
+            if (!empty($this->getEmail())) {
+                $json["email"] = $this->getEmail();
+            }
+
+            if (!empty($this->getBirthday())) {
+                $json["birthday"] = $this->getBirthday();
+            }
+
+            return $json;
         }
 
     }

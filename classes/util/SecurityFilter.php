@@ -41,8 +41,14 @@ namespace classes\util {
                 self::forceUserLogin();
             } else if ($this->isExpiredSession()) {
                 //User authenticated with a expired session
-                self::invalidadeUserSession();
-                self::forceUserLogin();
+                if ($this->isAjax()) {
+                    echo json_encode(AppConstants::INVALID_SESSION_JSON);
+                    exit();
+                } else {
+                    self::invalidadeUserSession();
+                    self::forceUserLogin();
+                }
+
             } else {
                 //update the user's last activity time
                 $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
@@ -82,6 +88,15 @@ namespace classes\util {
         public static function forceUserLogin()
         {
             header("Location: " . AppConstants::LOGIN_PAGE);
+        }
+
+        /**
+         * Try to identify AJAX requests
+         */
+        private function isAjax()
+        {
+            return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
         }
 
     }

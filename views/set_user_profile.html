@@ -1,0 +1,86 @@
+<!-- Page Button Section -->
+<div class="d-flex justify-content-end">
+    <div class="mt-1 mb-1">
+        <button type="button" class="btn btn-primary mr-1" onclick="$(location).attr('href', 'searchuser');">Search</button>
+    </div>
+    <div class="mt-1 mb-1">
+        <button type="button" class="btn btn-primary" onclick="$('#submit').click();">Save</button>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-start pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
+    <span class="text-secondary">User Personal Data</span>
+</nav>
+<div class="card">
+    <div class="card-box bg-white p-4">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" class="form-control" id="firstName" value="<?=$firstName?>">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" class="form-control" id="lastName" value="<?=$lastName?>">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?=$email?>">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="dob">Date of Birthday:</label>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="dt-birthday" name="birthday" value="<?=$birthday?>" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submit" hidden>
+        </form>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-start pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
+    <span class="text-secondary">User Profiles</span>
+</nav>
+<div class="card">
+    <div class="card-box bg-white p-4">
+        <form class="">
+            <div class="form-inline col-auto">
+                <div class="form-group mb-2">
+                    <label class="mr-2" for="selectProfile">Profile:</label>
+                    <select class="custom-select" id="selectProfile">
+                        <option selected>Choose...</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="firstName"></label>
+                    <a href="" onclick="alert('hi');">
+                        <span id="addIcon" class="text-success h3" data-toggle="tooltip" title="Add a profile to User">
+                            <i class="fas fa-plus-circle"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="row col-auto">
+                <div class="card mt-1">
+                    <div class="card-body">
+                        <table id="table" class="table-striped table-bordered table-sm" data-togle="table" hidden>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="col-4" data-sortable="true" data-halign="center" data-field="profileName">Profile</th>
+                                    <th class="col-4" data-sortable="true" data-halign="center" data-field="operations">#</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

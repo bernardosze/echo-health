@@ -34,10 +34,8 @@ namespace routes {
             "seeprescriptions" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
 
             //routes for Administration
-            "admin/setdoctor" => ["classes/controllers/setdoctor.php", [ISecurityProfile::SYSADMIN]],
-            "admin/setdoctorschedule" => ["classes/controllers/setdoctorschedule.php", [ISecurityProfile::SYSADMIN]],
-            "admin/setworkingdays" => ["classes/controllers/setworkingdays.php", [ISecurityProfile::SYSADMIN]],
-
+            "searchuser" => ["classes/controllers/UserSearchController.php", [ISecurityProfile::SYSADMIN]],
+            "setuserprofile" => ["classes/controllers/SetUserProfileController.php", [ISecurityProfile::SYSADMIN]],
         ];
 
         //Default http error handlers

@@ -1,6 +1,6 @@
 <?php
 /**
- * User Model
+ * User Business Object.
  * Author: Leonardo Otoni
  */
 namespace classes\business {
@@ -157,6 +157,22 @@ namespace classes\business {
                 $userDao->updateUserEmail($userModel);
             }
 
+        }
+
+        /**
+         * Fetch used based on UserSearchParams object.
+         * Return an array of UserModel
+         */
+        public function fetchUsers($userSearchParams)
+        {
+            $userDao = new UserDao();
+            return $userDao->getUserByUserSearchParams($userSearchParams);
+        }
+
+        public function fetchUserById($userId)
+        {
+            $userDao = new UserDao();
+            return $userDao->getUserById($userId);
         }
 
     }

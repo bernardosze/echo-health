@@ -33,9 +33,7 @@ namespace classes\util {
             ],
             "Administration" =>
             [
-                "Set Doctor" => "admin/setdoctor",
-                "Set Doctor Schedule" => "admin/setdoctorschedule",
-                "Set Working Days" => "admin/setworkingdays",
+                "Set User Profile" => "searchuser",
             ],
 
         ];

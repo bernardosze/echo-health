@@ -47,6 +47,8 @@ namespace classes\util {
         //Static Content does not require security
         public const STATIC_CONTENT = "static/";
 
+        public const INVALID_SESSION_JSON = ["status" => "Invalid_Session"];
+
     }
 
 }

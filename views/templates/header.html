@@ -11,26 +11,41 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
-
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
+
     <!-- Exclusive Page CSS -->
-    <?php 
+    <!-- if( isset($flatpickrComponent) && $flatpickrComponent === true ){
+            echo "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css\">";
+        } -->
+    <?php
+        
+
         if( isset($extraCSS) ) {
             foreach($extraCSS as $css){
                 echo "<link rel=\"stylesheet\" href=\"$css\">";
             }
         }
     ?>
+
+    <!-- Exclusive Page JS -->
+    <?php 
+        if( isset($priorityJS) ) {
+            foreach($priorityJS as $js){
+                echo "<script src=\"$js\"></script>";
+            }
+        }
+    ?>
+
     <title><?php if( isset($pageTitle) ) { echo $pageTitle; } else { echo "EchoHealth"; } ?></title>
 </head>
 
 <body class="container-fluid bg-light">
-    <header>
+    <header class="mb-1">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
             <a class="navbar-brand" href="<?php use \classes\util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
-                <img src="static/img/icons/hospital.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                <img src="static/img/icons/hospital.png" width="30" height="30" class="d-inline-block align-top" alt="App Logo">
                 EchoHealth
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +82,7 @@
                                 $userProfiles = $userSessionProfile->getProfiles();
                             ?>
                             <?php if( in_array("SYSADMIN", $userProfiles) ): ?>
-                            <img src="static/img/icons/sheriff" width="17" height="17" alt="">
+                            <img src="static/img/icons/sheriff" width="17" height="17" alt="Sysadmin Logo">
                             <?php endif; ?>
                             <?php if( in_array("DOCTOR", $userProfiles) ): ?>
                             <i class="fas fa-user-md"></i>
@@ -93,16 +108,18 @@
     <div>
         <!-- Alert Section -->
         <?php if (isset($alertSuccessMessage)) : ?>
-        <div class=" alert alert-primary border-primary mb-1" role="alert">
+        <div class="alert alert-primary border-primary mb-1" role="alert">
             <?=$alertSuccessMessage?>
         </div>
         <?php elseif(isset($alertErrorMessage)) : ?>
-        <div class=" alert alert-danger border-danger mb-1" role="alert">
+        <div class="alert alert-danger border-danger mb-1" role="alert">
             <?=$alertErrorMessage?>
         </div>
         <?php elseif(isset($alertWarningMessage)) : ?>
-        <div class=" alert alert-warning border-warning mb-1" role="alert">
+        <div class="alert alert-warning border-warning mb-1" role="alert">
             <?=$alertWarningMessage?>
         </div>
         <?php endif;?>
     </div>
+    <div class="card bg-light">
+        <div class="card-body m-0">

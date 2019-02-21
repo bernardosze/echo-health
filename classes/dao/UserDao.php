@@ -2,15 +2,16 @@
 
 namespace classes\dao {
 
+    use Exception;
     use PDO;
     use PDOException;
     use \classes\database\Database as Database;
     use \classes\models\UserModel as UserModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
-    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
-    use \Exception;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
+    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
+    use \classes\util\UserSeachParams as UserSearchParams;
 
     class UserDao
     {
@@ -21,6 +22,33 @@ namespace classes\dao {
 
         public function __construct()
         {
+        }
+
+        public function getUserById($userId)
+        {
+
+            $query = "select * from user where id = :userId and blocked <> 'Y' LIMIT 1";
+
+            try {
+
+                $db = Database::getConnection();
+
+                $stmt = $db->prepare($query);
+                $stmt->bindValue(":userId", $userId);
+                $stmt->execute();
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "\classes\models\UserModel");
+                if ($stmt->rowCount() > 0) {
+                    return $stmt->fetch();
+                } else {
+                    throw new NoDataFoundException();
+                }
+
+            } catch (PDOException $e) {
+                throw $e;
+            } finally {
+                $stmt->closeCursor();
+            }
+
         }
 
         /**
@@ -53,6 +81,64 @@ namespace classes\dao {
                 $stmt->closeCursor();
             }
 
+        }
+
+        /**
+         * Fetch users using an UserSearchParams object. If it is null,
+         * users will be fetched without any filter.
+         * Returns an array of UserModel
+         */
+        public function getUserByUserSearchParams($userSearchParams)
+        {
+            if ($userSearchParams === null || $userSearchParams === "" ||
+                !($userSearchParams instanceof \classes\util\UserSearchParams)) {
+                throw new Exception("A UserSearchParams object must be provided");
+            }
+
+            $query = "select id, email, first_name, last_name from user ";
+            $orderBy = " order by email asc ";
+            $preparedParams = [];
+
+            if (count($userSearchParams->toArray()) > 0) {
+
+                $filterQuery = "";
+                foreach ($userSearchParams->toArray() as $field => $value) {
+                    $filterString = " lower(" . $field . ") like :" . $field . " ";
+                    $filterQuery = $filterQuery . (empty($filterQuery) ? "where" . $filterString : "and" . $filterString);
+                    $preparedParams[":" . $field] = $value;
+                }
+
+                $query = $query . $filterQuery;
+
+            }
+
+            $query = $query . $orderBy;
+
+            try {
+
+                $db = Database::getConnection();
+                $stmt = $db->prepare($query);
+                if (count($preparedParams) > 0) {
+                    foreach ($preparedParams as $param => $value) {
+                        $value = (strlen($value) > 1 ? strtolower($value) : $value);
+                        $stmt->bindValue($param, $value."%");
+                    }
+                }
+
+                $stmt->execute();
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "\classes\models\UserModel");
+
+                if ($stmt->rowCount() > 0) {
+                    return $stmt->fetchAll();
+                } else {
+                    throw new NoDataFoundException();
+                }
+
+            } catch (PDOException $e) {
+                throw $e;
+            } finally {
+                $stmt->closeCursor();
+            }
         }
 
         /**
@@ -159,14 +245,7 @@ namespace classes\dao {
                 $stmt->bindValue(":blocked", "N");
                 $stmt->bindValue(":recordCreation", date("Y-m-d H:i:s"));
                 $stmt->execute();
-
-                //Get the userId previously generated
-                $stmt = $db->prepare($selectUserQuery);
-                $stmt->bindValue(":email", $userModel->getEmail());
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "\classes\models\UserModel");
-                $stmt->execute();
-                //override the previous $userModel object.
-                $userModel = $stmt->fetch();
+                $userModel->setId($db->lastInsertId());
 
                 //Register the user as a PATIENT by default
                 $stmt = $db->prepare($insertUserProfileQuery);
