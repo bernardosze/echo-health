@@ -55,6 +55,7 @@ namespace classes\Database {
                     )
                 );
             } catch (PDOException $e) {
+                var_dump($e->getMessage());
                 if ($e->getCode() == self::MYSQL_DOWN_ERROR_CODE) {
                     //database is unreachable
                     throw new FatalException($e->getMessage(), $e->getCode());
