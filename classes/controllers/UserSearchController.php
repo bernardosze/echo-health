@@ -10,13 +10,12 @@ namespace classes\controllers {
     use \classes\util\UserSearchParams as UserSearchParams;
 
     $pageTitle = "User Search";
-    $extraCSS = [
-        "https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.css",
-    ];
+
+    //$specifc components in use on the page
+    $bootstrapTableComponent = true;
+
     $extraJS = [
         "static/js/validation/user_search.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.2/core.min.js",
-        "https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.js",
     ];
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {

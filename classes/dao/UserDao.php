@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * DAO Class to handle all User database operations
+ * Author: Leonardo Otoni
+ */
 namespace classes\dao {
 
     use Exception;
@@ -10,6 +13,7 @@ namespace classes\dao {
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
+    use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
     use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
     use \classes\util\UserSeachParams as UserSearchParams;
 
@@ -19,6 +23,7 @@ namespace classes\dao {
         private const USER_REGISTER_EMAIL_DUPLICATED_EXCEPTION = "Informed email is already in use, please choose another one.";
         private const UPDATE_USER_PASSWD_ERROR = "An error occurred trying to update the user's password: ";
         private const UPDATE_USER_EMAIL_ERROR = "An error occurred trying to update the user's email: ";
+        private const UPDATE_USER_ERROR = "An error occurred trying to update the user: ";
 
         public function __construct()
         {
@@ -317,6 +322,35 @@ namespace classes\dao {
                 throw new UpdateUserDataException(self::UPDATE_USER_EMAIL_ERROR . $e->getMessage());
             } finally {
                 $statement->closeCursor();
+            }
+        }
+
+        /**
+         * Update the following user fields:
+         * email, firstName, lastName, email, Birthday
+         * $userModel - A provided UserModel Object
+         */
+        public function updateUser($userModel)
+        {
+            $updateQuery = "update user set first_name=:firstName, last_name=:lastName, email=:email, birthday=:birthday where id=:userId";
+
+            try {
+
+                $db = Database::getConnection();
+
+                $smtm = $db->prepare($updateQuery);
+                $smtm->bindValue(":email", $userModel->getEmail());
+                $smtm->bindValue(":firstName", $userModel->getFirstName());
+                $smtm->bindValue(":lastName", $userModel->getLastName());
+                $smtm->bindValue(":birthday", $userModel->getBirthday());
+                $smtm->bindValue(":userId", $userModel->getId());
+
+                $smtm->execute();
+
+            } catch (PDOException $e) {
+                throw new UpdateUserDataException(self::UPDATE_USER_ERROR . $e->getMessage());
+            } finally {
+                $smtm->closeCursor();
             }
         }
 

@@ -16,11 +16,15 @@
 
 
     <!-- Exclusive Page CSS -->
-    <!-- if( isset($flatpickrComponent) && $flatpickrComponent === true ){
-            echo "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css\">";
-        } -->
     <?php
         
+        if( isset($flatpickrComponent) && $flatpickrComponent === true ){
+            echo "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css\">";
+        }
+
+        if( isset($bootstrapTableComponent) && $bootstrapTableComponent === true ){
+            echo "<link rel=\"stylesheet\" href=\"https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.css\">";
+        }
 
         if( isset($extraCSS) ) {
             foreach($extraCSS as $css){

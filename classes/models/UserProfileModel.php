@@ -43,6 +43,15 @@ namespace classes\models {
         {
             return $this->profile;
         }
+
+        //helper to transform this into an array
+        public function toArray()
+        {
+            return array(
+                "user_id" => $this->getUserId(),
+                "profile_id" => $this->getProfileId(),
+            );
+        }
     }
 
 }

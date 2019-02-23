@@ -180,6 +180,17 @@ namespace classes\models {
             );
         }
 
+        //Basic fields to allow update a existing user.
+        public function isNotValidForUpdate()
+        {
+            return (
+                empty(self::getEmail()) ||
+                empty(self::getFirstName()) ||
+                empty(self::getLastName()) ||
+                empty(self::getBirthday())
+            );
+        }
+
         public function passwordsAreEqual()
         {
             return $this->getPassword() === $this->getNewPassword();

@@ -13,6 +13,9 @@ namespace classes\business {
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
     use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
     use \classes\util\UserSessionProfile as UserSessionProfile;
+    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
+    use \classes\models\UserProfileModel as UserProfileModel;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
     class UserBO
     {
@@ -173,6 +176,93 @@ namespace classes\business {
         {
             $userDao = new UserDao();
             return $userDao->getUserById($userId);
+        }
+
+        /**
+         * From a given $userModel object, check if exists changes. If yes, update the object
+         * $userModel - UserModel object
+         */
+        public function updateUser($userModel)
+        {
+            if (empty($userModel) ||
+                !($userModel instanceof \classes\models\UserModel) ||
+                $userModel->isNotValidForUpdate()) {
+                throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
+            }
+
+            $userDao = new UserDao();
+            $userModelFromDB = $userDao->getUserById($userModel->getId());
+
+            if ($userModel->getFirstName() !== $userModelFromDB->getFirstName() ||
+                $userModel->getLastName() !== $userModelFromDB->getLastName() ||
+                $userModel->getEmail() !== $userModelFromDB->getEmail() ||
+                $userModel->getBirthday() !== $userModelFromDB->getBirthday()) {
+                    $userDao->updateUser($userModel);
+            }
+
+        }
+
+        /**
+         * For a given userId and ProfileModel array, define wich operations must to be performed
+         * and dispath them to the database in order to up-to-date the user profile
+         */
+        public function updateUserProfile($userId, $profileModelArray)
+        {
+            if(empty($userId)){
+                throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
+            }
+
+            $profileDao = new ProfileDao();
+            $profileModelArrayFromDB;
+            try{
+                $profileModelArrayFromDB = $profileDao->getProfilesByUserId($userId, ISecurityProfile::PATIENT);
+            } catch (NoDataFoundException $e) {
+                $profileModelArrayFromDB = [];
+            }
+            
+            //check if needs to set a new profile for the  user
+            $profilesToInsert = [];
+            foreach ($profileModelArray as $profileModel) {
+                $mustToInsert = true;
+                foreach ($profileModelArrayFromDB as $profileModelFromDB) {
+                    if($profileModel->getId() === $profileModelFromDB->getId()){
+                        $mustToInsert = false;
+                        break;
+                    }
+                }
+                if($mustToInsert){
+                    $upm = new UserProfileModel();
+                    $upm->setUserId($userId);
+                    $upm->setProfileId($profileModel->getId());
+                    $profilesToInsert[] = $upm;
+                }
+            }
+
+            $profilesToDelete = [];
+            foreach ($profileModelArrayFromDB as $profileModelFromDB) {
+                $mustToDelete = true;
+                foreach ($profileModelArray as $profileModel) {
+                    if($profileModelFromDB->getId() === $profileModel->getId()){
+                        $mustToDelete = false;
+                        break;
+                    }
+                }
+                if($mustToDelete){
+                    $upm = new UserProfileModel();
+                    $upm->setUserId($userId);
+                    $upm->setProfileId($profileModelFromDB->getId());
+                    $profilesToDelete[] = $upm;
+                }
+            }
+
+            if(count($profilesToInsert) > 0){
+                $profileDao->insertUserProfile($profilesToInsert);
+            }
+
+            if(count($profilesToDelete) > 0){
+                $profileDao->deleteUserProfile($profilesToDelete);
+            }
+            
         }
 
     }

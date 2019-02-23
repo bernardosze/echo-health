@@ -3,22 +3,23 @@
 namespace classes\controllers {
 
     use Exception;
+    use \classes\business\ProfileBO as ProfileBO;
     use \classes\business\UserBO as UserBO;
+    use \classes\models\ProfileModel as ProfileModel;
+    use \classes\models\UserModel as UserModel;
 
     $pageTitle = "Set User Profile";
-    $extraCSS = [
-        "",
-        "https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.css",
-    ];
+
+    //$specifc components in use on the page
+    $flatpickrComponent = true;
+    $bootstrapTableComponent = true;
+
     $extraJS = [
-        "https://cdn.jsdelivr.net/npm/flatpickr",
-        "https://cdnjs.cloudflare.com/ajax/libs/core-js/2.6.2/core.min.js",
-        "https://unpkg.com/bootstrap-table@1.13.4/dist/bootstrap-table.min.js",
         "static/js/validation/set_user_profile.js",
     ];
 
     //page variables
-    $firstName = $lastName = $email = $birthday = "";
+    $userId = $firstName = $lastName = $email = $birthday = $appProfiles = $userInEditProfiles = "";
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -29,14 +30,23 @@ namespace classes\controllers {
             if (array_key_exists("id", $qString) &&
                 !empty($qString["id"])) {
 
-                $userBO = new UserBO();
                 try {
+
+                    $userBO = new UserBO();
                     $userModel = $userBO->fetchUserById($qString["id"]);
+                    $userId = $userModel->getId();
                     $firstName = $userModel->getFirstName();
                     $lastName = $userModel->getLastName();
                     $email = $userModel->getEmail();
                     $birthday = $userModel->getBirthday();
 
+                    $profileBO = new ProfileBO();
+                    $profilesArray = $profileBO->getSpecialProfiles($qString["id"]);
+                    $appProfiles = $profilesArray[0];
+                    $userInEditProfiles = $profilesArray[1];
+
+                } catch (NoDataFoundException $e) {
+                    $alertErrorMessage = $e->getMessage();
                 } catch (Exception $e) {
                     $alertErrorMessage = "Error loading user data";
                 }
@@ -45,6 +55,41 @@ namespace classes\controllers {
                 $alertErrorMessage = "Invalid Request: User id not provided.";
             }
 
+        }
+
+    } else {
+
+        $userId = filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT);
+        $firstName = filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING);
+        $lastName = filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+        $birthday = filter_input(INPUT_POST, "birthday", FILTER_SANITIZE_STRING);
+
+        $userModel = new UserModel();
+        $userModel->setId(filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT));
+        $userModel->setFirstName(filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING));
+        $userModel->setLastName(filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING));
+        $userModel->setEmail(filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL));
+        $userModel->setBirthday(filter_input(INPUT_POST, "birthday", FILTER_SANITIZE_STRING));
+
+        $profiles = filter_input(INPUT_POST, 'profile', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $profileModelArray = [];
+        if (!empty($profiles)) {
+            foreach ($profiles as $key => $data) {
+                $profileModel = new ProfileModel();
+                $profileModel->setId($data["id"]);
+                $profileModel->setName($data["name"]);
+                array_push($profileModelArray, $profileModel);
+            }
+        }
+        $userInEditProfiles = $profileModelArray;
+
+        try {
+            $userBO = new UserBO();
+            $userBO->updateUserProfile($userModel->getId(), $profileModelArray);
+            $alertSuccessMessage = "Data successfuly saved.";
+        } catch (Exception $e) {
+            $alertErrorMessage = $e->getMessage();
         }
 
     }
