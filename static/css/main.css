@@ -1,1 +1,7 @@
 /*Application  Main CSS file*/
+
+
+/*delete row on table*/
+.table-row-to-delete {
+    background-color: rgb(253, 203, 209);
+}

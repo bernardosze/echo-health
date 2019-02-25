@@ -30,7 +30,6 @@ namespace classes\controllers\changeemail {
         $userModel->setEmail(filter_input(INPUT_POST, "currentEmail", FILTER_SANITIZE_EMAIL));
         $userModel->setNewEmail(filter_input(INPUT_POST, "newEmail", FILTER_SANITIZE_EMAIL));
         $userModel->setPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
-        $userModel->setNewPassword(filter_input(INPUT_POST, "newPassword", FILTER_SANITIZE_STRING));
 
         try {
 
@@ -52,6 +51,8 @@ namespace classes\controllers\changeemail {
             $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionProfile);
 
         } catch (Exception $e) {
+            $currentEmail = $userModel->getEmail();
+            $newEmail = $userModel->getNewEmail();
             $alertErrorMessage = $e->getMessage();
         }
 

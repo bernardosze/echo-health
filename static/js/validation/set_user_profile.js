@@ -16,20 +16,9 @@ $(document).ready(function () {
                 email: true,
                 maxlength: 50
             },
-            birthday: {
+            dtbirthday: {
                 required: true,
                 maxDate: true
-            },
-            password: {
-                required: true,
-                minlength: 6,
-                maxlength: 20
-            },
-            confirmPassword: {
-                required: true,
-                minlength: 6,
-                maxlength: 20,
-                equalTo: "#password"
             },
         },
         messages: {
@@ -46,7 +35,7 @@ $(document).ready(function () {
                 email: "Please enter a valid email address",
                 maxlength: "Email is limited to 50 characters"
             },
-            birthday: {
+            dtbirthday: {
                 required: "Date of birthday is required",
                 maxDate: "Birthday cannot be a future date"
             },
@@ -54,6 +43,7 @@ $(document).ready(function () {
         errorElement: "div",
         errorClass: "is-invalid",
         validClass: "is-valid",
+        ignore: ".ignore",
         errorPlacement: function (error, element) {
             // Add the `help-block` class to the error element
             error.addClass("invalid-feedback");
@@ -75,7 +65,7 @@ $(document).ready(function () {
     });
 
     //Enable datepicker
-    $("#dt-birthday").flatpickr({
+    $("#dtbirthday").flatpickr({
         enableTime: false,
         dateFormat: "Y-m-d",
         maxDate: "today"
@@ -100,13 +90,26 @@ $.validator.addMethod("maxDate", function (value, element) {
     return false;
 }, "Invalid Date!");
 
+//specific field validation, not allowing date of birth greater than currentDate
+$.validator.addMethod("maxDate", function (value, element) {
+    var curDate = new Date();
+    var inputDate = new Date(value);
+    if (inputDate < curDate)
+        return true;
+    return false;
+}, "Invalid Date!");
+
 //Define if the AddProfile Button must be enabled or disabled
 const toggleAddProfileButtonBehaviour = (event) => {
 
     if (hasProfileSet(event)) {
         $("#addProfileButton").attr("disabled", "");
+        $("#addProfileButton").removeClass("btn-outline-success");
+        $("#addProfileButton").addClass("btn-outline-secondary");
     } else {
         $("#addProfileButton").removeAttr("disabled");
+        $("#addProfileButton").removeClass("btn-outline-secondary");
+        $("#addProfileButton").addClass("btn-outline-success");
     }
 
 }
@@ -165,11 +168,13 @@ const addProfileToList = () => {
 
     combo.selectedIndex = 0;
     $("#addProfileButton").attr("disabled", "");
+    $("#addProfileButton").removeClass("btn-outline-success");
+    $("#addProfileButton").addClass("btn-outline-secondary");
     $("#profilesTableEmptyRow").remove();
 
     const newRowContent =
         `<tr>
-            <td><input type="text" readonly class="form-control-plaintext" name="profile[${comboValue}][id]" value="${comboValue}"></td>
+            <td hidden><input type="text" readonly class="form-control-plaintext" name="profile[${comboValue}][id]" value="${comboValue}"></td>
             <td><input type="text" readonly class="form-control-plaintext" name="profile[${comboValue}][name]" value="${comboText}"></td>
             <td>
                 <i onclick="removeProfile('#${idElement}')" 

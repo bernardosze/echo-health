@@ -20,6 +20,10 @@ namespace classes\controllers {
 
     //page variables
     $userId = $firstName = $lastName = $email = $birthday = $appProfiles = $userInEditProfiles = "";
+    //Default page Messages
+    const DATA_SAVED = "Data successfully saved.";
+    const USER_NOT_FOUND = "Error loading user data";
+    const INVALID_REQUEST = "Invalid Request: User id not provided.";
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
@@ -48,11 +52,11 @@ namespace classes\controllers {
                 } catch (NoDataFoundException $e) {
                     $alertErrorMessage = $e->getMessage();
                 } catch (Exception $e) {
-                    $alertErrorMessage = "Error loading user data";
+                    $alertErrorMessage = USER_NOT_FOUND;
                 }
 
             } else {
-                $alertErrorMessage = "Invalid Request: User id not provided.";
+                $alertErrorMessage = INVALID_REQUEST;
             }
 
         }
@@ -66,11 +70,11 @@ namespace classes\controllers {
         $birthday = filter_input(INPUT_POST, "birthday", FILTER_SANITIZE_STRING);
 
         $userModel = new UserModel();
-        $userModel->setId(filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT));
-        $userModel->setFirstName(filter_input(INPUT_POST, "firstName", FILTER_SANITIZE_STRING));
-        $userModel->setLastName(filter_input(INPUT_POST, "lastName", FILTER_SANITIZE_STRING));
-        $userModel->setEmail(filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL));
-        $userModel->setBirthday(filter_input(INPUT_POST, "birthday", FILTER_SANITIZE_STRING));
+        $userModel->setId($userId);
+        $userModel->setFirstName($firstName);
+        $userModel->setLastName($lastName);
+        $userModel->setEmail($email);
+        $userModel->setBirthday($birthday);
 
         $profiles = filter_input(INPUT_POST, 'profile', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         $profileModelArray = [];
@@ -80,16 +84,26 @@ namespace classes\controllers {
                 $profileModel->setId($data["id"]);
                 $profileModel->setName($data["name"]);
                 array_push($profileModelArray, $profileModel);
+
             }
         }
-        $userInEditProfiles = $profileModelArray;
 
         try {
             $userBO = new UserBO();
+            $userBO->updateUser($userModel);
             $userBO->updateUserProfile($userModel->getId(), $profileModelArray);
-            $alertSuccessMessage = "Data successfuly saved.";
+
+            //load profiles to keep data on page
+            $profileBO = new ProfileBO();
+            $profilesArray = $profileBO->getSpecialProfiles($userId);
+            $appProfiles = $profilesArray[0];
+            $userInEditProfiles = $profilesArray[1];
+
+            $alertSuccessMessage = DATA_SAVED;
         } catch (Exception $e) {
             $alertErrorMessage = $e->getMessage();
+        } finally {
+
         }
 
     }

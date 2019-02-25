@@ -94,7 +94,14 @@ namespace classes\business {
                 //log the successful attempt
                 $userDao->logSuccessfulLogin($userModel);
                 $profileDao = new ProfileDao();
-                $profileModelArray = $profileDao->getProfilesByUserId($userModel->getId());
+                
+                $profileModelArray;
+                try{
+                    $profileModelArray = $profileDao->getProfilesByUserId($userModel->getId());
+                } catch (NoDataFoundException $e){
+                    $profileModelArray = [];
+                }
+                
                 return $this->createUserSessionProfile($userModel, $profileModelArray);
             }
 
@@ -128,8 +135,8 @@ namespace classes\business {
             $userModelFromDB = $userDao->getUserByEmail($userModel->getEmail());
 
             if (empty($userModel->getId()) ||
-                $userModel->passwordsAreBlank() ||
-                $userModel->passwordsAreEqual()) {
+                $userModel->arePasswordsBlank() ||
+                $userModel->arePasswordsEqual()) {
                 throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
             } else if (($userModelFromDB->getPassword() !== $userModel->getPassword())) {
                 throw new UpdateUserDataException(self::INVALID_USER_PASSWORD_EXCEPTION);
@@ -147,6 +154,7 @@ namespace classes\business {
 
             if (empty($userModel->getEmail()) ||
                 empty($userModel->getNewEmail()) ||
+                empty($userModel->getPassword()) ||
                 ($userModel->getEmail() === $userModel->getNewEmail())) {
                 throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
             }

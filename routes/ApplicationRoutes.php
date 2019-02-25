@@ -16,26 +16,28 @@ namespace routes {
          * controllers in the public/ folder will not require security
          */
         private static $routes = [
+            //
             "login" => ["classes/controllers/public/LoginController.php"],
             "logout" => ["classes/controllers/public/LogoutController.php"],
             "signup" => ["classes/controllers/public/SignUpController.php"],
-            "changepasswd" => ["classes/controllers/ChangeUserPasswordController.php", [ISecurityProfile::PATIENT]],
-            "changeemail" => ["classes/controllers/ChangeUserEmailController.php", [ISecurityProfile::PATIENT]],
-            "home" => ["classes/controllers/HomeController.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+            "changepasswd" => ["classes/controllers/ChangeUserPasswordController.php", []],
+            "changeemail" => ["classes/controllers/ChangeUserEmailController.php", []],
+            "home" => ["classes/controllers/HomeController.php", []],
 
             //routes for patients
             "appointment" => ["classes/controllers/MustDefineOne.php", []],
-            "cancelappointment" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
-            "seeprescriptions" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+            "cancelappointment" => ["classes/controllers/MustDefineOne.php", []],
+            "seeprescriptions" => ["classes/controllers/MustDefineOne.php", []],
 
             //routes for doctors
-            "myschedule" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
-            "test2" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
-            "seeprescriptions" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::PATIENT, ISecurityProfile::DOCTOR]],
+            "myschedule" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
+            "test2" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
+            "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
 
             //routes for Administration
             "searchuser" => ["classes/controllers/UserSearchController.php", [ISecurityProfile::SYSADMIN]],
             "setuserprofile" => ["classes/controllers/SetUserProfileController.php", [ISecurityProfile::SYSADMIN]],
+            "medicalspecialty" => ["classes/controllers/MedicalSpecialtyController.php", [ISecurityProfile::SYSADMIN]],
         ];
 
         //Default http error handlers

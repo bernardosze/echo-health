@@ -131,7 +131,7 @@
                     },
                     submitHandler: function (form) {
                         //generate a hash SHA1
-                        $("#password").val(generateSHA1Hash($("#email").val() + $("#password").val()));
+                        $("#password").val(generateSHA1Hash($("#password").val()));
                         form.submit();
                     },
                 });

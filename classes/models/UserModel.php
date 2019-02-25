@@ -191,12 +191,12 @@ namespace classes\models {
             );
         }
 
-        public function passwordsAreEqual()
+        public function arePasswordsEqual()
         {
             return $this->getPassword() === $this->getNewPassword();
         }
 
-        public function passwordsAreBlank()
+        public function arePasswordsBlank()
         {
             return (empty($this->getPassword())) || (empty($this->getNewPassword()));
         }

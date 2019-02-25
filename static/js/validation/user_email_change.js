@@ -13,7 +13,7 @@ $(document).ready(function () {
                 maxlength: 50,
                 differentCurrentEmail: true
             },
-            newPassword: {
+            password: {
                 required: true,
                 minlength: 6,
                 maxlength: 20,
@@ -26,7 +26,7 @@ $(document).ready(function () {
                 maxlength: "Email is limited to 50 characters",
                 differentCurrentEmail: "New email cannot be equals the current one",
             },
-            newPassword: {
+            password: {
                 required: "Password is required",
                 minlength: "Password must be at least 6 characters long",
                 maxlength: "New Password is limited to 20 characters",
@@ -54,8 +54,7 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             //generate a hash SHA1
-            $("#password").val(generateSHA1Hash($("#currentEmail").val() + $("#newPassword").val()));
-            $("#newPassword").val(generateSHA1Hash($("#newEmail").val() + $("#newPassword").val()));
+            $("#password").val(generateSHA1Hash($("#password").val()));
             form.submit();
         },
 

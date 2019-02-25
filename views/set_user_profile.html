@@ -35,7 +35,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="dt-birthday" name="birthday" value="<?=$birthday?>" required>
+                        <input type="text" class="form-control" id="dtbirthday" name="birthday" value="<?=$birthday?>" required>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 <div class="input-group col-md-6">
                     <label for="profilesSelect">Profiles:</label>
                     <div class="form-group input-group">
-                        <select id="profilesSelect" class="custom-select" onchange="toggleAddProfileButtonBehaviour(event);">
+                        <select id="profilesSelect" name="profilesSelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
                             <option selected></option>
                             <?php if(!empty($appProfiles)):?>
                             <?php foreach($appProfiles as $profileModel) { ?>
@@ -60,10 +60,9 @@
                             <?php endif; ?>
                         </select>
                         <div class="input-group-append">
-                            <button id="addProfileButton" title="Add Profile" class="btn btn-outline-success" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
+                            <button id="addProfileButton" title="Add Profile" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -72,7 +71,7 @@
                 <table id="profilesTable" class="table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th hidden>#</th>
                             <th>Profile</th>
                             <th>Action</th>
                         </tr>
@@ -86,7 +85,7 @@
 
                         <?php foreach($userInEditProfiles as $key => $profileModel) { ?>
                         <tr id="userProfile-<?=$profileModel->getId()?>">
-                            <td><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][id]" value="<?=$profileModel->getId()?>"></td>
+                            <td hidden><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][id]" value="<?=$profileModel->getId()?>"></td>
                             <td><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][name]" value="<?=$profileModel->getName()?>"></td>
                             <td><i onclick="removeProfile('#userProfile-<?=$profileModel->getId()?>')" data-toggle="tooltip" title="Remove Profile" class="text-danger fas fa-minus-circle fa-lg"></i>
                             </td>

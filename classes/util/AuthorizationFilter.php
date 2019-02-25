@@ -38,7 +38,7 @@ namespace classes\util {
                     $appRoutesData = RoutesManager::getApplicationRoutes();
                     $routeData = $appRoutesData[$route];
 
-                    if (\count($routeData) > 1) {
+                    if (\count($routeData) > 1 && \count($routeData[1]) > 0) {
 
                         //appRouteData[1] contains an array of profile permissions
                         foreach ($userProfiles as $profile) {
@@ -47,6 +47,9 @@ namespace classes\util {
                                 break;
                             }
                         }
+                    } else {
+                        //Route does not require authorization
+                        $authorized = true;
                     }
 
                 }

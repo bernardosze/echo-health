@@ -24,6 +24,7 @@ namespace classes\dao {
         private const UPDATE_USER_PASSWD_ERROR = "An error occurred trying to update the user's password: ";
         private const UPDATE_USER_EMAIL_ERROR = "An error occurred trying to update the user's email: ";
         private const UPDATE_USER_ERROR = "An error occurred trying to update the user: ";
+        private const UPDATE_USER_ERROR_EMAIL = "Email already in use. Choose another.";
 
         public function __construct()
         {
@@ -225,8 +226,6 @@ namespace classes\dao {
             $insertUserQuery = "insert into USER (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
                 "values(:email, :firstName, :lastName, :password, :birthday, :blocked, :recordCreation )";
 
-            $selectUserQuery = "select * from user where email= :email";
-
             $insertUserProfileQuery = "insert into user_profile (user_id, profile_id) " .
                 "select u.id as user_id, p.id as profile_id " .
                 "from profile p, user u " .
@@ -253,10 +252,10 @@ namespace classes\dao {
                 $userModel->setId($db->lastInsertId());
 
                 //Register the user as a PATIENT by default
-                $stmt = $db->prepare($insertUserProfileQuery);
-                $stmt->bindValue(":profileName", ISecurityProfile::PATIENT);
-                $stmt->bindValue(":userId", $userModel->getId());
-                $stmt->execute();
+                // $stmt = $db->prepare($insertUserProfileQuery);
+                // $stmt->bindValue(":profileName", ISecurityProfile::PATIENT);
+                // $stmt->bindValue(":userId", $userModel->getId());
+                // $stmt->execute();
 
                 $db->commit();
 
@@ -306,7 +305,7 @@ namespace classes\dao {
 
         public function updateUserEmail($userModel)
         {
-            $updateQuery = "update user set email=:newEmail, password=:newPassword where email = :oldEmail";
+            $updateQuery = "update user set email=:newEmail where email = :oldEmail";
 
             try {
 
@@ -314,12 +313,17 @@ namespace classes\dao {
 
                 $statement = $db->prepare($updateQuery);
                 $statement->bindValue(":newEmail", $userModel->getNewEmail());
-                $statement->bindValue(":newPassword", $userModel->getNewPassword());
                 $statement->bindValue(":oldEmail", $userModel->getEmail());
                 $statement->execute();
 
             } catch (PDOException $e) {
-                throw new UpdateUserDataException(self::UPDATE_USER_EMAIL_ERROR . $e->getMessage());
+                if($e->getCode() === "23000"){
+                    //Integrity constraint violation
+                    throw new UpdateUserDataException(self::UPDATE_USER_ERROR_EMAIL);
+                } else {
+                    throw new UpdateUserDataException(self::UPDATE_USER_EMAIL_ERROR . $e->getMessage());
+                }
+                
             } finally {
                 $statement->closeCursor();
             }

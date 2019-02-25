@@ -29,11 +29,12 @@ namespace classes\util {
             [
                 "See Schedule" => "myschedule",
                 "Test 2" => "test2",
-                "test 3" => "seeprescriptions",
+                "test 3" => "test3",
             ],
             "Administration" =>
             [
                 "Set User Profile" => "searchuser",
+                "Medical Specialty" => "medicalspecialty",
             ],
 
         ];

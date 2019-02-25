@@ -110,7 +110,8 @@
         </nav>
     </header>
     <div>
-        <!-- Alert Section -->
+
+        <!-- Alert Section using form submit -->
         <?php if (isset($alertSuccessMessage)) : ?>
         <div class="alert alert-primary border-primary mb-1" role="alert">
             <?=$alertSuccessMessage?>
@@ -124,6 +125,15 @@
             <?=$alertWarningMessage?>
         </div>
         <?php endif;?>
+
+        <!-- Alert Section for AJAX -->
+        <div id="alertSuccessMessage" class="alert alert-primary border-primary mb-1" role="alert" hidden>
+        </div>
+        <div id="alertErrorMessage" class="alert alert-danger border-danger mb-1" role="alert" hidden>
+        </div>
+        <div id="alertWarningMessage" class="alert alert-warning border-warning mb-1" role="alert" hidden>
+        </div>
+
     </div>
     <div class="card bg-light">
         <div class="card-body m-0">

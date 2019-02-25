@@ -66,8 +66,8 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             //generate a hash SHA1
-            $("#currentPassword").val(generateSHA1Hash($("#email").val() + $("#currentPassword").val()));
-            $("#password").val(generateSHA1Hash($("#email").val() + $("#password").val()));
+            $("#currentPassword").val(generateSHA1Hash($("#currentPassword").val()));
+            $("#password").val(generateSHA1Hash($("#password").val()));
             form.submit();
         },
 
