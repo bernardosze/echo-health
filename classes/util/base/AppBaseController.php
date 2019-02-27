@@ -202,7 +202,7 @@ namespace classes\util\base {
         private function setViewsOnResponse()
         {
 
-            //header scope variables
+            //header and footer scope variables
             $pageTitle = $this->pageTitle;
             $extraJS = $this->extraJS;
             $extraCSS = $this->extraCSS;
