@@ -9,7 +9,7 @@ namespace classes\util {
     /**
      * Class to check the the user authorization for a given route.
      *
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     final class AuthorizationFilter
     {

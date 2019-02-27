@@ -5,45 +5,58 @@ namespace classes\controllers {
     use Exception;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
     use \classes\models\MedicalSpecialtyModel as MedicalSpecialtyModel;
+    use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
-    use \classes\util\MenuManager as MenuManager;
 
-    class MedicalSpecialtyController
+    /**
+     * Controller Class for Medical Specialty Registry
+     *
+     * @author: Leonardo Otoni
+     */
+    class MedicalSpecialtyController extends AppBaseController
     {
-        private $pageTitle;
-        private $extraJS;
 
         public function __construct()
         {
-            $this->pageTitle = "Medical Specialty Registry";
-            $this->extraJS = ["static/js/validation/medical_specialty.js"];
-            $this->processRequest();
+            parent::__construct(
+                "Medical Specialty Registry",
+                ["views/medical_specialty.html"],
+                null,
+                ["static/js/validation/medical_specialty.js"]
+            );
         }
 
-        private function processRequest()
+        /**
+         * Method override.
+         * Process GET requests.
+         */
+        protected function doGet()
         {
-            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-                $this->doGet();
-            } else {
-                $this->doPost();
-            }
-        }
 
-        private function doGet()
-        {
+            // $this->renderView();
             $qString = $_SERVER['QUERY_STRING'];
             if (!empty($qString) && (strpos($qString, 'JSON') !== false)) {
                 $this->processJsonRequest();
             }
 
-            $this->renderView();
+            parent::doGet();
+
         }
 
-        private function doPost()
+        /**
+         * Method override.
+         * Process GET requests.
+         */
+        protected function doPost()
         {
             $this->processJsonPost();
+            parent::doPost();
         }
 
+        /**
+         * Return a JSON response with all Medical Specialties
+         *
+         */
         private function processJsonRequest()
         {
             try {
@@ -60,6 +73,10 @@ namespace classes\controllers {
             exit();
         }
 
+        /**
+         * Process POST request passing JSON data.
+         * It will return data up-to-date to the fronte end.
+         */
         private function processJsonPost()
         {
             $jsonArray = $_POST["medicalSpecialty"];
@@ -89,17 +106,6 @@ namespace classes\controllers {
             echo json_encode($data);
             exit();
 
-        }
-
-        private function renderView()
-        {
-            $pageTitle = $this->pageTitle;
-            $extraJS = $this->extraJS;
-            $appMenu = MenuManager::getFiltredMenus();
-
-            require_once "views/templates/header.html";
-            require_once "views/medical_specialty.html";
-            require_once "views/templates/footer.html";
         }
 
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Medical Specialty DAO Class
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\dao {
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Profile Business Object.
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\business {
 

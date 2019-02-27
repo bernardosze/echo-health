@@ -6,7 +6,7 @@ namespace classes\util {
      * Singleton Security filter that verify the user session status.
      * Only authenticated users with a valid session can survive :)
      *
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     final class SecurityFilter
     {

@@ -4,7 +4,7 @@ namespace classes\util {
 
     /**
      * Helper Class to hold the basic user profile into session
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     class UserSessionProfile
     {

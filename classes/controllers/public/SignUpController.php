@@ -2,7 +2,7 @@
 /**
  * Controller to dispatch the user registration form
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 namespace classes\controllers\publicControllers {

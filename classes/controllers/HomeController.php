@@ -1,19 +1,41 @@
 <?php
-/**
- * App Home Page Controller
- * Author: Leonardo Otoni
- */
-
 namespace classes\controllers {
 
     use \classes\util\AppConstants as AppConstants;
+    use \classes\util\base\AppBaseController as AppBaseController;
 
-    $pageTitle = "Home Page";
-    $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
-    $firstName = $userSessionProfile->getFirstName();
+    /**
+     * App Home Page Controller
+     *
+     * @author: Leonardo Otoni
+     */
+    class HomeController extends AppBaseController
+    {
 
-    require_once "views/templates/header.html";
-    require_once "views/home.html";
-    require_once "views/templates/footer.html";
+        public function __construct()
+        {
+            parent::__construct(
+                "Home Page",
+                ["views/home.html"]
+            );
+        }
+
+        /**
+         * Method override.
+         * Render the Controller's view page.
+         */
+        protected function renderViewPages($views)
+        {
+            $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+            $firstName = $userSessionProfile->getFirstName();
+
+            foreach ($views as $view) {
+                require_once $view;
+            }
+        }
+
+    }
+
+    new HomeController();
 
 }

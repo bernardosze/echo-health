@@ -6,7 +6,7 @@ namespace classes\util\exceptions {
 
     /**
      * Must be used to throw Critical Exceptions, like an unreachable database.
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     class FatalException extends Exception
     {

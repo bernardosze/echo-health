@@ -2,7 +2,7 @@
 /**
  * GLOBAL APP CONSTANTS
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 namespace classes\util {

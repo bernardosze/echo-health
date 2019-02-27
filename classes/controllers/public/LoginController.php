@@ -2,7 +2,7 @@
 /**
  * Default app login controller.
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\controllers\publicControllers {
 

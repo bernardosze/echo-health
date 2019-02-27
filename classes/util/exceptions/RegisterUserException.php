@@ -6,7 +6,7 @@ namespace classes\util\exceptions {
 
     /**
      * Class to Handle Specific User Signup exceptions
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     class RegisterUserException extends Exception
     {

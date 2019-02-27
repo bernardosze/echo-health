@@ -1,6 +1,6 @@
 /**
  * Performs the form input validation for User Password Change Use Case
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 $(document).ready(function () {

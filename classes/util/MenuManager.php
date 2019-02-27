@@ -10,7 +10,7 @@ namespace classes\util {
      * Helper class to provide menu data according to the user profile
      * authenticated into the application.
      *
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     final class MenuManager implements ISecurityProfile
     {
