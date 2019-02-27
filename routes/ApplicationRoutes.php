@@ -25,6 +25,7 @@ namespace routes {
             "home" => ["classes/controllers/HomeController.php", []],
 
             //routes for patients
+            "patientprofile" => ["classes/controllers/UserPatientController.php"],
             "appointment" => ["classes/controllers/MustDefineOne.php", []],
             "cancelappointment" => ["classes/controllers/MustDefineOne.php", []],
             "seeprescriptions" => ["classes/controllers/MustDefineOne.php", []],
