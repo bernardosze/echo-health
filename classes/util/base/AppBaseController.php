@@ -53,21 +53,51 @@ namespace classes\util\base {
          *
          * @var string
          */
-        protected $alertErrorMessage;
+        private $alertErrorMessage;
+
+        /**
+         * Mutator for AlertErrorMessage
+         *
+         * @param string
+         */
+        protected function setAlertErrorMessage($value)
+        {
+            $this->alertErrorMessage = $value;
+        }
 
         /**
          * Variable used by the Header Template to exhibit Success Messages
          *
          * @var string
          */
-        protected $alertSuccessMessage;
+        private $alertSuccessMessage;
+
+        /**
+         * Mutator for AlertSuccessMessage
+         *
+         * @param string
+         */
+        protected function setAlertSuccessMessage($value)
+        {
+            $this->alertSuccessMessage = $value;
+        }
 
         /**
          * Variable used by the Header Template to exhibit Warning Messages
          *
          * @var string
          */
-        protected $alertWarningMessage;
+        private $alertWarningMessage;
+
+        /**
+         * Mutator for AlertWarningMessage
+         *
+         * @param string
+         */
+        protected function setWarningMessage($value)
+        {
+            $this->alertWarningMessage = $value;
+        }
 
         /**
          * Default constructor
@@ -129,6 +159,21 @@ namespace classes\util\base {
         }
 
         /**
+         * Render Controller Specific View Pages.
+         *
+         * This function must be overrided in cases where views are refering to specific scope variables from
+         * the Controllers.
+         *
+         * @param array[string]
+         */
+        protected function renderViewPages($views)
+        {
+            foreach ($views as $view) {
+                require_once $view;
+            }
+        }
+
+        /**
          * Set the Predefined views on the response
          */
         private function setViewsOnResponse()
@@ -148,9 +193,7 @@ namespace classes\util\base {
             require_once parent::TEMPLATE_HEADER;
 
             if (isset($this->viewPages)) {
-                foreach ($this->viewPages as $view) {
-                    require_once $view;
-                }
+                $this->renderViewPages($this->viewPages);
             }
 
             require_once parent::TEMPLATE_FOOTER;
