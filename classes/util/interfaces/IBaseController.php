@@ -8,6 +8,9 @@ namespace classes\util\interfaces {
     interface IBaseController
     {
 
+        /**
+         * Default method to be invoked by a controller to process a request
+         */
         public function processRequest();
 
     }
