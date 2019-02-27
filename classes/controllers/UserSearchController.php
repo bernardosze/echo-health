@@ -43,7 +43,7 @@ namespace classes\controllers {
         /**
          * Process a Ajax request.
          *
-         * This function will invoke the Business layer to fetch users send back a JSON object
+         * This function will invoke the Business layer to fetch users and send back a JSON object
          * to the Front-end
          *
          * @param $queryString - The request query string with user search parameters

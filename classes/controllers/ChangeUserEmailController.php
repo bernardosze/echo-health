@@ -10,6 +10,7 @@ namespace classes\controllers\changeemail {
 
     /**
      * Controller class for User Change Email
+     *
      * @author: Leonardo Otoni
      */
     class ChangeEmailController extends AppBaseController
