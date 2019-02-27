@@ -100,20 +100,43 @@ namespace classes\util\base {
         }
 
         /**
+         * Flag to enable loading the CSS and JS of flatPickrComponent;
+         *
+         * @var boolean
+         */
+        private $flatpickrComponent;
+
+        /**
+         * Flag to enable loading the CSS and JS of Boostrap-table component;
+         *
+         * @var boolean
+         */
+        private $bootstrapTableComponent;
+
+        /**
          * Default constructor
          *
          * @param string $pageTitle
          * @param array[string] $viewPages
          * @param array[string] $extraCSS
          * @param array[string] $extraJS
+         * @param bollean $flatpickrComponent
+         * @param bollean $bootstrapTableComponent
          */
-        protected function __construct($pageTitle = null, $viewPages = null, $extraCSS = null, $extraJS = null)
-        {
+        protected function __construct(
+            $pageTitle = null,
+            $viewPages = null,
+            $extraCSS = null,
+            $extraJS = null,
+            $flatpickrComponent = false,
+            $bootstrapTableComponent = false) {
 
             $this->pageTitle = $pageTitle;
             $this->viewPages = $viewPages;
             $this->extraCSS = $extraCSS;
             $this->extraJS = $extraJS;
+            $this->flatpickrComponent = $flatpickrComponent;
+            $this->bootstrapTableComponent = $bootstrapTableComponent;
 
             $this->processRequest();
         }
@@ -183,6 +206,8 @@ namespace classes\util\base {
             $pageTitle = $this->pageTitle;
             $extraJS = $this->extraJS;
             $extraCSS = $this->extraCSS;
+            $flatpickrComponent = $this->flatpickrComponent;
+            $bootstrapTableComponent = $this->bootstrapTableComponent;
             $alertErrorMessage = $this->alertErrorMessage;
             $alertSuccessMessage = $this->alertSuccessMessage;
             $alertWarningMessage = $this->alertWarningMessage;
