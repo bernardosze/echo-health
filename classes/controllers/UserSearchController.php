@@ -1,30 +1,58 @@
 <?php
-/**
- * Controller to search users.
- * @author: Leonardo Otoni
- */
 namespace classes\controllers {
 
     use Exception;
     use \classes\business\UserBO as UserBO;
+    use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\UserSearchParams as UserSearchParams;
 
-    $pageTitle = "User Search";
+    /**
+     * Controller Class for User Search
+     *
+     * @author: Leonardo Otoni
+     */
+    class UserSearchController extends AppBaseController
+    {
+        public function __construct()
+        {
+            parent::__construct(
+                "User Search",
+                ["views/user_search.html"],
+                null,
+                ["static/js/validation/user_search.js"],
+                null,
+                true
+            );
+        }
 
-    //$specifc components in use on the page
-    $bootstrapTableComponent = true;
+        /**
+         * Method override.
+         * Process GET requests.
+         */
+        protected function doGet()
+        {
 
-    $extraJS = [
-        "static/js/validation/user_search.js",
-    ];
+            $qString = $_SERVER['QUERY_STRING'];
+            if (!empty($qString) && (strpos($qString, 'JSON') !== false)) {
+                $this->processAjaxRequest($qString);
+            }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            parent::doGet();
+        }
 
-        $qString = $_SERVER['QUERY_STRING'];
-
-        if (!empty($qString) && (strpos($qString, 'JSON') !== false)) {
-
-            parse_str($qString, $qStringArray);
+        /**
+         * Process a Ajax request.
+         *
+         * This function will invoke the Business layer to fetch users send back a JSON object
+         * to the Front-end
+         *
+         * @param $queryString - The request query string with user search parameters
+         *
+         * @return JSON object
+         */
+        private function processAjaxRequest($queryString)
+        {
+            parse_str($queryString, $qStringArray);
 
             $userBO = new UserBO();
             $json = array();
@@ -39,13 +67,10 @@ namespace classes\controllers {
             } finally {
                 exit();
             }
-
-        } else {
-            require_once "views/templates/header.html";
-            require_once "views/user_search.html";
-            require_once "views/templates/footer.html";
         }
 
     }
+
+    new UserSearchController();
 
 }
