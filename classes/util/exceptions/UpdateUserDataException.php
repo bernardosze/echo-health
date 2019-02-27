@@ -6,7 +6,7 @@ namespace classes\util\exceptions {
 
     /**
      * Class to Handle Specific User update data exceptions
-     * Author: Leonardo Otoni
+     * @author: Leonardo Otoni
      */
     class UpdateUserDataException extends Exception
     {

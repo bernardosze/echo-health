@@ -2,7 +2,7 @@
 
 /**
  * Controller to handle user email change requests
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\controllers\changeemail {
 

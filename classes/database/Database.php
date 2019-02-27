@@ -3,7 +3,7 @@
  * Database Singleton Class
  * It manages the connection to the database using PDO
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\Database {
 

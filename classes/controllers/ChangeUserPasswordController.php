@@ -1,7 +1,7 @@
 <?php
 /**
  * Controller to handle user change password requests.
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\controllers\changePassword {
 

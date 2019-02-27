@@ -1,7 +1,7 @@
 <?php
 /**
  * App Home Page Controller
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 namespace classes\controllers {

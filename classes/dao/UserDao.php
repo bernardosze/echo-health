@@ -1,7 +1,7 @@
 <?php
 /**
  * DAO Class to handle all User database operations
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\dao {
 

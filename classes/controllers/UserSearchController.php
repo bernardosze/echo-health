@@ -1,7 +1,7 @@
 <?php
 /**
  * Controller to search users.
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\controllers {
 

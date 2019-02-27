@@ -1,7 +1,7 @@
 <?php
 /**
  * Singleton class to store the application routes
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace routes {
 

@@ -3,7 +3,7 @@
  * General methods to create a hash and assigned it into the form.
  * File used in the authentication and user registration pages
  *
- * Author: Leonardo Otoni de Assis
+ * @author: Leonardo Otoni de Assis
  *
  * Dependency: sha1.min.js
  */

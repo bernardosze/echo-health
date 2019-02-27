@@ -3,7 +3,7 @@
  * Default app ClassLoader.
  * As long as the namespace is correctly declared, it will load automatically the class ad-hoc.
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 //define("ROOT_PATH", dirname(__FILE__, 2) . "/");

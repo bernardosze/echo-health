@@ -3,7 +3,7 @@
  * Filter file that is used for all incoming requests.
  * This filter rely on Apache .htaccess to work.
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 
 define("ROOT_PATH", dirname(__FILE__, 1) . "/");
@@ -58,6 +58,7 @@ function dispatchRoute($route)
         SecurityFilter::getInstance()->validateUserSession();
         AuthorizationFilter::validateUserAuthorization($route);
 
+        //TODO:: Remove this declaration from here as soon all controllers are inherinting from AppBaseController.
         //Filter the User Menu considering the profiles defined for the routes
         $appMenu = MenuManager::getFiltredMenus();
     }

@@ -3,7 +3,7 @@
  * Logout controller. It invalidate the user session and performs the redirection
  * to the application
  *
- * Author: Leonardo Otoni
+ * @author: Leonardo Otoni
  */
 namespace classes\controllers\publicControllers {
 
