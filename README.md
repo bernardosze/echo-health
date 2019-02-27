@@ -1,3 +1,6 @@
+Bernardo Sze - Patients pages
+Leonardo Otoni - All
+
 # echo-health
 
 ======= <<<<<<<<< GENERAL INSTRUCTIONS TO SETUP THE ENVIRONMENT >>>>>>>>> =======
