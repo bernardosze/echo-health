@@ -5,6 +5,7 @@
  */
 namespace classes\dao {
 
+    use Exception;
     use PDO;
     use PDOException;
     use \classes\database\Database as Database;
@@ -40,10 +41,10 @@ namespace classes\dao {
                     throw new NoDataFoundException();
                 }
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if (isset($stmt)) {
+                    $stmt->closeCursor();
+                }
             }
 
         }
@@ -114,15 +115,17 @@ namespace classes\dao {
 
                 $db->commit();
 
-            } catch (PDOException $e) {
+            } catch (\Exception $e) {
                 $db->rollback();
                 throw $e;
-            } catch (\Exception $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if (isset($stmt)) {
+                    $stmt->closeCursor();
+                }
             }
 
         }
+
     }
+
 }

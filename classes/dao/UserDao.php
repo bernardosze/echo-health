@@ -49,10 +49,10 @@ namespace classes\dao {
                     throw new NoDataFoundException();
                 }
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
 
         }
@@ -81,10 +81,10 @@ namespace classes\dao {
                     throw new NoDataFoundException();
                 }
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
 
         }
@@ -140,10 +140,10 @@ namespace classes\dao {
                     throw new NoDataFoundException();
                 }
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
         }
 
@@ -177,10 +177,10 @@ namespace classes\dao {
 
                 $stmt->execute();
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
-                $stmt->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
 
         }
@@ -209,8 +209,6 @@ namespace classes\dao {
 
                 $stmt->execute();
 
-            } catch (PDOException $e) {
-                throw $e;
             } finally {
                 $stmt->closeCursor();
             }
@@ -274,7 +272,9 @@ namespace classes\dao {
                 $db->rollBack();
                 throw $e;
             } finally {
-                $stmt->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
 
         }
@@ -290,16 +290,18 @@ namespace classes\dao {
             try {
                 $db = Database::getConnection();
 
-                $statement = $db->prepare($updateQuery);
+                $stmt = $db->prepare($updateQuery);
 
-                $statement->bindValue(":password", $userModel->getNewPassword());
-                $statement->bindValue(":userId", $userModel->getId());
-                $statement->execute();
+                $stmt->bindValue(":password", $userModel->getNewPassword());
+                $stmt->bindValue(":userId", $userModel->getId());
+                $stmt->execute();
 
             } catch (Exception $e) {
                 throw new UpdateUserDataException(self::UPDATE_USER_PASSWD_ERROR . $e->getMessage());
             } finally {
-                $statement->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
         }
 
@@ -311,10 +313,10 @@ namespace classes\dao {
 
                 $db = Database::getConnection();
 
-                $statement = $db->prepare($updateQuery);
-                $statement->bindValue(":newEmail", $userModel->getNewEmail());
-                $statement->bindValue(":oldEmail", $userModel->getEmail());
-                $statement->execute();
+                $stmt = $db->prepare($updateQuery);
+                $stmt->bindValue(":newEmail", $userModel->getNewEmail());
+                $stmt->bindValue(":oldEmail", $userModel->getEmail());
+                $stmt->execute();
 
             } catch (PDOException $e) {
                 if($e->getCode() === "23000"){
@@ -325,7 +327,9 @@ namespace classes\dao {
                 }
                 
             } finally {
-                $statement->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
         }
 
@@ -342,19 +346,21 @@ namespace classes\dao {
 
                 $db = Database::getConnection();
 
-                $smtm = $db->prepare($updateQuery);
-                $smtm->bindValue(":email", $userModel->getEmail());
-                $smtm->bindValue(":firstName", $userModel->getFirstName());
-                $smtm->bindValue(":lastName", $userModel->getLastName());
-                $smtm->bindValue(":birthday", $userModel->getBirthday());
-                $smtm->bindValue(":userId", $userModel->getId());
+                $stmt = $db->prepare($updateQuery);
+                $stmt->bindValue(":email", $userModel->getEmail());
+                $stmt->bindValue(":firstName", $userModel->getFirstName());
+                $stmt->bindValue(":lastName", $userModel->getLastName());
+                $stmt->bindValue(":birthday", $userModel->getBirthday());
+                $stmt->bindValue(":userId", $userModel->getId());
 
-                $smtm->execute();
+                $stmt->execute();
 
             } catch (PDOException $e) {
                 throw new UpdateUserDataException(self::UPDATE_USER_ERROR . $e->getMessage());
             } finally {
-                $smtm->closeCursor();
+                if(isset($stmt)){
+                    $stmt->closeCursor();
+                }
             }
         }
 
