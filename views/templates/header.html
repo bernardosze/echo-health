@@ -97,8 +97,13 @@
                             <?=$userFirstName?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <?php if( in_array("PATIENT", $userProfiles) ): ?>
+                                <a class="dropdown-item" href="patientprofile">Profile</a>
+                                <hr>
+                            <?php endif;?>
                             <a class="dropdown-item" href="changeemail">Change Email</a>
                             <a class="dropdown-item" href="changepasswd">Change Password</a>
+                            <hr>
                             <a class="dropdown-item" href="logout"><i class="fas fa-sign-out-alt">&nbsp;</i>Logout</a>
                         </div>
                     </li>

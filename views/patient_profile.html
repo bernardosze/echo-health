@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-end align-items-center">
+    <div class="mt-1 mb-1">
+        <button type="button" class="btn btn-primary" onclick="$('#patientProfileForm').submit();">Save</button>
+    </div>
+</div>
+<div class="card">
+    <div class="card-box bg-white p-4">
+        <form id="patientProfileForm" action="patientprofile" method="POST">
+            <fieldset>
+                <legend>Emergency Contact</legend>
+                <div class="form-group row">
+                    <label for="emergencyContact" class="col-sm-2 col-form-label">Name:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="emergencyContact" name="emergencyContact" value="<?=$emergencyContact?>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="emergencyRelationship" class="col-sm-2 col-form-label">Relationship:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="emergencyRelationship" name="emergencyRelationship" value="<?=$emergencyRelationship?>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="emergencyPhone" class="col-sm-2 col-form-label">Phone:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="emergencyPhone" name="emergencyPhone"  value="<?=$emergencyPhone?>">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                    <legend>Insurance Information</legend>
+                    <div class="form-group row">
+                        <label for="insuranceCompany" class="col-sm-2 col-form-label">Company Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insuranceCompany" name="insuranceCompany" value="<?=$insuranceCompany?>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="insuranceCertificate" class="col-sm-2 col-form-label">Certificate/ID#</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insuranceCertificate" name="insuranceCertificate" value="<?=$insuranceCertificate?>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="insuranceGroupPolicy" class="col-sm-2 col-form-label">Group Policy #</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="insuranceGroupPolicy" name="insuranceGroupPolicy"  value="<?=$insuranceGroupPolicy?>">
+                        </div>
+                    </div>
+                </fieldset>
+        </form>
+    </div>
+</div>
