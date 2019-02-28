@@ -154,7 +154,7 @@ namespace classes\util\base {
                 } else {
                     $this->doPost();
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 //TODO: improve exception handling to avoid a generic error message.
                 http_response_code(500);
                 require_once ApplicationRoutes::_500_CONTROLLER;
@@ -201,6 +201,18 @@ namespace classes\util\base {
          */
         private function setViewsOnResponse()
         {
+            if ($this->isIntranet()) {
+                $this->setIntranetViews();
+            } else {
+                $this->setExternalViews();
+            }
+        }
+
+        /**
+         * Set default pages on response.
+         */
+        private function setIntranetViews()
+        {
 
             //header and footer scope variables
             $pageTitle = $this->pageTitle;
@@ -223,6 +235,25 @@ namespace classes\util\base {
 
             require_once parent::TEMPLATE_FOOTER;
 
+        }
+
+        /**
+         * Set only specific controller pages on response
+         */
+        private function setExternalViews()
+        {
+            $this->renderViewPages($this->viewPages);
+        }
+
+        /**
+         * Flag function to define if the controller must render basic templates for intranet
+         * environment, like header and footer pages.
+         *
+         * @return boolean
+         */
+        protected function isIntranet()
+        {
+            return true;
         }
     }
 }
