@@ -6,49 +6,96 @@
  */
 namespace classes\controllers\publicControllers {
 
-    use Exception;
     use \classes\business\UserBO as UserBO;
     use \classes\models\UserModel as UserModel;
     use \classes\util\AppConstants as AppConstants;
+    use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\AuthenticationException as AuthenticationException;
     use \classes\util\SecurityFilter as SecurityFilter;
-    use \routes\RoutesManager as RoutesManager;
 
-    const LOGIN_VIEW = "views/security/login.html";
-    $email = "";
+    class LoginController extends AppBaseController
+    {
+        private $userAuthenticationErrorMsg = null;
+        private $email = "";
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $securityFilter = SecurityFilter::getInstance();
-        if ($securityFilter->isUserLogged() && !$securityFilter->isExpiredSession()) {
-            //User is already authenticated, so dispatch to the intranet home.
-            header("Location: " . AppConstants::HOME_PAGE_INTRANET);
-        } else {
-            require_once ROOT_PATH . LOGIN_VIEW;
+        //overrided property to not set intranet pages
+        protected $isIntranet = false;
+
+        public function __construct()
+        {
+            parent::__construct(
+                null,
+                ["views/security/login.html"]
+            );
+
         }
 
-    } else {
-        //the user login form was posted
-        $userModel = new UserModel();
-        $userModel->setEmail(filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL));
-        $userModel->setPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
+        /**
+         * Method override.
+         * Process GET requests.
+         */
+        protected function doGet()
+        {
 
-        try {
-            $userBO = new UserBO();
-            $userSessionData = $userBO->authenticateUser($userModel);
-            session_start();
-            $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionData);
-            $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
-            header("Location: " . AppConstants::HOME_PAGE_INTRANET);
-        } catch (AuthenticationException $e) {
-            //User could not be authenticated
-            $userAuthenticationErrorMsg = AppConstants::USER_AUTHENTICATION_ERROR_MSG;
-        } catch (Exception $e) {
-            //Exception not expected from model
-            require_once RoutesManager::_500_CONTROLLER;
-            exit();
+            if (SecurityFilter::isUserLogged() && !SecurityFilter::isExpiredSession()) {
+                //User is already authenticated, so dispatch to the intranet home.
+                header("Location: " . AppConstants::HOME_PAGE_INTRANET);
+            }
+
+            parent::doGet();
         }
 
-        require_once ROOT_PATH . LOGIN_VIEW;
+        /**
+         * Method override.
+         * Process POST requests.
+         */
+        protected function doPost()
+        {
+            $userModel = new UserModel();
+            $this->email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+            $userModel->setEmail($this->email);
+            $userModel->setPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
+
+            try {
+                $userBO = new UserBO();
+                $userSessionData = $userBO->authenticateUser($userModel);
+                session_start();
+                $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionData);
+                $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
+                header("Location: " . AppConstants::HOME_PAGE_INTRANET);
+            } catch (AuthenticationException $e) {
+                //User could not be authenticated
+                $this->userAuthenticationErrorMsg = AppConstants::USER_AUTHENTICATION_ERROR_MSG;
+            }
+
+            parent::doPost();
+        }
+
+        /**
+         * Method override.
+         * Render the Controller's view page.
+         */
+        protected function renderViewPages($views)
+        {
+            $userAuthenticationErrorMsg = $this->userAuthenticationErrorMsg;
+            $email = $this->email;
+
+            foreach ($views as $view) {
+                require_once $view;
+            }
+        }
+
+        /**
+         * Method override.
+         * It define that the controller must to render only the predefined pages.
+         */
+        protected function isIntranet()
+        {
+            return false;
+        }
+
     }
+
+    new LoginController();
 
 }

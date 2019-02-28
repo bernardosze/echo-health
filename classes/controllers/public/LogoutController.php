@@ -8,9 +8,18 @@
 namespace classes\controllers\publicControllers {
 
     use \classes\util\AppConstants as AppConstants;
+    use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\SecurityFilter as SecurityFilter;
 
-    SecurityFilter::invalidadeUserSession();
-    header("Location: " . AppConstants::HOME_PAGE);
+    class LogoutController extends AppBaseController
+    {
+        public function __construct()
+        {
+            SecurityFilter::invalidadeUserSession();
+            header("Location: " . AppConstants::HOME_PAGE);
+        }
+    }
+
+    new LogoutController();
 
 }
