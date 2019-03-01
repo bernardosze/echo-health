@@ -7,14 +7,15 @@ namespace classes\models {
     class PatientModel implements JsonSerializable
     {
         private $id;
-        private $user_profile_user_id;
-        private $user_profile_profile_id;
         private $emergency_contact;
         private $emergency_relationship;
         private $emergency_phone;
         private $insurance_company;
         private $insurance_certificate;
         private $insurance_group_policy;
+
+        //aux UserProfileModel entity
+        private $userProfile;
 
         public function __construct()
         {
@@ -30,24 +31,14 @@ namespace classes\models {
             $this->id = $value;
         }
 
-        public function getUserProfileUserId()
+        public function getUserProfile()
         {
-            return $this->user_profile_user_id;
+            return $this->userProfile;
         }
 
-        public function setUserProfileUserId($value)
+        public function setUserProfile($value)
         {
-            $this->user_profile_user_id = $value;
-        }
-
-        public function getUserProfileProfileId()
-        {
-            return $this->user_profile_profile_id;
-        }
-
-        public function setUserProfileProfileId($value)
-        {
-            $this->user_profile_profile_id = $value;
+            $this->userProfile = $value;
         }
 
         public function getEmergencyContact()
@@ -148,5 +139,3 @@ namespace classes\models {
     }
 
 }
-
-?>
