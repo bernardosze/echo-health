@@ -32,14 +32,14 @@ namespace classes\util {
         {
 
             $userSessionData = null;
-            if ($this->isUserLogged()) {
+            if (self::isUserLogged()) {
                 $userSessionData = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             }
 
             if (!isset($userSessionData)) {
                 //User not authenticated!!!
                 self::forceUserLogin();
-            } else if ($this->isExpiredSession()) {
+            } else if (self::isExpiredSession()) {
                 //User authenticated with a expired session
                 if ($this->isAjax()) {
                     echo json_encode(AppConstants::INVALID_SESSION_JSON);
@@ -55,16 +55,20 @@ namespace classes\util {
             }
         }
 
-        public function isUserLogged()
+        public static function isUserLogged()
         {
-            return array_key_exists(AppConstants::USER_SESSION_DATA, $_SESSION);
+            if (isset($_SESSION)) {
+                return array_key_exists(AppConstants::USER_SESSION_DATA, $_SESSION);
+            } else {
+                return false;
+            }
         }
 
         /**
          * Check if the user session is valid or not.
          * It returns true if the user session is expired, otherwise it will return false.
          */
-        public function isExpiredSession()
+        public static function isExpiredSession()
         {
             //User logged in, now checks if session is expired
             $userRequestTime = $_SERVER["REQUEST_TIME"];
