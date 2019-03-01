@@ -10,13 +10,8 @@ namespace classes\dao {
     use PDOException;
     use \classes\database\Database as Database;
     use \classes\models\PatientModel as PatientModel;
-    use \classes\models\UserModel as UserModel;
-    use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
-    use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
-    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
-    use \classes\util\UserSeachParams as UserSearchParams;
 
     class PatientDao
     {
@@ -51,15 +46,37 @@ namespace classes\dao {
 
         }
 
+        /**
+         *
+         * afdsfsdfdsfsdfs
+         *
+         * @param $patientModel -
+         */
         public function insertPatientProfile($patientModel)
         {
 
-            $insertPatientProfileQuery = "INSERT INTO patient (user_profile_user_id, emergency_contact, emergency_relationship, emergency_phone, insurance_company, insurance_certificate, insurance_group_policy) " .
-                "values( :userId, :emergencyContact, :emergencyRelationship, :emergencyPhone, :insuranceCompany, :insuranceCertificate, :insuranceGroupPolicy )";
+            $insertPatientProfileQuery =
+                "INSERT INTO patient (user_profile_user_id,
+                user_profile_profile_id,
+                emergency_contact,
+                emergency_relationship,
+                emergency_phone,
+                insurance_company,
+                insurance_certificate,
+                insurance_group_policy) " .
 
-            $db = Database::getConnection();
+                "values( :userId,
+                    :userProfileId,
+                    :emergencyContact,
+                    :emergencyRelationship,
+                    :emergencyPhone,
+                    :insuranceCompany,
+                    :insuranceCertificate,
+                    :insuranceGroupPolicy )";
 
             try {
+
+                $db = Database::getConnection();
 
                 /* It is necessary to guarantee that a User and UserProfile are saved
                  * in the same transaction. All users initially has a PATIENT profile
@@ -67,7 +84,8 @@ namespace classes\dao {
                 $db->beginTransaction();
 
                 $stmt = $db->prepare($insertPatientProfileQuery);
-                //$stmt->bindValue(":userId", $userModel->getId());
+                $stmt->bindValue(":userId", $patientModel->getUserProfile->getUserId());
+                $stmt->bindValue(":userProfileId", $patientModel->getUserProfile->getProfileId());
                 $stmt->bindValue(":emergencyContact", $patientModel->getEmergencyContact());
                 $stmt->bindValue(":emergencyRelationship", $patientModel->getEmergencyRelationship());
                 $stmt->bindValue(":emergencyPhone", $patientModel->getEmergencyPhone());
@@ -75,12 +93,6 @@ namespace classes\dao {
                 $stmt->bindValue(":insuranceCertificate", $patientModel->getInsuranceCertificate());
                 $stmt->bindValue(":insuranceGroupPolicy", $patientModel->getInsuranceGroupPolicy());
                 $stmt->execute();
-
-                //Register the user as a PATIENT by default
-                // $stmt = $db->prepare($insertUserProfileQuery);
-                // $stmt->bindValue(":profileName", ISecurityProfile::PATIENT);
-                // $stmt->bindValue(":userId", $userModel->getId());
-                // $stmt->execute();
 
                 $db->commit();
 
