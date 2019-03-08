@@ -6,6 +6,21 @@
     background-color: rgb(253, 203, 209);
 }
 
+.login-bg::before {
+    content: "";
+    background: url("../img/shutterstock_594717740.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1; 
+}
+
 .echo-green-bg {
     background-color: #40C7B9 !important;
 }
