@@ -23,6 +23,8 @@ namespace classes\Database {
         //private const DB_DSN = 'mysql:host=localhost:3306;dbname=php'; //Bernardo's Local DB
         private const DB_USERNAME = 'php';
         private const DB_PASSWORD = 'php';
+        //private const DB_USERNAME = 'root';//Josh Uname
+        //private const DB_PASSWORD = '';//Josh password
 
         private function __construct()
         {
