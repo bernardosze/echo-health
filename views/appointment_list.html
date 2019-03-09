@@ -1,16 +1,20 @@
 <div class="container-fluid">
-    <?php if (isset($firstName)): ?>
-    <div>
-      <h4>
-        Welcome <?=$firstName?>,
-      </h4>
-      <p>You have the following appointment times:
-        <ul>
-          <?php foreach($from->getFrom() as $froms) {?>
-          <li><?=$froms?></li>
-          <?php } ?>
-        </ul>
-      </p>
-    </div>
+  <?php if (isset($firstName)): ?>
+  <div>
+    <h4>
+      Welcome <?=$firstName?>,
+    </h4>
+    <?php if(isset($appointments)) : ?>
+    <p>You have the following appointment times:
+      <ul>
+        <?php foreach($appointments as $appointment) {?>
+        <li><?=$appointment?></li>
+        <?php } ?>
+      </ul>
+    </p>
+    <?php else: ?>
+    <p>Dear Doctor, unfortunatelly you cannot do any attendance yet. Call Joshua. :)</p>
     <?php endif;?>
   </div>
+  <?php endif;?>
+</div>

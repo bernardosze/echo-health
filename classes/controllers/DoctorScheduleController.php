@@ -1,11 +1,10 @@
 <?php
 namespace classes\controllers {
 
-    use Exception;
+    use \classes\business\AppointmentBO as AppointmentBO;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
-    use \classes\business\AppointmentBO as AppointmentBO;
-    use \classes\models\AppointmentModel as AppointmentModel;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
     /**
      * App Home Page Controller
@@ -14,6 +13,8 @@ namespace classes\controllers {
      */
     class DoctorScheduleController extends AppBaseController
     {
+
+        private $appointments;
 
         public function __construct()
         {
@@ -25,12 +26,31 @@ namespace classes\controllers {
 
         /**
          * Method override.
+         * Process GET requests.
+         */
+        protected function doGet()
+        {
+
+            try {
+                $apptBO = new AppointmentBO();
+                $this->appointments = $apptBO->getAllAppointments();
+            } catch (NoDataFoundException $e) {
+                parent::setAlertErrorMessage($e->getMessage());
+            }
+
+            parent::doGet();
+
+        }
+
+        /**
+         * Method override.
          * Render the Controller's view page.
          */
         protected function renderViewPages($views)
         {
-            $apptBO = new AppointmentBO();
-            $from= $apptBO->getFrom();
+
+            $appointments = $this->appointments;
+
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $firstName = $userSessionProfile->getFirstName();
 

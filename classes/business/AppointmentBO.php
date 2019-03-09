@@ -6,9 +6,8 @@
 namespace classes\business {
 
     use \classes\dao\AppointmentDao as AppointmentDao;
-    use \classes\models\AppointmentModel as AppointmentModel;
 
-    class MedicalSpecialtyBO
+    class AppointmentBO
     {
         public function __construct()
         {
@@ -22,10 +21,5 @@ namespace classes\business {
         }
 
     }
-
-        
-
-        
-    
 
 }
