@@ -31,7 +31,7 @@ namespace routes {
             "seeprescriptions" => ["classes/controllers/MustDefineOne.php", []],
 
             //routes for doctors
-            "myschedule" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
+            "myschedule" => ["classes/controllers/DoctorScheduleController.php", [ISecurityProfile::DOCTOR]],
             "test2" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
             "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
 

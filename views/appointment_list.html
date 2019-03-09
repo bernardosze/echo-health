@@ -1,0 +1,16 @@
+<div class="container-fluid">
+    <?php if (isset($firstName)): ?>
+    <div>
+      <h4>
+        Welcome <?=$firstName?>,
+      </h4>
+      <p>You have the following appointment times:
+        <ul>
+          <?php foreach($from->getFrom() as $froms) {?>
+          <li><?=$froms?></li>
+          <?php } ?>
+        </ul>
+      </p>
+    </div>
+    <?php endif;?>
+  </div>
