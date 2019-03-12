@@ -2,12 +2,11 @@
 
 namespace classes\controllers\changePassword {
 
+    use Exception;
     use \classes\business\UserBO as UserBO;
     use \classes\models\UserModel as UserModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
-    use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
-    use \routes\RoutesManager as RoutesManager;
 
     /**
      * Controller Class for User Change Password
@@ -64,19 +63,17 @@ namespace classes\controllers\changePassword {
             $userModel->setPassword(filter_input(INPUT_POST, "currentPassword", FILTER_SANITIZE_STRING));
             $userModel->setNewPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
 
+            $json = [];
             try {
                 $userBO = new UserBO();
                 $userBO->updateUserPassword($userModel);
-                parent::setAlertSuccessMessage("Password successfully updated.");
-            } catch (UpdateUserDataException $e) {
-                //Set the error message to appear on screen
-                parent::setAlertErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
-                require_once RoutesManager::_500_CONTROLLER;
-                exit();
+                $json = ["status" => "ok", "message" => "Password successfully updated."];
+            } catch (Exception $e) {
+                $json = ["status" => "error", "message" => $e->getMessage()];
+            } finally {
+                header('Content-type: application/json');
+                echo json_encode($json);
             }
-
-            parent::doPost();
 
         }
 

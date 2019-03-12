@@ -38,7 +38,7 @@ $(document).ready(function () {
                 differentCurrentPassword: "New Password cannot be equals to Current Password"
             },
             confirmPassword: {
-                required: "Password is required",
+                required: "Confirm Password is required",
                 minlength: "Password must be at least 6 characters long",
                 maxlength: "Password is limited to 20 characters",
                 equalTo: "Password confirmed does not match."
@@ -68,9 +68,19 @@ $(document).ready(function () {
             //generate a hash SHA1
             $("#currentPassword").val(generateSHA1Hash($("#currentPassword").val()));
             $("#password").val(generateSHA1Hash($("#password").val()));
-            form.submit();
+            $("#confirmPassword").val(generateSHA1Hash($("#confirmPassword").val()));
+            submitFormAjax();
         },
 
+    });
+
+    $('#saveButton').click((event) => {
+        //reset the old messages
+        $("#alertSuccessMessage").attr("hidden", true);
+        $("#alertErrorMessage").attr("hidden", true);
+        $("#alertWarningMessage").attr("hidden", true);
+
+        $('#changePasswordform').submit();
     });
 
 });
@@ -82,3 +92,26 @@ $.validator.addMethod("differentCurrentPassword", function (value, element) {
         return true;
     return false;
 }, "Passwords are matching.");
+
+const submitFormAjax = () => {
+
+    let formData = $("#changePasswordform").serialize();
+    $.ajax({
+        url: "changepasswd",
+        type: "POST",
+        data: formData
+    }).done((json) => {
+        if (json.status === "ok") {
+            $("#alertSuccessMessage").removeAttr("hidden").text(json.message);
+        } else {
+            $("#alertErrorMessage").removeAttr("hidden").text(json.message);
+        }
+    }).done(() => {
+        $("#currentPassword").val("");
+        $("#password").val("");
+        $("#confirmPassword").val("");
+        $("input").removeClass("is-valid");
+    }).fail((error) => {
+        console.error(error);
+    });
+};
