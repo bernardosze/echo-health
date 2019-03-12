@@ -61,14 +61,12 @@ $(document).ready(function () {
 
     });
 
-
     $("#saveButton").click((event) => {
         //reset the old messages
         $("#alertSuccessMessage").attr("hidden", true);
         $("#alertErrorMessage").attr("hidden", true);
         $("#alertWarningMessage").attr("hidden", true);
         $("#changeEmailForm").submit();
-
     });
 
 });
@@ -91,9 +89,8 @@ const submitFormAjax = () => {
         url: "changeemail",
         type: "POST",
         data: formData
-    }).done(function (response) {
+    }).done((json) => {
 
-        const json = JSON.parse(response);
         if (json.status === "ok") {
             $("#currentEmail").val($("#newEmail").val());
             $("#newEmail").val("");
@@ -102,9 +99,9 @@ const submitFormAjax = () => {
             $("#alertErrorMessage").removeAttr("hidden").text(json.message);
         }
 
+    }).done(() => {
         $("#password").val("");
         $("input").removeClass("is-valid");
-
     }).fail((error) => {
         console.error(error);
     });

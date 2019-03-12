@@ -204,15 +204,16 @@ const submitFormAjax = () => {
         url: "setuserprofile",
         type: "POST",
         data: formData
-    }).done(function (response) { //
+    }).done((json) => {
 
-        const json = JSON.parse(response);
         if (json.status === "ok") {
             $("#alertSuccessMessage").removeAttr("hidden").text(json.message);
         } else {
             $("#alertErrorMessage").removeAttr("hidden").text(json.message);
         }
 
+    }).fail((error) => {
+        console.error(error);
     });
 
 };
