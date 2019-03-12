@@ -61,6 +61,9 @@ $(document).ready(function () {
         unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass(errorClass).addClass(validClass);
         },
+        submitHandler: function (form) {
+            submitFormAjax();
+        },
 
     });
 
@@ -194,10 +197,9 @@ const addProfileToList = () => {
 }
 
 //Post the form data using AJAX.
-$("#setUserProfileForm").submit((event) => {
+const submitFormAjax = () => {
 
-    event.preventDefault();
-    let formData = $(event.target).serialize();
+    let formData = $("#setUserProfileForm").serialize();
     $.ajax({
         url: "setuserprofile",
         type: "POST",
@@ -213,6 +215,6 @@ $("#setUserProfileForm").submit((event) => {
 
     });
 
-});
+};
 
 
