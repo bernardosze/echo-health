@@ -19,6 +19,7 @@ namespace classes\controllers\changeemail {
         //page scope variables
         private $currentEmail = null;
         private $newEmail = null;
+        private const DATA_SAVED = "Email successfully updated.";
 
         public function __construct()
         {
@@ -64,17 +65,14 @@ namespace classes\controllers\changeemail {
             $userModel->setNewEmail(filter_input(INPUT_POST, "newEmail", FILTER_SANITIZE_EMAIL));
             $userModel->setPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
 
+            $json = [];
             try {
 
                 $userBO = new UserBO();
                 $userBO->updateUserEmail($userModel);
-                parent::setAlertSuccessMessage("Email successfully updated.");
-                $this->currentEmail = $userModel->getNewEmail();
-                $this->newEmail = "";
 
                 //data to re-create a new UserSessionProfile
                 $userSessionData = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
-
                 $userSessionProfile = new UserSessionProfile(
                     $userSessionData->getUserId(),
                     $userModel->getNewEmail(),
@@ -83,13 +81,13 @@ namespace classes\controllers\changeemail {
                 );
                 $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionProfile);
 
-            } catch (Exception $e) {
-                $this->currentEmail = $userModel->getEmail();
-                $this->newEmail = $userModel->getNewEmail();
-                parent::setAlertErrorMessage($e->getMessage());
-            }
+                $json = ["status" => "ok", "message" => self::DATA_SAVED];
 
-            parent::doPost();
+            } catch (Exception $e) {
+                $json = ["status" => "error", "message" => $e->getMessage()];
+            } finally {
+                echo json_encode($json);
+            }
 
         }
 
