@@ -55,8 +55,19 @@ $(document).ready(function () {
         submitHandler: function (form) {
             //generate a hash SHA1
             $("#password").val(generateSHA1Hash($("#password").val()));
-            form.submit();
+            submitFormAjax();
+
         },
+
+    });
+
+
+    $("#saveButton").click((event) => {
+        //reset the old messages
+        $("#alertSuccessMessage").attr("hidden", true);
+        $("#alertErrorMessage").attr("hidden", true);
+        $("#alertWarningMessage").attr("hidden", true);
+        $("#changeEmailForm").submit();
 
     });
 
@@ -65,7 +76,38 @@ $(document).ready(function () {
 //specific field validation, not allowing the  new email equals the current one
 $.validator.addMethod("differentCurrentEmail", function (value, element) {
     let currentEmail = $("#currentEmail").val();
-    if (currentEmail !== value)
+    if (currentEmail !== value) {
         return true;
-    return false;
+    } else {
+        return false;
+    }
+
 }, "email are matching.");
+
+const submitFormAjax = () => {
+
+    let formData = $("#changeEmailForm").serialize();
+    $.ajax({
+        url: "changeemail",
+        type: "POST",
+        data: formData
+    }).done(function (response) {
+
+        const json = JSON.parse(response);
+        if (json.status === "ok") {
+            $("#currentEmail").val($("#newEmail").val());
+            $("#newEmail").val("");
+            $("#alertSuccessMessage").removeAttr("hidden").text(json.message);
+        } else {
+            $("#alertErrorMessage").removeAttr("hidden").text(json.message);
+        }
+
+        $("#password").val("");
+        $("input").removeClass("is-valid");
+
+    }).fail((error) => {
+        console.error(error);
+    });
+
+
+}
