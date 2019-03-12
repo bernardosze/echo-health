@@ -28,6 +28,7 @@ namespace classes\business {
         private const USER_NOT_FOUND_EXCEPTION = "User not found into database.";
 
         private const UPDATE_USER_DATA_INVALID_ARGUMENTS = "Impossible to update data. Data is missing.";
+        private const DUPLICATED_EMAIL_EXCEPTION = "Informed email is already in use. Please choose another one.";
 
         /**
          * Default constructor
@@ -205,7 +206,17 @@ namespace classes\business {
                 $userModel->getLastName() !== $userModelFromDB->getLastName() ||
                 $userModel->getEmail() !== $userModelFromDB->getEmail() ||
                 $userModel->getBirthday() !== $userModelFromDB->getBirthday()) {
-                    $userDao->updateUser($userModel);
+                    try{
+                        $userDao->updateUser($userModel);
+                    } catch (UpdateUserDataException $e) {
+                        if(\strpos($e->getMessage(), "Integrity constraint violation") !== false) {
+                            throw new UpdateUserDataException(self::DUPLICATED_EMAIL_EXCEPTION);
+                        } else {
+                            throw $e;
+                        }
+
+                    }
+                    
             }
 
         }
