@@ -113,22 +113,17 @@ namespace classes\controllers {
                 }
             }
 
+            $json = [];
             try {
                 $userBO = new UserBO();
                 $userBO->updateUser($userModel);
                 $userBO->updateUserProfile($userModel->getId(), $profileModelArray);
-
-                //load profiles to keep data on page
-                $profileBO = new ProfileBO();
-                $profilesArray = $profileBO->getSpecialProfiles($this->userId);
-                $this->appProfiles = $profilesArray[0];
-                $this->userInEditProfiles = $profilesArray[1];
-                parent::setAlertSuccessMessage(self::DATA_SAVED);
+                $json = ["status" => "ok", "message" => self::DATA_SAVED];
             } catch (Exception $e) {
-                parent::setAlertErrorMessage($e->getMessage());
+                $json = ["status" => "error", "message" => $e->getMessage()];
+            } finally {
+                echo json_encode($json);
             }
-
-            parent::doPost();
 
         }
 
