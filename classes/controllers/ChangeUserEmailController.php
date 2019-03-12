@@ -86,6 +86,7 @@ namespace classes\controllers\changeemail {
             } catch (Exception $e) {
                 $json = ["status" => "error", "message" => $e->getMessage()];
             } finally {
+                header('Content-type: application/json');
                 echo json_encode($json);
             }
 
