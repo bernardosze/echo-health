@@ -36,7 +36,7 @@ namespace classes\controllers {
             // $this->renderView();
             $qString = $_SERVER['QUERY_STRING'];
             if (!empty($qString) && (strpos($qString, 'JSON') !== false)) {
-                $this->processJsonRequest();
+                $this->processJsonGetRequest();
             }
 
             parent::doGet();
@@ -46,44 +46,19 @@ namespace classes\controllers {
         /**
          * Method override.
          * Process GET requests.
-         */
-        protected function doPost()
-        {
-            $this->processJsonPost();
-            parent::doPost();
-        }
-
-        /**
-         * Return a JSON response with all Medical Specialties
          *
-         */
-        private function processJsonRequest()
-        {
-            try {
-                $msBO = new MedicalSpecialtyBO();
-                $medicalSpecialties = $msBO->getAllMedicalSpecialties();
-                $data = ["status" => "ok", "data" => $medicalSpecialties];
-            } catch (NoDataFoundException $e) {
-                $data = ["status" => "ok", "data" => []];
-            } catch (Exception $e) {
-                $data = ["status" => "error", "message" => $e->getMessage()];
-            }
-
-            echo json_encode($data);
-            exit();
-        }
-
-        /**
          * Process POST request passing JSON data.
          * It will return data up-to-date to the fronte end.
          */
-        private function processJsonPost()
+        protected function doPost()
         {
+
             $jsonArray = $_POST["medicalSpecialty"];
 
             try {
 
                 $medicalSpecialtiesArray = [];
+                $data = [];
                 foreach ($jsonArray as $specialty) {
                     if ($specialty["name"] !== "") {
                         $ms = new MedicalSpecialtyModel();
@@ -99,12 +74,33 @@ namespace classes\controllers {
                 $msBO = new MedicalSpecialtyBO();
                 $result = $msBO->saveMedicalSpecialties($medicalSpecialtiesArray);
                 $data = ["status" => "ok", "data" => $result, "message" => "Data successfully saved."];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $data = ["status" => "error", "message" => $e->getMessage()];
+            } finally {
+                header('Content-type: application/json');
+                echo json_encode($data);
             }
+        }
 
-            echo json_encode($data);
-            exit();
+        /**
+         * Return a JSON response with all Medical Specialties
+         *
+         */
+        private function processJsonGetRequest()
+        {
+            try {
+                $msBO = new MedicalSpecialtyBO();
+                $medicalSpecialties = $msBO->getAllMedicalSpecialties();
+                $data = ["status" => "ok", "data" => $medicalSpecialties];
+            } catch (NoDataFoundException $e) {
+                $data = ["status" => "ok", "data" => []];
+            } catch (Exception $e) {
+                $data = ["status" => "error", "message" => $e->getMessage()];
+            } finally {
+                header('Content-type: application/json');
+                echo json_encode($data);
+                exit();
+            }
 
         }
 
