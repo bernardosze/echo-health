@@ -25,7 +25,9 @@ namespace classes\controllers\publicControllers {
         {
             parent::__construct(
                 null,
-                ["views/security/login.html"]
+                ["views/security/login.html"],
+                null,
+                ["static/js/validation/login.js"]
             );
 
         }
@@ -56,19 +58,24 @@ namespace classes\controllers\publicControllers {
             $userModel->setEmail($this->email);
             $userModel->setPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
 
+            $json = [];
             try {
                 $userBO = new UserBO();
                 $userSessionData = $userBO->authenticateUser($userModel);
                 session_start();
                 $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionData);
                 $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
-                header("Location: " . AppConstants::HOME_PAGE_INTRANET);
+                //header("Location: " . AppConstants::HOME_PAGE_INTRANET);
+                $json = ["status" => "ok", "message" => "Authenticated", "url" => AppConstants::HOME_PAGE_INTRANET];
             } catch (AuthenticationException $e) {
                 //User could not be authenticated
-                $this->userAuthenticationErrorMsg = AppConstants::USER_AUTHENTICATION_ERROR_MSG;
+                $json = ["status" => "error", "message" => AppConstants::USER_AUTHENTICATION_ERROR_MSG];
+                //$this->userAuthenticationErrorMsg = AppConstants::USER_AUTHENTICATION_ERROR_MSG;
+            } finally {
+                header('Content-type: application/json');
+                echo json_encode($json);
+                exit();
             }
-
-            parent::doPost();
         }
 
         /**
@@ -87,7 +94,7 @@ namespace classes\controllers\publicControllers {
 
         /**
          * Method override.
-         * It define that the controller must to render only the predefined pages.
+         * It defines that the controller must to render only the predefined pages.
          */
         protected function isIntranet()
         {
