@@ -94,7 +94,7 @@ namespace classes\util\base {
          *
          * @param string
          */
-        protected function setWarningMessage($value)
+        protected function setAlertWarningMessage($value)
         {
             $this->alertWarningMessage = $value;
         }

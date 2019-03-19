@@ -55,16 +55,16 @@ namespace classes\controllers {
             parse_str($queryString, $qStringArray);
 
             $userBO = new UserBO();
-            $json = array();
+            $json = [];
             try {
                 $usp = new UserSearchParams($qStringArray);
                 $data = $userBO->fetchUsers($usp);
                 $json = ["status" => "ok", "data" => $data];
-                echo json_encode($json);
             } catch (Exception $e) {
                 $json = ["status" => "error"];
-                echo json_encode($json);
             } finally {
+                header('Content-type: application/json');
+                echo json_encode($json);
                 exit();
             }
         }

@@ -4,7 +4,7 @@ namespace classes\models {
 
     use JsonSerializable;
 
-    class AppointmentModel implements JsonSerializable
+    class AppointmentModel 
     {
         private $id;
         private $from;
@@ -16,6 +16,10 @@ namespace classes\models {
 
         public function __construct()
         {
+        }
+        public function __toString()
+        {
+            return $this->from;
         }
 
         public function getId()
@@ -78,7 +82,7 @@ namespace classes\models {
             $this->status = $value;
         }
 
-
+        
         
 
     }

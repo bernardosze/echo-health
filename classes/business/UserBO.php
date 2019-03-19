@@ -5,17 +5,17 @@
  */
 namespace classes\business {
 
-    use Exception;
     use \classes\dao\ProfileDao as ProfileDao;
     use \classes\dao\UserDao as UserDao;
     use \classes\database\Database as Database;
+    use \classes\models\UserProfileModel as UserProfileModel;
     use \classes\util\exceptions\AuthenticationException as AuthenticationException;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
     use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
-    use \classes\util\UserSessionProfile as UserSessionProfile;
     use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
-    use \classes\models\UserProfileModel as UserProfileModel;
-    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
+    use \classes\util\UserSessionProfile as UserSessionProfile;
+    use \classes\util\validators\FormValidators as FormValidators;
 
     class UserBO
     {
@@ -28,6 +28,7 @@ namespace classes\business {
         private const USER_NOT_FOUND_EXCEPTION = "User not found into database.";
 
         private const UPDATE_USER_DATA_INVALID_ARGUMENTS = "Impossible to update data. Data is missing.";
+        private const DUPLICATED_EMAIL_EXCEPTION = "Informed email is already in use. Please choose another one.";
 
         /**
          * Default constructor
@@ -49,21 +50,13 @@ namespace classes\business {
             }
 
             //General business rules
-            $this->validateUserDateOfBirth($userModel->getBirthday());
+            if (FormValidators::isFutureDate($userModel->getBirthday())) {
+                throw new RegisterUserException(self::USER_REGISTER_AGE_EXCEPTION);
+            }
 
             $userDao = new UserDao();
             $userDao->insertNewUser($userModel);
 
-        }
-
-        /**
-         * A valid date cannot be a future date
-         */
-        private function validateUserDateOfBirth($birthday)
-        {
-            if (date("Y-m-d") < date("Y-m-d", strtotime($birthday))) {
-                throw new RegisterUserException(self::USER_REGISTER_AGE_EXCEPTION);
-            }
         }
 
         /**
@@ -72,8 +65,8 @@ namespace classes\business {
          */
         public function authenticateUser($userModelFromForm)
         {
-
-            if (empty($userModelFromForm->getEmail()) || empty($userModelFromForm->getPassword())) {
+            //empty($userModelFromForm->getEmail())
+            if (!FormValidators::isValidEmail($userModelFromForm->getEmail()) || empty($userModelFromForm->getPassword())) {
                 throw new AuthenticationException(self::USER_AUTHENTICATION_EXCEPTION);
             }
 
@@ -94,14 +87,14 @@ namespace classes\business {
                 //log the successful attempt
                 $userDao->logSuccessfulLogin($userModel);
                 $profileDao = new ProfileDao();
-                
+
                 $profileModelArray;
-                try{
+                try {
                     $profileModelArray = $profileDao->getProfilesByUserId($userModel->getId());
-                } catch (NoDataFoundException $e){
+                } catch (NoDataFoundException $e) {
                     $profileModelArray = [];
                 }
-                
+
                 return $this->createUserSessionProfile($userModel, $profileModelArray);
             }
 
@@ -152,8 +145,8 @@ namespace classes\business {
         public function updateUserEmail($userModel)
         {
 
-            if (empty($userModel->getEmail()) ||
-                empty($userModel->getNewEmail()) ||
+            if ((!FormValidators::isValidEmail($userModel->getEmail()) ||
+                !FormValidators::isValidEmail($userModel->getNewEmail())) ||
                 empty($userModel->getPassword()) ||
                 ($userModel->getEmail() === $userModel->getNewEmail())) {
                 throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
@@ -205,7 +198,17 @@ namespace classes\business {
                 $userModel->getLastName() !== $userModelFromDB->getLastName() ||
                 $userModel->getEmail() !== $userModelFromDB->getEmail() ||
                 $userModel->getBirthday() !== $userModelFromDB->getBirthday()) {
+                try {
                     $userDao->updateUser($userModel);
+                } catch (UpdateUserDataException $e) {
+                    if (\strpos($e->getMessage(), "Integrity constraint violation") !== false) {
+                        throw new UpdateUserDataException(self::DUPLICATED_EMAIL_EXCEPTION);
+                    } else {
+                        throw $e;
+                    }
+
+                }
+
             }
 
         }
@@ -216,29 +219,29 @@ namespace classes\business {
          */
         public function updateUserProfile($userId, $profileModelArray)
         {
-            if(empty($userId)){
+            if (empty($userId)) {
                 throw new UpdateUserDataException(self::UPDATE_USER_DATA_INVALID_ARGUMENTS);
             }
 
             $profileDao = new ProfileDao();
             $profileModelArrayFromDB;
-            try{
+            try {
                 $profileModelArrayFromDB = $profileDao->getProfilesByUserId($userId, ISecurityProfile::PATIENT);
             } catch (NoDataFoundException $e) {
                 $profileModelArrayFromDB = [];
             }
-            
+
             //check if needs to set a new profile for the  user
             $profilesToInsert = [];
             foreach ($profileModelArray as $profileModel) {
                 $mustToInsert = true;
                 foreach ($profileModelArrayFromDB as $profileModelFromDB) {
-                    if($profileModel->getId() === $profileModelFromDB->getId()){
+                    if ($profileModel->getId() === $profileModelFromDB->getId()) {
                         $mustToInsert = false;
                         break;
                     }
                 }
-                if($mustToInsert){
+                if ($mustToInsert) {
                     $upm = new UserProfileModel();
                     $upm->setUserId($userId);
                     $upm->setProfileId($profileModel->getId());
@@ -250,12 +253,12 @@ namespace classes\business {
             foreach ($profileModelArrayFromDB as $profileModelFromDB) {
                 $mustToDelete = true;
                 foreach ($profileModelArray as $profileModel) {
-                    if($profileModelFromDB->getId() === $profileModel->getId()){
+                    if ($profileModelFromDB->getId() === $profileModel->getId()) {
                         $mustToDelete = false;
                         break;
                     }
                 }
-                if($mustToDelete){
+                if ($mustToDelete) {
                     $upm = new UserProfileModel();
                     $upm->setUserId($userId);
                     $upm->setProfileId($profileModelFromDB->getId());
@@ -263,14 +266,14 @@ namespace classes\business {
                 }
             }
 
-            if(count($profilesToInsert) > 0){
+            if (count($profilesToInsert) > 0) {
                 $profileDao->insertUserProfile($profilesToInsert);
             }
 
-            if(count($profilesToDelete) > 0){
+            if (count($profilesToDelete) > 0) {
                 $profileDao->deleteUserProfile($profilesToDelete);
             }
-            
+
         }
 
     }

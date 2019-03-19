@@ -1,35 +1,28 @@
-/**
- * Performs the form input validation for User Email Change Use Case
- * @author: Leonardo Otoni
- */
-
 $(document).ready(function () {
 
-    $("#changeEmailForm").validate({
+    $("#loginForm").validate({
         rules: {
-            newEmail: {
+            email: {
                 required: true,
                 email: true,
-                maxlength: 50,
-                differentCurrentEmail: true
+                maxlength: 50
             },
             password: {
                 required: true,
                 minlength: 6,
-                maxlength: 20,
+                maxlength: 20
             },
         },
         messages: {
-            newEmail: {
+            email: {
                 required: "Email is required",
                 email: "Please enter a valid email address",
-                maxlength: "Email is limited to 50 characters",
-                differentCurrentEmail: "New email cannot be equals the current one",
+                maxlength: "Email is limited to 50 characters"
             },
             password: {
-                required: "Password is required",
+                required: "Password is prequired",
                 minlength: "Password must be at least 6 characters long",
-                maxlength: "New Password is limited to 20 characters",
+                maxlength: "Password is limited to 20 characters"
             },
         },
         errorElement: "div",
@@ -56,55 +49,39 @@ $(document).ready(function () {
             //generate a hash SHA1
             $("#password").val(generateSHA1Hash($("#password").val()));
             submitFormAjax();
-
         },
-
     });
 
-    $("#saveButton").click((event) => {
-        //reset the old messages
-        $("#alertSuccessMessage").attr("hidden", true);
-        $("#alertErrorMessage").attr("hidden", true);
-        $("#alertWarningMessage").attr("hidden", true);
-        $("#changeEmailForm").submit();
+    $("#loginButton").click(() => {
+        $("#loginForm").submit();
     });
 
 });
 
-//specific field validation, not allowing the  new email equals the current one
-$.validator.addMethod("differentCurrentEmail", function (value, element) {
-    let currentEmail = $("#currentEmail").val();
-    if (currentEmail !== value) {
-        return true;
-    } else {
-        return false;
-    }
-
-}, "email are matching.");
 
 const submitFormAjax = () => {
 
-    let formData = $("#changeEmailForm").serialize();
+    let formData = $("#loginForm").serialize();
+
     $.ajax({
-        url: "changeemail",
+        url: "login",
         type: "POST",
         data: formData
     }).done((json) => {
 
-        if (json.status === "ok") {
-            $("#currentEmail").val($("#newEmail").val());
-            $("#newEmail").val("");
-            $("#alertSuccessMessage").removeAttr("hidden").text(json.message);
+        if (json.status === "ok" && json.message === "Authenticated") {
+            $(location).attr("href", json.url);
         } else {
             $("#alertErrorMessage").removeAttr("hidden").text(json.message);
         }
 
     }).done(() => {
         $("#password").val("");
-        $("input").removeClass("is-valid");
+        $("#password").removeClass("is-invalid");
+        $("#password-error").remove();
     }).fail((error) => {
+        $("#alertErrorMessage").removeAttr("hidden").text("Impossible to authenticate. Server unreached.");
         console.error(error);
     });
-
 
 }

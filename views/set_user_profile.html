@@ -1,12 +1,12 @@
 <!-- Page Button Section -->
-<form id="setUserProfileForm" action="setuserprofile" method="POST">
+<form id="setUserProfileForm">
     <input type="hidden" name="userId" value="<?=$userId?>">
     <div class="d-flex justify-content-end">
         <div class="mt-1 mb-1">
             <button type="button" class="btn btn-primary mr-1" onclick="$(location).attr('href', 'searchuser');">Search</button>
         </div>
         <div class="mt-1 mb-1">
-            <button type="button" class="btn btn-primary" onclick="$('#submit').click();">Save</button>
+            <button id="saveButton" type="button" class="btn btn-primary">Save</button>
         </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-start pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">

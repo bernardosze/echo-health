@@ -30,12 +30,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <?php if (isset($userAuthenticationErrorMsg)): ?>
-                        <div class="alert alert-danger" role="alert">
-                            <?php echo $userAuthenticationErrorMsg ?>
-                        </div>
-                        <?php endif;?>
-                        <form id="hashform" action="login" method="POST" class="needs-validation" novalidate>
+                        <div id="alertErrorMessage" class="alert alert-danger" role="alert" hidden></div>
+                        <form id="loginForm">
                             <div class="input-group form-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -49,7 +45,7 @@
                                 <input id="password" class="form-control" type="password" name="password" placeholder="password" required>
                             </div>
                             <div class="form-group">
-                                <input id="submitBtn" class="btn btn-primary btn-block" type="submit" value="Login">
+                                <button id="loginButton" class="btn btn-primary btn-block">Login</button>
                                 <a href="signup" class="btn btn-danger btn-block">Sign-up</a>
                             </div>
                         </form>
@@ -75,70 +71,11 @@
         <!-- SPECIFIC PAGE JS FILES -->
         <script src="static/js/sha1.min.js"></script>
         <script src="static/js/security.js"></script>
+        <script src="static/js/validation/login.js"></script>
 
         <!--jQuery Validate -->
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/additional-methods.min.js"></script>
-
-        <script>
-
-            $(document).ready(function () {
-
-                $("#hashform").validate({
-                    rules: {
-                        email: {
-                            required: true,
-                            email: true,
-                            maxlength: 50
-                        },
-                        password: {
-                            required: true,
-                            minlength: 6,
-                            maxlength: 20
-                        },
-                    },
-                    messages: {
-                        email: {
-                            required: "Email is required",
-                            email: "Please enter a valid email address",
-                            maxlength: "Email is limited to 50 characters"
-                        },
-                        password: {
-                            required: "Password is prequired",
-                            minlength: "Password must be at least 6 characters long",
-                            maxlength: "Password is limited to 20 characters"
-                        },
-                    },
-                    errorElement: "div",
-                    errorClass: "is-invalid",
-                    validClass: "is-valid",
-                    errorPlacement: function (error, element) {
-                        // Add the `help-block` class to the error element
-                        error.addClass("invalid-feedback");
-
-                        if (element.prop("type") === "checkbox") {
-                            error.insertAfter(element.parent("label"));
-                        } else {
-                            error.insertAfter(element);
-                        }
-                    },
-
-                    highlight: function (element, errorClass, validClass) {
-                        $(element).addClass(errorClass).removeClass(validClass);
-                    },
-                    unhighlight: function (element, errorClass, validClass) {
-                        $(element).removeClass(errorClass).addClass(validClass);
-                    },
-                    submitHandler: function (form) {
-                        //generate a hash SHA1
-                        $("#password").val(generateSHA1Hash($("#password").val()));
-                        form.submit();
-                    },
-                });
-
-            });
-
-        </script>
 
 </body>
 

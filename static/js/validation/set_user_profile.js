@@ -61,6 +61,9 @@ $(document).ready(function () {
         unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass(errorClass).addClass(validClass);
         },
+        submitHandler: function (form) {
+            submitFormAjax();
+        },
 
     });
 
@@ -69,6 +72,15 @@ $(document).ready(function () {
         enableTime: false,
         dateFormat: "Y-m-d",
         maxDate: "today"
+    });
+
+    $("#saveButton").click(function () {
+        //reset the old messages
+        $("#alertSuccessMessage").attr("hidden", true);
+        $("#alertErrorMessage").attr("hidden", true);
+        $("#alertWarningMessage").attr("hidden", true);
+
+        $("#setUserProfileForm").submit();
     });
 
     //set tooltips for add icon and delete icons
@@ -80,15 +92,6 @@ $(document).ready(function () {
     });
 
 });
-
-//specific field validation, not allowing date of birth greater than currentDate
-$.validator.addMethod("maxDate", function (value, element) {
-    var curDate = new Date();
-    var inputDate = new Date(value);
-    if (inputDate < curDate)
-        return true;
-    return false;
-}, "Invalid Date!");
 
 //specific field validation, not allowing date of birth greater than currentDate
 $.validator.addMethod("maxDate", function (value, element) {
@@ -192,5 +195,27 @@ const addProfileToList = () => {
     newRow.innerHTML = newRowContent;
 
 }
+
+//Post the form data using AJAX.
+const submitFormAjax = () => {
+
+    let formData = $("#setUserProfileForm").serialize();
+    $.ajax({
+        url: "setuserprofile",
+        type: "POST",
+        data: formData
+    }).done((json) => {
+
+        if (json.status === "ok") {
+            $("#alertSuccessMessage").removeAttr("hidden").text(json.message);
+        } else {
+            $("#alertErrorMessage").removeAttr("hidden").text(json.message);
+        }
+
+    }).fail((error) => {
+        console.error(error);
+    });
+
+};
 
 
