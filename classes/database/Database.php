@@ -20,14 +20,13 @@ namespace classes\Database {
         //TODO: Move the connection data to config class
         //Database connection attributes
         //private const DB_DSN = 'mysql:host=localhost;dbname=php';
-        private const DB_DSN = 'mysql:host=localhost:3306;dbname=php'; //Bernardo's Local DB
+        //private const DB_DSN = 'mysql:host=localhost:3306;dbname=php'; //Bernardo's Local DB
         //private const DB_USERNAME = 'php';
         //private const DB_PASSWORD = 'php';
         private const DB_USERNAME = 'root';//Josh Uname
         private const DB_PASSWORD = '';//Josh password
         private const DB_DSN = 'mysql:host=localhost:3306;dbname=php';
-        private const DB_USERNAME = 'php';
-        private const DB_PASSWORD = 'php';
+        
 
         private function __construct()
         {
