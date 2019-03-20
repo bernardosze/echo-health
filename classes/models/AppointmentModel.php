@@ -6,16 +6,18 @@ namespace classes\models {
 
     class AppointmentModel 
     {
-        private $id;
+        public $id;
         private $from;
         private $to;
-        private $patient_id;
+        public $patient_id;
         private $doctor_id;
         private $status;
       
 
         public function __construct()
         {
+            $id = $this->id;
+            $from = $this->from;
         }
         public function __toString()
         {

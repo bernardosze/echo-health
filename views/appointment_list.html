@@ -2,16 +2,24 @@
   <?php if (isset($firstName)): ?>
   <div>
     <h4>
-      Welcome <?=$firstName?>,
+      Welcome Dr. <?=$firstName?>,
     </h4>
+    <h5>Appointments for the day: </h5>
     <?php if(isset($appointments)) : ?>
-    <p>You have the following appointment times:
+    <!-- <p>You have the following appointment times:
       <ul>
         <?php foreach($appointments as $appointment) {?>
-        <li><?=$appointment?></li>
+        <li><a href="href='studentdetail.php?id=$s->id"><?=$appointment?></a></li>
         <?php } ?>
       </ul>
-    </p>
+    </p> -->
+
+    <?php foreach ($appointments as $appointment){
+      
+      echo "<li><a href='appointment_detail.php?id=$appointment->patient_id'\>" . $appointment->getFrom() . '</a>'.
+          " 
+          </li>";
+  } ?>
     <?php else: ?>
     <p>Dear Doctor, unfortunatelly you cannot do any attendance yet. Call Joshua. :)</p>
     <?php endif;?>

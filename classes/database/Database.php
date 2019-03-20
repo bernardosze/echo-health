@@ -21,7 +21,6 @@ namespace classes\Database {
         //Database connection attributes
         private const DB_DSN = 'mysql:host=localhost:3306;dbname=php';
         
-
         private function __construct()
         {
         }
