@@ -28,7 +28,7 @@ namespace classes\util {
             ],
             "Attendance" =>
             [
-                "See Schedule" => "myschedule",
+                "See Appointments" => "myschedule",
                 "Test 2" => "test2",
                 "test 3" => "test3",
             ],
