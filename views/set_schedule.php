@@ -1,5 +1,11 @@
 <?php
 use \classes\database\Database as Database;
+$db=Database::getConnection();
+$fromTime="select * FROM schedule WHERE doctor_id=1 AND day_of_week='Mon';";
+$statement =$db->prepare($fromTime);
+$statement->execute();
+$TimeMon=$statement->fetchAll();
+$statement->closeCursor();
 ?>
 
 
@@ -28,82 +34,89 @@ use \classes\database\Database as Database;
             <td><input type="time" name="ToTimeSat" max="18:00" value="18:00"></td>
             <!-- <td><input type="time" name="ToTimeSun" max="18:00" value=""></td>-->
             </td></tr>
+        <tr><td></td><td><input type="submit" name="updateMon" value="Update"></td>
+            <td><input type="submit" name="updateTue" value="Update"></td>
+            <td><input type="submit" name="updateWed" value="Update"></td>
+            <td><input type="submit" name="updateThu" value="Update"></td>
+            <td><input type="submit" name="updateFri" value="Update"></td>
+            <td><input type="submit" name="updateSat" value="Update"></td>
+        </tr>
 
-    </table>
-    <input type="submit" name="submit">
+    </table><br>
+    <input type="submit" name="submit" value="Submit">
+
 </form>
-<?php if(isset($_POST['submit'])){
-    $FromTimeMon=$_POST['FromTimeMon'];
-    $FromTimeTue=$_POST['FromTimeTue'];
-    $FromTimeWed=$_POST['FromTimeWed'];
-    $FromTimeThu=$_POST['FromTimeThu'];
-    $FromTimeFri=$_POST['FromTimeFri'];
-    $FromTimeSat=$_POST['FromTimeSat'];
+<?php
+
+$FromTimeMon=$_POST['FromTimeMon'];
+$FromTimeTue=$_POST['FromTimeTue'];
+$FromTimeWed=$_POST['FromTimeWed'];
+$FromTimeThu=$_POST['FromTimeThu'];
+$FromTimeFri=$_POST['FromTimeFri'];
+$FromTimeSat=$_POST['FromTimeSat'];
 
 
-    $ToTimeMon=$_POST['ToTimeMon'];
-    $ToTimeTue=$_POST['ToTimeTue'];
-    $ToTimeWed=$_POST['ToTimeWed'];
-    $ToTimeThu=$_POST['ToTimeThu'];
-    $ToTimeFri=$_POST['ToTimeFri'];
-    $ToTimeSat=$_POST['ToTimeSat'];
+$ToTimeMon=$_POST['ToTimeMon'];
+$ToTimeTue=$_POST['ToTimeTue'];
+$ToTimeWed=$_POST['ToTimeWed'];
+$ToTimeThu=$_POST['ToTimeThu'];
+$ToTimeFri=$_POST['ToTimeFri'];
+$ToTimeSat=$_POST['ToTimeSat'];
+
+//Converting HTML time format to SQL time format
+$time_input_Mon = $FromTimeMon;
+$Mon_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Mon = $Mon_Time->format( 'H:i:s');
+
+$time_input_Tue = $FromTimeTue;
+$Tue_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Tue = $Tue_Time->format( 'H:i:s');
+
+$time_input_Wed = $FromTimeWed;
+$Wed_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Wed = $Wed_Time->format( 'H:i:s');
+
+$time_input_Thu = $FromTimeThu;
+$Thu_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Thu = $Thu_Time->format( 'H:i:s');
+
+$time_input_Fri = $FromTimeFri;
+$Fri_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Fri = $Fri_Time->format( 'H:i:s');
+
+$time_input_Sat = $FromTimeSat;
+$Sat_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
+$format_Sat = $Sat_Time->format( 'H:i:s');
+
+//-----------------------------------------------------------------------------
+//Formatting the To Time
+$To_time_input_Mon = $ToTimeMon;
+$To_Mon_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Mon = $To_Mon_Time->format( 'H:i:s');
+
+$To_time_input_Tue = $ToTimeTue;
+$To_Tue_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Tue = $To_Tue_Time->format( 'H:i:s');
+
+$To_time_input_Wed = $ToTimeWed;
+$To_Wed_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Wed = $To_Wed_Time->format( 'H:i:s');
+
+$To_time_input_Thu = $ToTimeThu;
+$To_Thu_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Thu = $To_Thu_Time->format( 'H:i:s');
+
+$To_time_input_Fri = $ToTimeFri;
+$To_Fri_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Fri = $To_Fri_Time->format( 'H:i:s');
+
+$To_time_input_Sat = $ToTimeSat;
+$To_Sat_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
+$To_format_Sat = $To_Sat_Time->format( 'H:i:s');
 
 
-    $db=Database::getConnection();
-    //Converting HTML time format to SQL time format
-    $time_input_Mon = $FromTimeMon;
-    $Mon_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Mon = $Mon_Time->format( 'H:i:s');
-
-    $time_input_Tue = $FromTimeTue;
-    $Tue_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Tue = $Tue_Time->format( 'H:i:s');
-
-    $time_input_Wed = $FromTimeWed;
-    $Wed_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Wed = $Wed_Time->format( 'H:i:s');
-
-    $time_input_Thu = $FromTimeThu;
-    $Thu_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Thu = $Thu_Time->format( 'H:i:s');
-
-    $time_input_Fri = $FromTimeFri;
-    $Fri_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Fri = $Fri_Time->format( 'H:i:s');
-
-    $time_input_Sat = $FromTimeSat;
-    $Sat_Time = DateTime::createFromFormat( 'H:i', $time_input_Mon);
-    $format_Sat = $Sat_Time->format( 'H:i:s');
-
-    //-----------------------------------------------------------------------------
-    //Formatting the To Time
-    $To_time_input_Mon = $ToTimeMon;
-    $To_Mon_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Mon = $To_Mon_Time->format( 'H:i:s');
-
-    $To_time_input_Tue = $ToTimeTue;
-    $To_Tue_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Tue = $To_Tue_Time->format( 'H:i:s');
-
-    $To_time_input_Wed = $ToTimeWed;
-    $To_Wed_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Wed = $To_Wed_Time->format( 'H:i:s');
-
-    $To_time_input_Thu = $ToTimeThu;
-    $To_Thu_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Thu = $To_Thu_Time->format( 'H:i:s');
-
-    $To_time_input_Fri = $ToTimeFri;
-    $To_Fri_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Fri = $To_Fri_Time->format( 'H:i:s');
-
-    $To_time_input_Sat = $ToTimeSat;
-    $To_Sat_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
-    $To_format_Sat = $To_Sat_Time->format( 'H:i:s');
-
-
-
-
+if(isset($_POST['submit']))
+{
     //-----------------------------------------------------------------------------
 
     $query1="insert into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Mon','$format_Mon','$To_format_Mon',1);";
@@ -132,4 +145,49 @@ use \classes\database\Database as Database;
     $pdostm6=$db->prepare($query6);
     $pdostm6->execute();
 
-}?>
+}
+
+else if(isset($_POST['updateMon']))
+{
+    //-----------------------------------------------------------------------------
+    $query="update schedule set `FROM`='$format_Mon', `To` = '$To_format_Mon' WHERE doctor_id=1 AND day_of_week='Mon';";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+else if(isset($_POST['updateTue']))
+{
+    $query="update schedule set `FROM`='$format_Tue' , `To` = '$To_format_Tue' WHERE doctor_id=1 AND day_of_week='Tue';";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+else if(isset($_POST['updateWed']))
+{
+    $query="update schedule set `FROM`='$format_Wed' ,`To` = '$To_format_Wed' WHERE doctor_id=1 AND day_of_week='Wed';";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+else if(isset($_POST['updateThu']))
+{
+    $query="update schedule set `FROM`='$format_Thu' , `To` = '$To_format_Thu' WHERE doctor_id=1 AND day_of_week='Thu';";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+else if(isset($_POST['updateFri']))
+{
+    $query="update schedule set `FROM`='$format_Fri' , `To` = '$To_format_Fri' WHERE doctor_id=1 AND day_of_week='Fri';";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+else if(isset($_POST['updateSat']))
+{
+    $query="update schedule set `FROM`='$format_Sat' , `To` = '$To_format_Sat' WHERE doctor_id=1; AND day_of_week='Sat'";
+    $pdostm=$db->prepare($query);
+    $pdostm->execute();
+}
+
+?>
