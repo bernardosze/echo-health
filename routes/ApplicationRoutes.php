@@ -34,6 +34,7 @@ namespace routes {
             "myschedule" => ["classes/controllers/DoctorScheduleController.php", [ISecurityProfile::DOCTOR]],
             "appointmentdetails" => ["classes/controllers/AppointmentDetailController.php", [ISecurityProfile::DOCTOR]],
             "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
+            "SetSchedule" =>["classes/controllers/SetScheduleController.php", [ISecurityProfile::DOCTOR]],
 
             //routes for Administration
             "searchuser" => ["classes/controllers/UserSearchController.php", [ISecurityProfile::SYSADMIN]],

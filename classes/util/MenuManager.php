@@ -25,6 +25,7 @@ namespace classes\util {
                 "Cancel Appointment" => "cancelappointment",
                 "See Prescriptions" => "seeprescriptions",
                 "Patient Profile" => "patientprofile",
+                "Set Schedule" => "SetSchedule",
             ],
             "Attendance" =>
             [
