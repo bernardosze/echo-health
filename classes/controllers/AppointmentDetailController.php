@@ -1,7 +1,7 @@
 <?php
 namespace classes\controllers {
 
-    use \classes\business\AppointmentBO as AppointmentBO;
+    use \classes\business\AppointmentDetailBO as AppointmentDetailBO;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
@@ -11,16 +11,16 @@ namespace classes\controllers {
      *
      * @author: Josh
      */
-    class DoctorScheduleController extends AppBaseController
+    class AppointmentDetailController extends AppBaseController
     {
 
-        private $appointments;
-        private $todaysappointments;
+        private $appointmentDetail;
+
         public function __construct()
         {
             parent::__construct(
-                "Schedule",
-                ["views/appointment_list.html"]
+                "Appointment Details",
+                ["views/appointment_details.html"]
             );
         }
 
@@ -32,10 +32,8 @@ namespace classes\controllers {
         {
 
             try {
-                $apptBO = new AppointmentBO();
-                //$todayapptBO = new AppointmentBO();
-                $this->appointments = $apptBO->getAllAppointments();
-                //$this->todaysappointments = $todayapptBO->getTodaysAppointments();
+                $apptDetailBO = new AppointmentDetailBO();
+                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails();
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }
@@ -51,8 +49,8 @@ namespace classes\controllers {
         protected function renderViewPages($views)
         {
 
-            $appointments = $this->appointments;
-            //$todaysappointments = $this->todaysappointments;
+            $appointmentDetail = $this->appointmentDetail;
+
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $firstName = $userSessionProfile->getFirstName();
 
@@ -63,6 +61,6 @@ namespace classes\controllers {
 
     }
 
-    new DoctorScheduleController();
+    new AppointmentDetailController();
 
 }

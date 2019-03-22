@@ -11,7 +11,7 @@ namespace classes\dao {
     use \classes\database\Database as Database;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
-    class AppointmentDao
+    class AppointmentDetailDao
     {
 
         private const EXCEPTION_ENTRY_NAME_EXISTS = "Operation aborted: Cannot save duplicated Specialty Names into the Database.";
@@ -24,13 +24,11 @@ namespace classes\dao {
         /**
          * Get all Appointments from the Database
          */
-        public function getAllAppointments()
+        public function getAppointmentDetails()
         {
 
-            $query = "
-            
-                    SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime, DATE_FORMAT(a.from,'%W') AS dayName  from appointment a;
-            ";
+            $query = "select p.id,u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS from user u, patient p, 
+            appointment a where a.PATIENT_ID = p.id and p.USER_PROFILE_USER_ID = u.id and a.PATIENT_ID=1;";
 
             try {
 
@@ -39,7 +37,7 @@ namespace classes\dao {
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
-                    return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\AppointmentModel");
+                    return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\AppointmentDetailModel");
                 } else {
                     throw new NoDataFoundException();
                 }
@@ -51,30 +49,7 @@ namespace classes\dao {
             }
 
         }
-        public function getTodaysAppointments()
-        {
-
-            $query = "SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime  from appointment a where DATE_FORMAT(a.from,'%d/%m/%Y') = CURDATE()";
-
-            try {
-
-                $db = Database::getConnection();
-                $stmt = $db->prepare($query);
-                $stmt->execute();
-
-                if ($stmt->rowCount() > 0) {
-                    return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\AppointmentModel");
-                } else {
-                    throw new NoDataFoundException();
-                }
-
-            } finally {
-                if (isset($stmt)) {
-                    $stmt->closeCursor();
-                }
-            }
-
-        }
+        
 
         
         

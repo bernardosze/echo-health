@@ -12,7 +12,9 @@ namespace classes\models {
         public $patient_id;
         private $doctor_id;
         private $status;
-      
+        private $nicedate;
+        private $nicetime;
+        private $dayname;
 
         public function __construct()
         {
@@ -24,6 +26,28 @@ namespace classes\models {
             return $this->from;
         }
 
+        public function getDayName(){
+            return $this->dayname;
+        }
+
+        public function setDayName($value){
+            $this->dayname=$value;
+        }
+        public function getNiceDate(){
+            return $this->nicedate;
+        }
+        public function getNiceTime(){
+            return $this->nicetime;
+        }
+
+        public function setNiceDate($value){
+            $this->nicedate=$value;
+        }
+
+        public function setNiceTime($value){
+            $this->nicetime=$value;
+        }
+        
         public function getId()
         {
             return $this->id;

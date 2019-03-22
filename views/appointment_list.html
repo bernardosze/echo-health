@@ -4,25 +4,51 @@
     <h4>
       Welcome Dr. <?=$firstName?>,
     </h4>
-    <h5>Appointments for the day: </h5>
+    <h5>These are your upcoming appointments.</h5>
+    <br>
     <?php if(isset($appointments)) : ?>
-    <!-- <p>You have the following appointment times:
-      <ul>
-        <?php foreach($appointments as $appointment) {?>
-        <li><a href="href='studentdetail.php?id=$s->id"><?=$appointment?></a></li>
-        <?php } ?>
-      </ul>
-    </p> -->
 
-    <?php foreach ($appointments as $appointment){
+    <?php foreach ($appointments as $appointment){?>
+      <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-2">
+                  <h3>
+                      <?php echo $appointment->getNiceTime()?>
+                  </h3>
+                </div>
+                <div class="col-md-2">
+                  <h3>
+                      <?php echo $appointment->getNiceDate()?>
+                  </h3>
+                </div>
+                <div class="col-md-2">
+                    <h3>
+                        <?php echo $appointment->getDayName()?>
+                    </h3>
+                  </div>
+                <div class="col-md-2">
+                   
+                    <?php
+                    $attend="Attend";
+                    echo "<a class='btn btn-block btn-lg btn-primary' role='button' href='appointmentdetails?id=$appointment->patient_id'\>".$attend.'</a>'.
+                      " 
+                      </li>";
+                      ?>
+                </div>
+                <div class="col-md-4">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       
-      echo "<li><a href='appointment_detail.php?id=$appointment->patient_id'\>" . $appointment->getFrom() . '</a>'.
-          " 
-          </li>";
-  } ?>
+  <?php } ?>
     <?php else: ?>
     <p>Dear Doctor, unfortunatelly you cannot do any attendance yet. Call Joshua. :)</p>
     <?php endif;?>
   </div>
   <?php endif;?>
 </div>
+

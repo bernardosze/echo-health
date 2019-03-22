@@ -32,7 +32,7 @@ namespace routes {
 
             //routes for doctors
             "myschedule" => ["classes/controllers/DoctorScheduleController.php", [ISecurityProfile::DOCTOR]],
-            "test2" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
+            "appointmentdetails" => ["classes/controllers/AppointmentDetailController.php", [ISecurityProfile::DOCTOR]],
             "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
 
             //routes for Administration

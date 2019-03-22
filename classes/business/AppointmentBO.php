@@ -1,7 +1,7 @@
 <?php
 /**
- * Medical Specialty Business Object.
- * @author: Leonardo Otoni
+ * Appointment Business Object.
+ * @author: Joshua Dias
  */
 namespace classes\business {
 
@@ -19,6 +19,13 @@ namespace classes\business {
             return $apptDao->getAllAppointments();
 
         }
+
+        // public function getTodaysAppointments()
+        // {
+        //     $todayapptDao = new AppointmentDao();
+        //     return $todayapptDao->getTodaysAppointments();
+
+        // }
 
     }
 
