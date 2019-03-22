@@ -7,13 +7,11 @@
             </h3>
 
             <?php if(isset($appointmentDetail)) : 
-            
-            
-            
+           
             ?>
             <?php foreach ($appointmentDetail as $appointment){
-            $fname = $appointment->getFirstName()   ;
-            echo $fname;
+            
+            
             ?>
     
             <div class="row">
@@ -24,7 +22,7 @@
                             <label for="patientID">
                                 Patient ID
                             </label>
-                            <input type="text" class="form-control" id="patientID" value="<?=$fname?>" />
+                            <input type="text" class="form-control" id="patientID" value="<?=$appointment->getId()?>" disabled/>
                         </div>
 
                         <div class="form-group">
@@ -32,21 +30,21 @@
                             <label for="firstname">
                                 First Name
                             </label>
-                            <input type="text" class="form-control" id="firstname" />
+                            <input type="text" class="form-control" id="firstname" value="<?=$appointment->getFirstName()?>"/>
                         </div>
                         <div class="form-group">
 
                             <label for="lastname">
                                 Last Name
                             </label>
-                            <input type="text" class="form-control" id="lastname" />
+                            <input type="text" class="form-control" id="lastname"value="<?=$appointment->getLastName()?>" />
                         </div>
                         <div class="form-group">
 
                             <label for="birthday">
                                 Birthday
                             </label>
-                            <input type="text" class="form-control" id="birthday" />
+                            <input type="text" class="form-control" id="birthday" value="<?=$appointment->getBirthday()?>" />
                         </div>
 
                         <div class="form-group">
@@ -54,13 +52,20 @@
                             <label for="status">
                                 Status
                             </label>
-                            <input type="text" class="form-control" id="status" />
+                            <select class="form-control" id="status">
+                                    <option value="SCHEDULED">SCHEDULED</option>
+                                    <option value="RESCHEDULED">RESCHEDULED</option>
+                                    <option value="CLOSED">CLOSED</option>
+                                    <option value="CANCLED">CANCLED</option>
+                                  </select>
+                            
                         </div>
                         
                         
-                        <button type="submit" class="btn btn-primary">
-                            Update
-                        </button>
+                       <a class='btn btn-block btn-lg btn-primary' role='button' href='somewhere?id=<?=$appointment->getId()?>'>Treat Patient</a>
+                      
+                   
+                      ?>
                     </form>
                 </div>
                 <div class="col-md-6">

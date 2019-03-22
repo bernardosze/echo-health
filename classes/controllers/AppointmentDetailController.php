@@ -15,7 +15,7 @@ namespace classes\controllers {
     {
 
         private $appointmentDetail;
-
+        private $patientId;
         public function __construct()
         {
             parent::__construct(
@@ -30,10 +30,10 @@ namespace classes\controllers {
          */
         protected function doGet()
         {
-
+            $patientId = intval($_GET['id']);
             try {
                 $apptDetailBO = new AppointmentDetailBO();
-                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails();
+                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails($patientId);
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }

@@ -13,10 +13,10 @@ namespace classes\business {
         {
         }
 
-        public function getAppointmentDetails()
+        public function getAppointmentDetails($patientId)
         {
             $apptDetailDao = new AppointmentDetailDao();
-            return $apptDetailDao->getAppointmentDetails();
+            return $apptDetailDao->getAppointmentDetails($patientId);
 
         }
 

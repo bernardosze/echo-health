@@ -1,6 +1,6 @@
 <?php
 /**
- * Appointment DAO Class
+ * Appointment Detail DAO Class
  * @author: Josh
  */
 namespace classes\dao {
@@ -24,22 +24,24 @@ namespace classes\dao {
         /**
          * Get all Appointments from the Database
          */
-        public function getAppointmentDetails()
+        public function getAppointmentDetails($patientId)
         {
 
-            $query = "select p.id,u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS from user u, patient p, 
-            appointment a where a.PATIENT_ID = p.id and p.USER_PROFILE_USER_ID = u.id and a.PATIENT_ID=1;";
+            $query = "SELECT p.id,u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS FROM user u, patient p, 
+            appointment a WHERE a.PATIENT_ID = p.id AND p.USER_PROFILE_USER_ID = u.id and a.PATIENT_ID=:patientId ;";
 
             try {
 
                 $db = Database::getConnection();
+                
                 $stmt = $db->prepare($query);
+                $stmt->bindValue(":patientId", $patientId);
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
                     return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\AppointmentDetailModel");
                 } else {
-                    throw new NoDataFoundException();
+                    throw new NoDataFoundExceptioN();
                 }
 
             } finally {

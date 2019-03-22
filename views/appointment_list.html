@@ -31,7 +31,7 @@
                 <div class="col-md-2">
                    
                     <?php
-                    $attend="Attend";
+                    $attend="View Details";
                     echo "<a class='btn btn-block btn-lg btn-primary' role='button' href='appointmentdetails?id=$appointment->patient_id'\>".$attend.'</a>'.
                       " 
                       </li>";
@@ -43,8 +43,9 @@
             </div>
           </div>
         </div>
-      
+        <hr>
   <?php } ?>
+  
     <?php else: ?>
     <p>Dear Doctor, unfortunatelly you cannot do any attendance yet. Call Joshua. :)</p>
     <?php endif;?>

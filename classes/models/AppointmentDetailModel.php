@@ -6,48 +6,48 @@ namespace classes\models {
 
     class AppointmentDetailModel 
     {
-        private $patient_id;
-        private $firstname;
-        private $lastname;
+        private $id;
+        private $first_name;
+        private $last_name;
         private $birthday;
         private $status;
         
-      
-
         public function __construct()
         {
            
         }
-        
-
+        public function __toString()
+        {
+            
+        }
         public function getId()
         {
-            return $this->patient_id;
+            return $this->id;
         }
 
         public function setId($value)
         {
-            $this->patient_id = $value;
+            $this->id = $value;
         }
 
         public function getFirstName()
         {
-            return $this->firstname;
+            return $this->first_name;
         }
 
         public function setFirstName($value)
         {
-            $this->firstname = $value;
+            $this->first_name = $value;
         }
 
         public function getLastName()
         {
-            return $this->lastname;
+            return $this->last_name;
         }
 
         public function setLastName($value)
         {
-            $this->lastname = $value;
+            $this->last_name = $value;
         }
 
         public function getBirthday()
@@ -79,10 +79,6 @@ namespace classes\models {
         {
             $this->status = $value;
         }
-
-
-        
-        
 
     }
 
