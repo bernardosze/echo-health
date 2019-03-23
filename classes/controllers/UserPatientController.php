@@ -6,7 +6,7 @@
 
 namespace classes\controllers {
 
-    use \classes\dao\PatientBO as PatientBO;
+    use \classes\business\PatientBO as PatientBO;
     use \classes\models\PatientModel as PatientModel;
     use \classes\models\UserProfileModel as UserProfileModel;
     use \classes\util\AppConstants as AppConstants;
@@ -33,9 +33,13 @@ namespace classes\controllers {
         $patientModel->setUserProfile($userProfile);
 
         try {
+            var_dump("error0");
             $patientBO = new PatientBO();
+            var_dump("error1");
             $patientBO->savePatientProfile($patientModel);
+            var_dump("error2");
             $alertSuccessMessage = "Profile successfully updated.";
+            var_dump("error3");
         } catch (UpdateUserDataException $e) {
             //Set the error message to appear on screen
             $alertErrorMessage = $e->getMessage();

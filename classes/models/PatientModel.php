@@ -2,6 +2,7 @@
 
 namespace classes\models {
 
+    //use \classes\models\ProfileModel as ProfileModel;
     use JsonSerializable;
 
     class PatientModel implements JsonSerializable
@@ -15,10 +16,13 @@ namespace classes\models {
         private $insurance_group_policy;
 
         //aux UserProfileModel entity
+
         private $userProfile;
+        
 
         public function __construct()
         {
+            //$userProfile = new ProfileModel();
         }
 
         public function getId()
@@ -33,6 +37,7 @@ namespace classes\models {
 
         public function getUserProfile()
         {
+            
             return $this->userProfile;
         }
 
