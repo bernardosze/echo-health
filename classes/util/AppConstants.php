@@ -29,7 +29,7 @@ namespace classes\util {
         public const LOGIN_PAGE = self::MODULE_NAME . "login";
 
         //The session lifespan limit in seconds. Default 300 seconds (5 min).
-        public const SESSION_DURATION_IN_SECONDS = 3000;
+        public const SESSION_DURATION_IN_SECONDS = 300;
 
         //User authenticated data [id, email]
         public const USER_SESSION_DATA = "USER_SESSION_DATA";
