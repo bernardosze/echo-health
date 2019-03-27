@@ -7,6 +7,7 @@ namespace classes\controllers\changePassword {
     use \classes\models\UserModel as UserModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
+    use \classes\util\email\EmailSender as EmailSender;
 
     /**
      * Controller Class for User Change Password
@@ -59,7 +60,6 @@ namespace classes\controllers\changePassword {
             $userModel = new UserModel();
             $userModel->setId($this->userId);
             $userModel->setEmail($this->userEmail);
-
             $userModel->setPassword(filter_input(INPUT_POST, "currentPassword", FILTER_SANITIZE_STRING));
             $userModel->setNewPassword(filter_input(INPUT_POST, "password", FILTER_SANITIZE_STRING));
 
@@ -67,7 +67,9 @@ namespace classes\controllers\changePassword {
             try {
                 $userBO = new UserBO();
                 $userBO->updateUserPassword($userModel);
+                $this->notifyPasswordChange();
                 $json = ["status" => "ok", "message" => "Password successfully updated."];
+
             } catch (Exception $e) {
                 $json = ["status" => "error", "message" => $e->getMessage()];
             } finally {
@@ -88,6 +90,31 @@ namespace classes\controllers\changePassword {
 
             foreach ($views as $view) {
                 require_once $view;
+            }
+
+        }
+
+        /**
+         * Send email to the user informing that the password was changed.
+         */
+        private function notifyPasswordChange()
+        {
+
+            try {
+
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $firstName = $userSessionProfile->getFirstName();
+
+                //Load Template email
+                $message = \file_get_contents('./static/email_template/changepasswd.html');
+                $message = str_replace("%username%", $firstName, $message);
+                $message = str_replace("%system_time%", date("Y-m-d h:i:s a"), $message);
+
+                $emailSender = new EmailSender();
+                $emailSender->sendSystemEmail($this->userEmail, "Password Changed", $message);
+
+            } catch (\Exception $e1) {
+                //TODO: generate a log to register that the email routine is not working
             }
 
         }
