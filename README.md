@@ -5,6 +5,15 @@ Leonardo Otoni - All
 
 ======= <<<<<<<<< GENERAL INSTRUCTIONS TO SETUP THE ENVIRONMENT >>>>>>>>> =======
 
+This project Requires Composer: https://getcomposer.org/
+
+After install composer, perform the steps down below on the project root folder:
+
+$ composer install
+$ composer dumpautoload
+
+--------------------
+
 1 - Create User table (Ready to MySql)
 -- MySQL Workbench Forward Engineering
 

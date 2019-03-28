@@ -1,4 +1,10 @@
 {
+    "autoload": {
+        "psr-4": {
+            "classes\\": "classes/",
+            "routes\\": "routes/"
+        }
+    },
     "require": {
         "phpmailer/phpmailer": "^6.0"
     }
