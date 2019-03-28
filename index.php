@@ -7,7 +7,8 @@
  */
 
 define("ROOT_PATH", dirname(__FILE__, 1) . "/");
-require_once ROOT_PATH . "classes/util/ClassLoader.php";
+//require_once ROOT_PATH . "classes/util/ClassLoader.php";
+require_once 'vendor/autoload.php';
 
 use classes\util\AppConstants as AppConstants;
 use \classes\util\AuthorizationFilter as AuthorizationFilter;
