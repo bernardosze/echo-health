@@ -2,3 +2,4 @@
 .vscode
 wordcounter.ts
 /vendor/
+.idea
