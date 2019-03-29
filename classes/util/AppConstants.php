@@ -12,7 +12,7 @@ namespace classes\util {
 
         //Defines the module name. It must start and end with /
         public const MODULE_NAME = "/echo-health/";
-        //public const MODULE_NAME = "/~bernardosze/humber-college/ite-5330/echo-health/";
+        //public const MODULE_NAME = "/~bernardosze/humber-college/ite-5330/project/echo-health/";
 
         //Default App Home page
         public const HOME_PAGE = "login";
