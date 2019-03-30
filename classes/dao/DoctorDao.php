@@ -9,13 +9,14 @@ namespace classes\dao {
     use PDO;
     use PDOException;
     use \classes\database\Database as Database;
+    use \classes\models\DoctorModel as DoctorModel;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
     class DoctorDao {
 
         public function getDoctorById($userId) {
 
-            $query = "SELECT * FROM doctor WHERE id = :userId AND blocked <> 'Y' LIMIT 1";
+            $query = "SELECT * FROM doctor WHERE user_profile_user_id = :userId LIMIT 1";
 
             try {
 
@@ -24,7 +25,7 @@ namespace classes\dao {
                 $stmt = $db->prepare($query);
                 $stmt->bindValue(":userId", $userId);
                 $stmt->execute();
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "\classes\models\UserModel");
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "\classes\models\DoctorModel");
                 if ($stmt->rowCount() > 0) {
                     return $stmt->fetch();
                 } else {

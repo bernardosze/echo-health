@@ -5,10 +5,9 @@
  */
 namespace classes\business {
 
-    use \classes\dao\MedicalSpecialtyDao as MedicalSpecialtyDao;
-    use \classes\dao\UserDao as UserDao;
+    use \classes\dao\DoctorDao as DoctorDao;
+    use \classes\models\DoctorModel as DoctorModel;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
-    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
 
     class DoctorBO
     {
@@ -22,31 +21,18 @@ namespace classes\business {
         {
         }
 
-        public function getDoctorsSpecialties($userId)
-        {
-            $medicalSpecialtyDao = new MedicalSpecialtyDao();
-
-            $medicalSpecialties;
-            try {
-                $medicalSpecialties = $medicalSpecialtyDao->getAllMedicalSpecialties()(ISecurityProfile::DOCTOR);
-            } catch (Exception $e) {
-                throw new NoDataFoundException(self::NO_SPECIAL_PROFILES);
-            }
-
-            $userProfiles;
-            try {
-                $userProfiles = $profileDao->getProfilesByUserId($userId, ISecurityProfile::DOCTOR);
-            } catch (Exception $e) {
-                $userProfiles = null;
-            }
-
-            return array($appSpecialProfiles, $userProfiles);
-        }
-
         public function fetchDoctorById($userId)
         {
-            $doctorDao = new DoctorDao();
-            return $doctorDao->getDoctorById($userId);
+            $doctor;
+            try {
+                $doctorDao = new DoctorDao();
+                $doctor = $doctorDao->getDoctorById($userId);
+            } catch (NoDataFoundException $e) {
+                $doctor = new DoctorModel();
+            }
+
+            return $doctor;
+
         }
 
     }
