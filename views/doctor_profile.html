@@ -1,0 +1,86 @@
+<form id="setDoctorProfileForm">
+    <input type="hidden" name="userId" value="<?=$userId?>">
+    <div class="d-flex justify-content-end">
+        <div class="mt-1 mb-1">
+            <button type="button" class="btn btn-primary mr-1" onclick="$(location).attr('href', 'searchuser');">Search</button>
+        </div>
+        <div class="mt-1 mb-1">
+            <button id="saveButton" type="button" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-start pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
+        <span class="text-secondary">Doctor Data</span>
+    </nav>
+    <div class="card">
+        <div class="card-box bg-white p-4">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="cspo">CSPO #:</label>
+                    <input type="text" class="form-control" id="cspo" name="cspo" value="<?=$cspo?>">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="firstName">Primary Phone:</label>
+                    <input type="text" class="form-control" id="primaryPhone" name="primaryPhone" value="<?=$primaryPhone?>">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="lastName">Secondary Phone:</label>
+                    <input type="text" class="form-control" id="secondaryPhone" name="secondaryPhone" value="<?=$secondaryPhone?>">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submit" hidden></button>
+            <div class="form-row">
+                <div class="input-group col-md-6">
+                    <label for="medicalSpecialtySelect">Medical Specialties:</label>
+                    <div class="form-group input-group">
+                        <select id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
+                            <option selected></option>
+                            <?php if(!empty($medicalSpecialties)):?>
+                            <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
+                            <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
+                            <?php } ?>
+                            <?php endif; ?>
+                        </select>
+                        <div class="input-group-append">
+                            <button id="addSpecialtyButton" title="Add Specialty" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row col-md-6">
+
+                <table id="profilesTable" class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>#</th>
+                            <th>Specialty</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(empty($userInEditProfiles)): ?>
+                        <tr id="specialtyTableEmptyRow">
+                            <td colspan="3" align="center">No specialty definied</td>
+                        </tr>
+                        <?php else: ?>
+
+                        <?php foreach($userInEditProfiles as $key => $profileModel) { ?>
+                        <tr id="userProfile-<?=$profileModel->getId()?>">
+                            <td hidden><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][id]" value="<?=$profileModel->getId()?>"></td>
+                            <td><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][name]" value="<?=$profileModel->getName()?>"></td>
+                            <td><i onclick="removeProfile('#userProfile-<?=$profileModel->getId()?>')" data-toggle="tooltip" title="Remove Profile" class="text-danger fas fa-minus-circle fa-lg"></i>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                        <?php endif; ?>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</form>
