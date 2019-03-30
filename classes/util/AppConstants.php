@@ -29,7 +29,7 @@ namespace classes\util {
         public const LOGIN_PAGE = self::MODULE_NAME . "login";
 
         //The session lifespan limit in seconds. Default 300 seconds (5 min).
-        public const SESSION_DURATION_IN_SECONDS = 3000;
+        public const SESSION_DURATION_IN_SECONDS = 300;
 
         //User authenticated data [id, email]
         public const USER_SESSION_DATA = "USER_SESSION_DATA";
@@ -49,6 +49,10 @@ namespace classes\util {
         public const STATIC_CONTENT = "static/";
 
         public const INVALID_SESSION_JSON = ["status" => "Invalid_Session"];
+
+        public const DB_DSN_KEY = "DB_HOST";
+        public const DB_PASSWORD_KEY = "DB_PASSWORD";
+        public const DB_USERNAME_KEY = "DB_USERNAME";
 
     }
 
