@@ -14,41 +14,43 @@ namespace classes\controllers {
     class DoctorProfileController extends AppBaseController {
         private $doctor;
 
-        public function __construct()
-        {
+        public function __construct() {
             parent::__construct(
                 "Doctor Profile Page",
                 ["views/doctor_profile.html"]
             );
         }
 
-        protected function doGet()
-        {
+        protected function doGet() {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
 
             try {
-
                 $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->fetchDoctorById($userId);
-
-            } catch (NoDataFoundException $e) {
-                parent::setAlertErrorMessage($e->getMessage());
+            } catch (Exception $e) {
+                throw $e;
             }
 
             parent::doGet();
 
         }
 
-        protected function getMedicalSpecialtyList()
-        {
+        protected function doPost() {
+
+            
+
+            parent::doPost();
+
+        }
+
+        protected function getMedicalSpecialtyList() {
             $msBO = new MedicalSpecialtyBO();
             $medicalSpecialties = $msBO->getAllMedicalSpecialties();
         }
 
-        protected function renderViewPages($views)
-        {
+        protected function renderViewPages($views) {
             //page scope variables
             $userId = $this->doctor->getUserId();
             $cspo = $this->doctor->getCspo();

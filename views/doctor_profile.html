@@ -47,6 +47,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="input-group col-md-6">
+                    <label for="medicalSpecialtySelect">Medical Specialties:</label>
+                    <div class="form-group input-group">
+                        <select id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
+                            <option selected></option>
+                            <?php if(!empty($medicalSpecialties)):?>
+                            <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
+                            <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
+                            <?php } ?>
+                            <?php endif; ?>
+                        </select>
+                        <div class="input-group-append">
+                            <button id="addSpecialtyButton" title="Add Specialty" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-row col-md-6">

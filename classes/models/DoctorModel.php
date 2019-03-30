@@ -8,8 +8,11 @@ namespace classes\models {
         private $user_id;
         private $profile_id;
         private $primary_phone;
-        private $secundary_phone;
+        private $secondary_phone;
         private $cspo;
+
+        // List all medical specialcities to populate
+        private $specialtiesListAux;
 
         //PROFILE_MODEL Associative entity to UserProfileModel
         private $profile;
@@ -49,12 +52,12 @@ namespace classes\models {
             $this->primary_phone = $value;
         }
 
-        public function getSecundaryPhone() {
-            return $this->secundary_phone;
+        public function getSecondaryPhone() {
+            return $this->secondary_phone;
         }
 
-        public function setSecundaryPhone($value) {
-            $this->secundary_phone = $value;
+        public function setSecondaryPhone($value) {
+            $this->secondary_phone = $value;
         }
 
         public function getCspo() {
@@ -65,6 +68,10 @@ namespace classes\models {
             $this->cspo = $value;
         }
 
+        public function setSepecialtiesListAux() {
+            $this->specialtiesListAux = $value;
+        }
+
         //helper to transform this into an array
         public function toArray()
         {
@@ -73,7 +80,7 @@ namespace classes\models {
                 "user_id" => $this->getUserId(),
                 "profile_id" => $this->getProfileId(),
                 "primary_phone" => $this->getPrimaryPhone(),
-                "secundary_phone" => $this->getSecundaryPhone(),
+                "secondary_phone" => $this->getSecondaryPhone(),
                 "cspo" => $this->getCspo(),
             );
         }
