@@ -32,35 +32,27 @@
             <button type="submit" class="btn btn-primary" id="submit" hidden></button>
             <div class="form-row">
                 <div class="input-group col-md-6">
-                        <label for="medicalSpecialtySelect">Select Medical Specialties to add:</label>
-                        <div class="form-group input-group">
-                            <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore">
-                                <?php if(!empty($medicalSpecialties)):?>
-                                <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
-                                <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
-                                <?php } ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
-                        <div class="form-group input-group">
-                            <div class="subject-info-arrows text-center">
-                                <input type="button" id="btnRight" value=">" class="btn btn-success btn-lg btn-block" /><br /> 
-                            </div>
-                        </div>
-                    
+
+                    <label for="medicalSpecialtySelect">Select Medical Specialties to add:</label>
+                    <div class="form-group input-group">
+                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore">
+                            <?php if(!empty($medicalSpecialties)):?>
+                            <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
+                            <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
+                            <?php } ?>
+                            <?php endif; ?>
+                        </select>
+                        <input type="button" id="btnRight" value=">" class="btn-sm btn-success btn btn-block mt-2" />
+                    </div>
+
+
                 </div>
                 <div class="input-group col-md-6">
                     <label for="medicalSpecialtySelection">Medical Specialties:</label>
                     <div class="form-group input-group">
                         <select multiple id="medicalSpecialtySelection" name="medicalSpecialtySelection" class="custom-select ignore">
-    
                         </select>
-                    </div>
-
-                    <div class="form-group input-group ">
-                        <div class="subject-info-arrows text-center">
-                            <input type="button" id="btnLeft" value="<" class="btn btn-danger btn-lg btn-block" /><br />
-                        </div>
+                        <input type="button" id="btnLeft" value="<" class="btn btn-danger btn-sm btn-block mt-2" />
                     </div>
                 </div>
             </div>
