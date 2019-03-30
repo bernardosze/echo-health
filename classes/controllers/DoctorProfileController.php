@@ -16,7 +16,8 @@ namespace classes\controllers {
         private $doctor;
         private $medicalSpecialties;
 
-        public function __construct() {
+        public function __construct()
+        {
             parent::__construct(
                 "Doctor Profile Page",
                 ["views/doctor_profile.html"],
@@ -27,7 +28,8 @@ namespace classes\controllers {
             );
         }
 
-        protected function doGet() {
+        protected function doGet()
+        {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
@@ -35,24 +37,29 @@ namespace classes\controllers {
             try {
                 $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->fetchDoctorById($userId);
-
-                $msBO = new MedicalSpecialtyBO();
-                $this->medicalSpecialties = $msBO->getAllMedicalSpecialties();
-
             } catch (Exception $e) {
                 throw $e;
+            }
+
+            try {
+                $msBO = new MedicalSpecialtyBO();
+                $this->medicalSpecialties = $msBO->getAllMedicalSpecialties();
+            } catch (Exception $e) {
+                $this->medicalSpecialties = null;
             }
 
             parent::doGet();
 
         }
 
-        protected function doPost() {
-            
+        protected function doPost()
+        {
+
             parent::doPost();
         }
 
-        protected function renderViewPages($views) {
+        protected function renderViewPages($views)
+        {
             //page scope variables
             $userId = $this->doctor->getUserId();
             $cspo = $this->doctor->getCspo();
