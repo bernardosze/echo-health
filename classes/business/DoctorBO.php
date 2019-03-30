@@ -5,17 +5,12 @@
  */
 namespace classes\business {
 
-    use \classes\dao\ProfileDao as ProfileDao;
-    use \classes\dao\UserDao as UserDao;
     use \classes\dao\MedicalSpecialtyDao as MedicalSpecialtyDao;
-    use \classes\dao\DoctorSpecialtyDao as DoctorSpecialtyDao;
-    use \classes\database\Database as Database;
-    use \classes\models\UserProfileModel as UserProfileModel;
+    use \classes\dao\UserDao as UserDao;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
     use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
 
-
-    class UserBO
+    class DoctorBO
     {
 
         private const NO_SPECIALTY = "Specialties not found in the database. Contact the SysAdmin.";
