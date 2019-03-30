@@ -8,6 +8,7 @@
 namespace classes\Database {
 
     use PDOException;
+    use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\FatalException as FatalException;
     use \PDO;
 
@@ -17,15 +18,18 @@ namespace classes\Database {
         private static $instance = null;
         private const MYSQL_DOWN_ERROR_CODE = 2002;
 
-        //TODO: Move the connection data to config class
         //Database connection attributes
-        private const DB_DSN = 'mysql:host=localhost:3306;dbname=php';
-
-        private const DB_USERNAME='php';
-        private const DB_PASSWORD='php';
+        private static $dbDSN;
+        private static $dbUsername;
+        private static $dbPassword;
 
         private function __construct()
         {
+            //Load the Applicaton Setup file to get Database connection info
+            $appIni = parse_ini_file("./app.ini");
+            self::$dbDSN = $appIni[AppConstants::DB_DSN_KEY];
+            self::$dbUsername = $appIni[AppConstants::DB_USERNAME_KEY];
+            self::$dbPassword = $appIni[AppConstants::DB_PASSWORD_KEY];
         }
 
         /**
@@ -46,9 +50,9 @@ namespace classes\Database {
         private static function connectToDatabase()
         {
             try {
-                self::$db = new PDO(self::DB_DSN,
-                    self::DB_USERNAME,
-                    self::DB_PASSWORD,
+                self::$db = new PDO(self::$dbDSN,
+                    self::$dbUsername,
+                    self::$dbPassword,
                     array(
                         PDO::ATTR_CASE => PDO::CASE_LOWER,
                         PDO::ATTR_PERSISTENT => true,
