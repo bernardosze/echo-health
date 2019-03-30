@@ -31,10 +31,10 @@
             </div>
             <button type="submit" class="btn btn-primary" id="submit" hidden></button>
             <div class="form-row">
-                <div class="input-group col-md-6">
-                    <label for="medicalSpecialtySelect">Medical Specialties:</label>
+                <div class="input-group col-md-5">
+                    <label for="medicalSpecialtySelect">Select Medical Specialties to add:</label>
                     <div class="form-group input-group">
-                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
+                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore">
                             <option selected></option>
                             <?php if(!empty($medicalSpecialties)):?>
                             <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
@@ -42,65 +42,24 @@
                             <?php } ?>
                             <?php endif; ?>
                         </select>
-                        <div class="input-group-append">
-                            <button id="addSpecialtyButton" title="Add Specialty" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
-                        </div>
                     </div>
                 </div>
-                <div class="input-group col-md-6">
-                    <label for="medicalSpecialtySelect">Medical Specialties:</label>
+                <div class="input-group col-md-2 justify-content-end">
                     <div class="form-group input-group">
-<<<<<<< HEAD
-                        <select id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
-                            <option selected></option>
-                            <?php if(!empty($medicalSpecialties)):?>
-                            <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
-                            <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
-                            <?php } ?>
-                            <?php endif; ?>
-=======
-                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
-
-
->>>>>>> ef784acad9136e9a09870ed5fb8003f4621f1920
-                        </select>
-                        <div class="input-group-append">
-                            <button id="addSpecialtyButton" title="Add Specialty" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>
-                        </div>
+                            <div class="subject-info-arrows text-center">
+                                <input type="button" id="btnRight" value=">" class="btn btn-primary" /><br />
+                                <input type="button" id="btnLeft" value="<" class="btn btn-primary" /><br />
+                            </div>
                     </div>
                 </div>
-            </div>
+                <div class="input-group col-md-5">
+                    <label for="medicalSpecialtySelection">Medical Specialties:</label>
+                    <div class="form-group input-group">
+                        <select multiple id="medicalSpecialtySelection" name="medicalSpecialtySelection" class="custom-select ignore">
 
-            <div class="form-row col-md-6">
-
-                <table id="profilesTable" class="table">
-                    <thead>
-                        <tr>
-                            <th hidden>#</th>
-                            <th>Specialty</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if(empty($userInEditProfiles)): ?>
-                        <tr id="specialtyTableEmptyRow">
-                            <td colspan="3" align="center">No specialty definied</td>
-                        </tr>
-                        <?php else: ?>
-
-                        <?php foreach($userInEditProfiles as $key => $profileModel) { ?>
-                        <tr id="userProfile-<?=$profileModel->getId()?>">
-                            <td hidden><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][id]" value="<?=$profileModel->getId()?>"></td>
-                            <td><input type="text" readonly class="form-control-plaintext" name="profile[<?=$key?>][name]" value="<?=$profileModel->getName()?>"></td>
-                            <td><i onclick="removeProfile('#userProfile-<?=$profileModel->getId()?>')" data-toggle="tooltip" title="Remove Profile" class="text-danger fas fa-minus-circle fa-lg"></i>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                        <?php endif; ?>
-
-                    </tbody>
-                </table>
-
+                        </select>
+                    </div>
+                </div>
             </div>
 
         </div>

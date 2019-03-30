@@ -19,7 +19,11 @@ namespace classes\controllers {
         public function __construct() {
             parent::__construct(
                 "Doctor Profile Page",
-                ["views/doctor_profile.html"]
+                ["views/doctor_profile.html"],
+                null,
+                ["static/js/doctor_profile.js"],
+                null,
+                false
             );
         }
 
@@ -43,8 +47,7 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost()
-        {
+        protected function doPost() {
             
             parent::doPost();
         }
