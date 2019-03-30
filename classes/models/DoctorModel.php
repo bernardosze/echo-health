@@ -11,6 +11,9 @@ namespace classes\models {
         private $secondary_phone;
         private $cspo;
 
+        // List all medical specialcities to populate
+        private $specialtiesListAux;
+
         //PROFILE_MODEL Associative entity to UserProfileModel
         private $profile;
 
@@ -76,6 +79,10 @@ namespace classes\models {
         public function setCspo($value)
         {
             $this->cspo = $value;
+        }
+
+        public function setSepecialtiesListAux() {
+            $this->specialtiesListAux = $value;
         }
 
         //helper to transform this into an array

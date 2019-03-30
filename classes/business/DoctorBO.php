@@ -32,7 +32,6 @@ namespace classes\business {
             }
 
             return $doctor;
-
         }
 
     }

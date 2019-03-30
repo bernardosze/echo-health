@@ -16,22 +16,23 @@ namespace classes\controllers {
         private $doctor;
         private $medicalSpecialties;
 
-        public function __construct()
-        {
+        public function __construct() {
             parent::__construct(
                 "Doctor Profile Page",
-                ["views/doctor_profile.html"]
+                ["views/doctor_profile.html"],
+                null,
+                ["static/js/doctor_profile.js"],
+                null,
+                false
             );
         }
 
-        protected function doGet()
-        {
+        protected function doGet() {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
 
             try {
-
                 $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->fetchDoctorById($userId);
 
@@ -46,14 +47,12 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost()
-        {
+        protected function doPost() {
             
             parent::doPost();
         }
 
-        protected function renderViewPages($views)
-        {
+        protected function renderViewPages($views) {
             //page scope variables
             $userId = $this->doctor->getUserId();
             $cspo = $this->doctor->getCspo();
