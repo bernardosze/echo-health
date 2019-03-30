@@ -17,8 +17,13 @@ namespace classes\business {
         public function getAllMedicalSpecialties()
         {
             $msDao = new MedicalSpecialtyDao();
-            return $msDao->getAllMedicalSpecialties();
-
+            $medicalSpecialties;
+            try {
+                $medicalSpecialties = $msDao->getAllMedicalSpecialties();
+            } catch (Exception $e) {
+                $medicalSpecialties = null;
+            }
+            return $medicalSpecialties;
         }
 
         /**
