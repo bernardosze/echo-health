@@ -11,8 +11,10 @@ namespace classes\controllers {
      *
      * @author: Bernardo Sze
      */
-    class DoctorProfileController extends AppBaseController {
+    class DoctorProfileController extends AppBaseController
+    {
         private $doctor;
+        private $medicalSpecialties;
 
         public function __construct() {
             parent::__construct(
@@ -29,6 +31,10 @@ namespace classes\controllers {
             try {
                 $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->fetchDoctorById($userId);
+
+                $msBO = new MedicalSpecialtyBO();
+                $this->medicalSpecialties = $msBO->getAllMedicalSpecialties();
+
             } catch (Exception $e) {
                 throw $e;
             }
@@ -37,17 +43,10 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost() {
-
+        protected function doPost()
+        {
             
-
             parent::doPost();
-
-        }
-
-        protected function getMedicalSpecialtyList() {
-            $msBO = new MedicalSpecialtyBO();
-            $medicalSpecialties = $msBO->getAllMedicalSpecialties();
         }
 
         protected function renderViewPages($views) {
@@ -56,6 +55,8 @@ namespace classes\controllers {
             $cspo = $this->doctor->getCspo();
             $primaryPhone = $this->doctor->getPrimaryPhone();
             $secondaryPhone = $this->doctor->getSecondaryPhone();
+
+            $medicalSpecialties = $this->medicalSpecialties;
 
             foreach ($views as $view) {
                 require_once $view;

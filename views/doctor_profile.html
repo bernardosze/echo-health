@@ -34,7 +34,7 @@
                 <div class="input-group col-md-6">
                     <label for="medicalSpecialtySelect">Medical Specialties:</label>
                     <div class="form-group input-group">
-                        <select id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
+                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
                             <option selected></option>
                             <?php if(!empty($medicalSpecialties)):?>
                             <?php foreach($medicalSpecialties as $medicalSpecialty) { ?>
@@ -50,6 +50,7 @@
                 <div class="input-group col-md-6">
                     <label for="medicalSpecialtySelect">Medical Specialties:</label>
                     <div class="form-group input-group">
+<<<<<<< HEAD
                         <select id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
                             <option selected></option>
                             <?php if(!empty($medicalSpecialties)):?>
@@ -57,6 +58,11 @@
                             <option value="<?=$medicalSpecialty->getId()?>"><?=$medicalSpecialty->getName()?></option>
                             <?php } ?>
                             <?php endif; ?>
+=======
+                        <select multiple id="medicalSpecialtySelect" name="medicalSpecialtySelect" class="custom-select ignore" onchange="toggleAddProfileButtonBehaviour(event);">
+
+
+>>>>>>> ef784acad9136e9a09870ed5fb8003f4621f1920
                         </select>
                         <div class="input-group-append">
                             <button id="addSpecialtyButton" title="Add Specialty" class="btn btn-outline-secondary" type="button" disabled><i class="fas fa-plus-circle fa-lg"></i></button>

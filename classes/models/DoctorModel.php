@@ -17,54 +17,67 @@ namespace classes\models {
         //PROFILE_MODEL Associative entity to UserProfileModel
         private $profile;
 
-        public function __constructor() {
+        public function __constructor()
+        {
         }
 
-        public function getId() {
+        public function getId()
+        {
             return $this->id;
         }
 
-        public function setId($value) {
+        public function setId($value)
+        {
             $this->id = $value;
         }
 
-        public function getUserId() {
+        public function getUserId()
+        {
             return $this->user_id;
         }
 
-        public function setUserId($value) {
+        public function setUserId($value)
+        {
             $this->user_id = $value;
         }
 
-        public function getProfileId() {
+        public function getProfileId()
+        {
             return $this->profile_id;
         }
 
-        public function setProfileId($value) {
+        public function setProfileId($value)
+        {
             $this->profile_id = $value;
         }
 
-        public function getPrimaryPhone() {
+        public function getPrimaryPhone()
+        {
             return $this->primary_phone;
         }
 
-        public function setPrimaryPhone($value) {
+        public function setPrimaryPhone($value)
+        {
             $this->primary_phone = $value;
         }
 
-        public function getSecondaryPhone() {
+        public function getSecondaryPhone()
+        {
             return $this->secondary_phone;
         }
 
-        public function setSecondaryPhone($value) {
+        public function setSecondaryPhone($value)
+        {
             $this->secondary_phone = $value;
         }
 
-        public function getCspo() {
+        public function getCspo()
+        {
             return $this->cspo;
         }
 
-        public function setCspo($value) {
+        public function setCspo($value)
+        {
             $this->cspo = $value;
         }
 
