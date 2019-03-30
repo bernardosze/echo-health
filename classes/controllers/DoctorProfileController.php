@@ -1,6 +1,7 @@
 <?php
 namespace classes\controllers {
 
+    use \classes\business\DoctorBO as DoctorBO;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
     use \classes\models\MedicalSpecialtyModel as MedicalSpecialtyModel;
     use \classes\util\AppConstants as AppConstants;
@@ -11,8 +12,9 @@ namespace classes\controllers {
      *
      * @author: Bernardo Sze
      */
-    class DoctorProfileController extends AppBaseController
-    {
+    class DoctorProfileController extends AppBaseController {
+        private $doctor;
+
 
         public function __construct()
         {
@@ -23,35 +25,17 @@ namespace classes\controllers {
         }
 
         protected function doGet() {
-            parse_str($_SERVER['QUERY_STRING'], $qString);
+            $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+            $id = $userSessionProfile->getUserId();
 
-            if (array_key_exists("id", $qString) &&
-                !empty($qString["id"])) {
+            try {
 
-                try {
+                $doctorBO = new DoctorBO();
+                $this->doctor = $doctorBO->fetchDoctorById($qString["id"]);
 
-                    $doctorBO = new DoctorBO();
-                    $doctorModel = $doctorBO->fetchDoctorById($qString["id"]);
-                    $this->userId = $userModel->getId();
-                    $this->firstName = $userModel->getFirstName();
-                    $this->lastName = $userModel->getLastName();
-                    $this->email = $userModel->getEmail();
-                    $this->birthday = $userModel->getBirthday();
-
-                    $profileBO = new ProfileBO();
-                    $profilesArray = $profileBO->getSpecialProfiles($qString["id"]);
-                    $this->appProfiles = $profilesArray[0];
-                    $this->userInEditProfiles = $profilesArray[1];
-
-                } catch (NoDataFoundException $e) {
-                    parent::setAlertErrorMessage($e->getMessage());
-                } catch (Exception $e) {
-                    parent::setAlertErrorMessage(self::USER_NOT_FOUND);
-                }
-
-            } else {
-                parent::setAlertErrorMessage(self::INVALID_REQUEST);
-            }
+            } catch (NoDataFoundException $e) {
+                parent::setAlertErrorMessage($e->getMessage());
+            } 
 
             parent::doGet();
 
@@ -65,10 +49,10 @@ namespace classes\controllers {
         protected function renderViewPages($views)
         {
             //page scope variables
-            $userId = $this->userId;
-            $cspo = $this->cspo;
-            $primaryPhone = $this->primaryPhone;
-            $secondaryPhone = $this->secondaryPhone;
+            $userId = $this->doctor->getUserId();
+            $cspo = $this->doctor->getCspo();
+            $primaryPhone = $this->doctor->getPrimaryPhone();
+            $secondaryPhone = $this->doctor->getSecondaryPhone();
 
             foreach ($views as $view) {
                 require_once $view;

@@ -15,7 +15,7 @@ namespace classes\business {
     use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
 
 
-    class UserBO
+    class DoctorBO
     {
 
         private const NO_SPECIALTY = "Specialties not found in the database. Contact the SysAdmin.";
@@ -50,8 +50,8 @@ namespace classes\business {
 
         public function fetchDoctorById($userId)
         {
-            $userDao = new UserDao();
-            return $userDao->getDoctorById($userId);
+            $doctorDao = new DoctorDao();
+            return $doctorDao->getDoctorById($userId);
         }
 
     }
