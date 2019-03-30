@@ -27,7 +27,7 @@ namespace classes\dao {
         public function getAllMedicalSpecialties()
         {
 
-            $query = "select id, name from medical_specialty order by 1 asc";
+            $query = "select id, name from medical_specialties order by 1 asc";
 
             try {
 
@@ -65,7 +65,7 @@ namespace classes\dao {
 
                 if (isset($itensToUpdate) && count($itensToUpdate) > 0) {
 
-                    $updateQry = "update medical_specialty set name=:name where id=:id";
+                    $updateQry = "update medical_specialties set name=:name where id=:id";
                     $stmt = $db->prepare($updateQry);
                     $stmt->bindParam(":name", $name);
                     $stmt->bindParam(":id", $id);
@@ -83,7 +83,7 @@ namespace classes\dao {
 
                 if (isset($itensToDelete) && count($itensToDelete) > 0) {
 
-                    $deleteQry = "delete from medical_specialty where id=:id";
+                    $deleteQry = "delete from medical_specialties where id=:id";
                     $stmt = $db->prepare($deleteQry);
                     $stmt->bindParam(":id", $id);
                     foreach ($itensToDelete as $medicalSpecialty) {
@@ -99,7 +99,7 @@ namespace classes\dao {
 
                 if (isset($itensToInsert) && count($itensToInsert) > 0) {
 
-                    $insertQry = "insert into medical_specialty (name) values (:name)";
+                    $insertQry = "insert into medical_specialties (name) values (:name)";
                     $stmt = $db->prepare($insertQry);
                     $stmt->bindParam(":name", $name);
                     foreach ($itensToInsert as $medicalSpecialty) {

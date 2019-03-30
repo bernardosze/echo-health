@@ -19,10 +19,11 @@ namespace classes\dao {
         {
         }
 
+        //TODO, Method duplicated. It must to be removed.
         public function getUserById($userId)
         {
 
-            $query = "SELECT * FROM user WHERE id = :userId AND blocked <> 'Y' LIMIT 1";
+            $query = "SELECT * FROM users WHERE id = :userId AND blocked <> 'Y' LIMIT 1";
 
             try {
 
@@ -56,7 +57,7 @@ namespace classes\dao {
         {
 
             $insertPatientProfileQuery =
-                "INSERT INTO patient (user_profile_user_id,
+                "INSERT INTO patients (user_profile_user_id,
                 user_profile_profile_id,
                 emergency_contact,
                 emergency_relationship,

@@ -29,7 +29,7 @@ namespace classes\dao {
 
             $query = "
             
-                    SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime, DATE_FORMAT(a.from,'%W') AS dayName  from appointment a;
+                    SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime, DATE_FORMAT(a.from,'%W') AS dayName  from appointments a;
             ";
 
             try {
@@ -54,7 +54,7 @@ namespace classes\dao {
         public function getTodaysAppointments()
         {
 
-            $query = "SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime  from appointment a where DATE_FORMAT(a.from,'%d/%m/%Y') = CURDATE()";
+            $query = "SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime  from appointments a where DATE_FORMAT(a.from,'%d/%m/%Y') = CURDATE()";
 
             try {
 

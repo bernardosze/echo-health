@@ -27,7 +27,7 @@ namespace classes\dao {
         public function getAppointmentDetails($patientId)
         {
 
-            $query = "SELECT p.id,u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS FROM user u, patient p, 
+            $query = "SELECT p.id,u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS FROM users u, patients p, 
             appointment a WHERE a.PATIENT_ID = p.id AND p.USER_PROFILE_USER_ID = u.id and a.PATIENT_ID=:patientId ;";
 
             try {

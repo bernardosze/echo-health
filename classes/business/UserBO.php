@@ -74,7 +74,7 @@ namespace classes\business {
 
             try {
                 $userModel = $userDao->getUserByEmail($userModelFromForm->getEmail());
-            } catch (NoDataFoundException $e) {
+            } catch (\Exception $e) {
                 //User not found
                 throw new AuthenticationException(self::USER_AUTHENTICATION_EXCEPTION);
             }

@@ -23,14 +23,14 @@ namespace classes\dao {
         {
 
             $qExcludeProfile = "select p.id, p.name " .
-                "from profile p inner join user_profile up on p.id = up.profile_id " .
-                "inner join user u on up.user_id = u.id " .
+                "from profiles p inner join user_profiles up on p.id = up.profile_id " .
+                "inner join users u on up.user_id = u.id " .
                 "where u.id = :userId and " .
                 " p.name <> :profileName";
 
             $qAllProfiles = "select p.id, p.name " .
-                "from profile p inner join user_profile up on p.id = up.profile_id " .
-                "inner join user u on up.user_id = u.id " .
+                "from profiles p inner join user_profiles up on p.id = up.profile_id " .
+                "inner join users u on up.user_id = u.id " .
                 "where u.id = :userId";
 
             $query = (!empty($profileToIgnore) ? $qExcludeProfile : $qAllProfiles);
@@ -65,8 +65,8 @@ namespace classes\dao {
          */
         public function getAppProfiles($profileToIgnore = null)
         {
-            $queryAllProfiles = "select p.id, p.name from profile p ";
-            $queryIgnoringProfile = "select p.id, p.name from profile p where p.name <> :profileToIgnore";
+            $queryAllProfiles = "select p.id, p.name from profiles p ";
+            $queryIgnoringProfile = "select p.id, p.name from profiles p where p.name <> :profileToIgnore";
             $query = (empty($profileToIgnore) ? $queryAllProfiles : $queryIgnoringProfile);
 
             try {
@@ -99,7 +99,7 @@ namespace classes\dao {
          */
         public function insertUserProfile($userProfileModelArray)
         {
-            $query = "insert into user_profile (user_id, profile_id) values";
+            $query = "insert into user_profiles (user_id, profile_id) values";
             //(:user_id, :profile_id)
             $params = "(?,?)";
 
@@ -143,7 +143,7 @@ namespace classes\dao {
 
         public function deleteUserProfile($userProfileModelArray)
         {
-            $query = "delete from user_profile where user_id=:userId and profile_id=:profileId";
+            $query = "delete from user_profiles where user_id=:userId and profile_id=:profileId";
 
             try {
 

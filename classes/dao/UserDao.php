@@ -33,7 +33,7 @@ namespace classes\dao {
         public function getUserById($userId)
         {
 
-            $query = "select * from user where id = :userId and blocked <> 'Y' LIMIT 1";
+            $query = "select * from users where id = :userId and blocked <> 'Y' LIMIT 1";
 
             try {
 
@@ -65,7 +65,7 @@ namespace classes\dao {
         public function getUserByEmail($userEmail)
         {
 
-            $query = "select * from user where email = :userEmail and blocked <> 'Y' LIMIT 1";
+            $query = "select * from users where email = :userEmail and blocked <> 'Y' LIMIT 1";
 
             try {
 
@@ -101,7 +101,7 @@ namespace classes\dao {
                 throw new Exception("A UserSearchParams object must be provided");
             }
 
-            $query = "select id, email, first_name, last_name from user ";
+            $query = "select id, email, first_name, last_name from users ";
             $orderBy = " order by email asc ";
             $preparedParams = [];
 
@@ -155,7 +155,7 @@ namespace classes\dao {
         public function logUnsuccessfulLogin($userModel)
         {
 
-            $query = "update user set " .
+            $query = "update users set " .
                 "last_login_attempt = :lastLoginAttempt, " .
                 "login_attempt = :loginAttempt, " .
                 "blocked = :blocked " .
@@ -192,7 +192,7 @@ namespace classes\dao {
         public function logSuccessfulLogin($userModel)
         {
 
-            $query = "update user set last_login = :lastLogin, " .
+            $query = "update users set last_login = :lastLogin, " .
                 "last_login_attempt = :lastLoginAttempt, " .
                 "login_attempt = :loginAttempt " .
                 "where id = :userId";
@@ -221,12 +221,12 @@ namespace classes\dao {
         public function insertNewUser($userModel)
         {
 
-            $insertUserQuery = "insert into USER (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
+            $insertUserQuery = "insert into USERS (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD, BIRTHDAY, BLOCKED, RECORD_CREATION) " .
                 "values(:email, :firstName, :lastName, :password, :birthday, :blocked, :recordCreation )";
 
-            $insertUserProfileQuery = "insert into user_profile (user_id, profile_id) " .
+            $insertUserProfileQuery = "insert into user_profiles (user_id, profile_id) " .
                 "select u.id as user_id, p.id as profile_id " .
-                "from profile p, user u " .
+                "from profiles p, users u " .
                 "where p.name = :profileName and u.id = :userId";
 
             $db = Database::getConnection();
@@ -248,12 +248,6 @@ namespace classes\dao {
                 $stmt->bindValue(":recordCreation", date("Y-m-d H:i:s"));
                 $stmt->execute();
                 $userModel->setId($db->lastInsertId());
-
-                //Register the user as a PATIENT by default
-                // $stmt = $db->prepare($insertUserProfileQuery);
-                // $stmt->bindValue(":profileName", ISecurityProfile::PATIENT);
-                // $stmt->bindValue(":userId", $userModel->getId());
-                // $stmt->execute();
 
                 $db->commit();
 
@@ -285,7 +279,7 @@ namespace classes\dao {
         public function updateUserPassword($userModel)
         {
 
-            $updateQuery = "update user set password = :password where id = :userId";
+            $updateQuery = "update users set password = :password where id = :userId";
 
             try {
                 $db = Database::getConnection();
@@ -307,7 +301,7 @@ namespace classes\dao {
 
         public function updateUserEmail($userModel)
         {
-            $updateQuery = "update user set email=:newEmail where email = :oldEmail";
+            $updateQuery = "update users set email=:newEmail where email = :oldEmail";
 
             try {
 
@@ -340,7 +334,7 @@ namespace classes\dao {
          */
         public function updateUser($userModel)
         {
-            $updateQuery = "update user set first_name=:firstName, last_name=:lastName, email=:email, birthday=:birthday where id=:userId";
+            $updateQuery = "update users set first_name=:firstName, last_name=:lastName, email=:email, birthday=:birthday where id=:userId";
 
             try {
 

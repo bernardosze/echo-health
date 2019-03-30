@@ -9,14 +9,15 @@ namespace classes\dao {
     use PDO;
     use PDOException;
     use \classes\database\Database as Database;
-    use \classes\models\DoctorModel as DoctorModel;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
-    class DoctorDao {
+    class DoctorDao
+    {
 
-        public function getDoctorById($userId) {
+        public function getDoctorById($userId)
+        {
 
-            $query = "SELECT * FROM doctor WHERE user_profile_user_id = :userId LIMIT 1";
+            $query = "SELECT * FROM doctors WHERE user_profile_user_id = :userId LIMIT 1";
 
             try {
 
@@ -33,7 +34,7 @@ namespace classes\dao {
                 }
 
             } finally {
-                if(isset($stmt)){
+                if (isset($stmt)) {
                     $stmt->closeCursor();
                 }
             }
@@ -47,7 +48,7 @@ namespace classes\dao {
          */
         public function insertDoctorSpecialty($doctorSpecialtyModelArray)
         {
-            $query = "INSERT INTO doctor_medical_specialty (doctor_id, medical_specialty_id) VALUES";
+            $query = "INSERT INTO doctor_medical_specialties (doctor_id, medical_specialty_id) VALUES";
             //(:doctor_id, :medical_specialty_id)
             $params = "(?,?)";
 
@@ -91,7 +92,7 @@ namespace classes\dao {
 
         public function deleteDoctorSpecialty($doctorSpecialtyModelArray)
         {
-            $query = "DELETE FROM doctor_medical_specialty WHERE doctor_id=:doctor_id AND medical_specialty_id=:medical_specialty_id";
+            $query = "DELETE FROM doctor_medical_specialties WHERE doctor_id=:doctor_id AND medical_specialty_id=:medical_specialty_id";
 
             try {
 
@@ -120,4 +121,4 @@ namespace classes\dao {
 
     } //END: class
 
-}//END: namespace
+} //END: namespace
