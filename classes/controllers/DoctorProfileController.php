@@ -3,7 +3,6 @@ namespace classes\controllers {
 
     use \classes\business\DoctorBO as DoctorBO;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
-    use \classes\models\MedicalSpecialtyModel as MedicalSpecialtyModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
 
@@ -15,7 +14,6 @@ namespace classes\controllers {
     class DoctorProfileController extends AppBaseController {
         private $doctor;
 
-
         public function __construct()
         {
             parent::__construct(
@@ -24,24 +22,27 @@ namespace classes\controllers {
             );
         }
 
-        protected function doGet() {
+        protected function doGet()
+        {
+
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
-            $id = $userSessionProfile->getUserId();
+            $userId = $userSessionProfile->getUserId();
 
             try {
 
                 $doctorBO = new DoctorBO();
-                $this->doctor = $doctorBO->fetchDoctorById($qString["id"]);
+                $this->doctor = $doctorBO->fetchDoctorById($userId);
 
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
-            } 
+            }
 
             parent::doGet();
 
         }
 
-        protected function getMedicalSpecialtyList(){
+        protected function getMedicalSpecialtyList()
+        {
             $msBO = new MedicalSpecialtyBO();
             $medicalSpecialties = $msBO->getAllMedicalSpecialties();
         }
