@@ -1,10 +1,12 @@
 <?php
 namespace classes\controllers {
 
+    use Exception;
     use \classes\business\DoctorBO as DoctorBO;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundExcpetion;
 
     /**
      * Doctor Profile Controller
@@ -44,8 +46,10 @@ namespace classes\controllers {
             try {
                 $msBO = new MedicalSpecialtyBO();
                 $this->medicalSpecialties = $msBO->getAllMedicalSpecialties();
-            } catch (Exception $e) {
+            } catch (NoDataFoundExcpetion $e) {
                 $this->medicalSpecialties = null;
+            } catch (Exception $e) {
+                throw $e;
             }
 
             parent::doGet();
