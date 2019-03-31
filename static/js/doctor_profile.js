@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $("#saveButton").click(function () {
         //reset the old messages
         $("#alertSuccessMessage").attr("hidden", true);

@@ -4,28 +4,26 @@ namespace classes\controllers {
     use Exception;
     use \classes\business\DoctorBO as DoctorBO;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
+    use \classes\models\DoctorModel as DoctorModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundExcpetion;
+    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
 
     /**
      * Doctor Profile Controller
      *
      * @author: Bernardo Sze
      */
-    class DoctorProfileController extends AppBaseController {
-        private $id = "";
-        private $userId = "";
-        private $profileId = "";
-        private $cspo = "";
-        private $primaryPhone = "";
-        private $secondaryPhone = "";
+    class DoctorProfileController extends AppBaseController
+    {
 
         private $doctor;
         private $medicalSpecialties;
         private $doctorMedicalSpecialties;
 
-        public function __construct() {
+        public function __construct()
+        {
             parent::__construct(
                 "Doctor Profile Page",
                 ["views/doctor_profile.html"],
@@ -36,11 +34,11 @@ namespace classes\controllers {
             );
         }
 
-        protected function doGet() {
+        protected function doGet()
+        {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
-            $profileId = $userSessionProfile->getProfiles();
 
             try {
                 $doctorBO = new DoctorBO();
@@ -63,37 +61,47 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost() {
-            $this->cspo = filter_input(INPUT_POST, "cspo", FILTER_SANITIZE_NUMBER_INT);
-            $this->primaryPhone = filter_input(INPUT_POST, "primaryPhone", FILTER_SANITIZE_NUMBER_INT);
-            $this->secondaryPhone = filter_input(INPUT_POST, "secondaryPhone", FILTER_SANITIZE_NUMBER_INT);
+        protected function doPost()
+        {
+            $doctor = new DoctorModel();
+            $doctor->setId(filter_input(INPUT_POST, "doctorId", FILTER_SANITIZE_NUMBER_INT));
 
-            $doctorModel = new DoctorModel();
-            $doctorModel->setId($this->id);
-            $doctorModel->setUserId($this->userId);
-            $doctorModel->setProfileId($this->profileId);
-            $doctorModel->setPrimaryPhone($this->primaryPhone);
-            $doctorModel->setSecondaryPhone($this->secondaryPhone);
-            $doctorModel->setCspo($this->cspo);
+            $userId = filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT);
+            if (empty($userId)) {
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $userId = $userSessionProfile->getUserId();
+            }
 
-            $json = [];
+            $profileId = filter_input(INPUT_POST, "profileId", FILTER_SANITIZE_NUMBER_INT);
+            if (empty($profileId)) {
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $profiles = $userSessionProfile->getProfiles();
+                $profileId = array_search(ISecurityProfile::DOCTOR, $profiles);
+            }
+
+            $doctor->setUserId($userId);
+            $doctor->setProfileId($profileId);
+            $doctor->setCspo(filter_input(INPUT_POST, "cspo", FILTER_SANITIZE_NUMBER_INT));
+            $doctor->setPrimaryPhone(filter_input(INPUT_POST, "primaryPhone", FILTER_SANITIZE_NUMBER_INT));
+            $doctor->setSecondaryPhone(filter_input(INPUT_POST, "secondaryPhone", FILTER_SANITIZE_NUMBER_INT));
+
             try {
-                $userBO = new UserBO();
-                $doctorBO->SaveDoctorProfile($doctorId, $doctorModel);
-                $json = ["status" => "ok", "message" => self::DATA_SAVED];
+                $doctorBO = new DoctorBO();
+                $this->doctor = $doctorBO->SaveDoctor($doctor);
+                parent::setAlertSuccessMessage("Profile successfully saved.");
             } catch (Exception $e) {
-                $json = ["status" => "error", "message" => $e->getMessage()];
-            } finally {
-                header('Content-type: application/json');
-                echo json_encode($json);
+                parent::setAlertErrorMessage("Error trying to save data:" . $e->getMessage());
             }
 
             parent::doPost();
         }
 
-        protected function renderViewPages($views) {
+        protected function renderViewPages($views)
+        {
             //page scope variables
+            $doctorId = $this->doctor->getId();
             $userId = $this->doctor->getUserId();
+            $profileId = $this->doctor->getProfileId();
             $cspo = $this->doctor->getCspo();
             $primaryPhone = $this->doctor->getPrimaryPhone();
             $secondaryPhone = $this->doctor->getSecondaryPhone();

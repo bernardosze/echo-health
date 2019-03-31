@@ -10,6 +10,7 @@ namespace classes\dao {
     use PDOException;
     use \classes\database\Database as Database;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
+    use \classes\models\DoctorModel as DoctorModel;
 
     class DoctorDao {
 
@@ -39,7 +40,7 @@ namespace classes\dao {
 
         }
 
-        public function insertDoctor($doctorModel) {
+        public function insertDoctor(DoctorModel $doctor) {
 
             $query = "INSERT INTO doctors (user_profile_user_id, user_profile_profile_id, 
                             primary_phone, secondary_phone, cspo) 
@@ -51,14 +52,14 @@ namespace classes\dao {
                 $db->beginTransaction();
 
                 $stmt = $db->prepare($query);
-                foreach ($doctorModel as $doctor) {
-                    $stmt->bindValue(":userId", $doctor->getUserId());
-                    $stmt->bindValue(":profileId", $doctor->getProfileId());
-                    $stmt->bindValue(":primaryPhone", $doctor->getPrimaryPhone());
-                    $stmt->bindValue(":secondaryPhone", $doctor->getSecondaryPhone());
-                    $stmt->bindValue(":cspo", $doctor->getCspo());
-                    $stmt->execute();
-                }
+                $stmt->bindValue(":userId", $doctor->getUserId());
+                $stmt->bindValue(":profileId", $doctor->getProfileId());
+                $stmt->bindValue(":primaryPhone", $doctor->getPrimaryPhone());
+                $stmt->bindValue(":secondaryPhone", $doctor->getSecondaryPhone());
+                $stmt->bindValue(":cspo", $doctor->getCspo());
+                $stmt->execute();
+
+                $doctor->setId($db->lastInsertId());
 
                 $db->commit();
 
@@ -69,6 +70,8 @@ namespace classes\dao {
                 if (isset($stmt)) {
                     $stmt->closeCursor();
                 }
+
+                return $doctor;
             }
 
         }

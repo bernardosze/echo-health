@@ -108,7 +108,8 @@ namespace classes\business {
         {
             $profiles = [];
             foreach ($profileModelArray as $profileModel) {
-                array_push($profiles, $profileModel->getName());
+                $profiles[$profileModel->getId()] = $profileModel->getName();
+                //array_push($profiles, $profileModel->getName());
             }
             return new UserSessionProfile(
                 $userModel->getId(),

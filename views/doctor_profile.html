@@ -1,8 +1,10 @@
-<form id="setDoctorProfileForm">
+<form id="setDoctorProfileForm" action="doctor-profile" method="POST">
+    <input type="hidden" name="doctorId" value="<?=$doctorId?>">
     <input type="hidden" name="userId" value="<?=$userId?>">
+    <input type="hidden" name="profileId" value="<?=$profileId?>">
     <div class="d-flex justify-content-end">
         <div class="mt-1 mb-1">
-            <button id="saveButton" type="button" class="btn btn-primary">Save</button>
+            <button id="saveButton" type="submit" class="btn btn-primary">Save</button>
         </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-start pt-0 pb-0 border" style="background-color: rgb(176, 182, 184);">
