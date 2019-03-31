@@ -85,9 +85,21 @@ namespace classes\controllers {
             $doctor->setPrimaryPhone(filter_input(INPUT_POST, "primaryPhone", FILTER_SANITIZE_NUMBER_INT));
             $doctor->setSecondaryPhone(filter_input(INPUT_POST, "secondaryPhone", FILTER_SANITIZE_NUMBER_INT));
 
+            ///
+            $filhosDoBernardo =$_POST["medicalSpecialtySelection"];//filter_input(INPUT_POST, "medicalSpecialtySelection");
+            $doctorMedicalSpecialties=[];  
+            foreach ($filhosDoBernardo as $key) {
+                # code...
+                //$obj = new DoctorMedicalSpecialtyModel()
+                //$obj->setDoctorId()
+                //$obj->setMedicalSpecialtyId($key)
+                //$doctorMedicalSpecialties[] = $obj;
+            }
             try {
                 $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->SaveDoctor($doctor);
+
+                ///
                 parent::setAlertSuccessMessage("Profile successfully saved.");
             } catch (Exception $e) {
                 parent::setAlertErrorMessage("Error trying to save data:" . $e->getMessage());
