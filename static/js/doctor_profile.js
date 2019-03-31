@@ -1,3 +1,14 @@
+$(document).ready(function () {
+    $("#saveButton").click(function () {
+        //reset the old messages
+        $("#alertSuccessMessage").attr("hidden", true);
+        $("#alertErrorMessage").attr("hidden", true);
+        $("#alertWarningMessage").attr("hidden", true);
+
+        $("#setDoctorProfileForm").submit();
+    });
+});
+
 (function () {
     $('#btnRight').click(function (e) {
         var selectedOpts = $('#medicalSpecialtySelect option:selected');

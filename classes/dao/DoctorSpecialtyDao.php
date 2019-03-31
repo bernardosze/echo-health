@@ -14,10 +14,10 @@ namespace classes\dao {
     class DoctorSpecialtyDao
     {
 
-        public function getDoctorById($userId)
+        public function getDoctorSpecialtyById($userId)
         {
 
-            $query = "SELECT * FROM doctors WHERE id = :userId AND blocked <> 'Y' LIMIT 1";
+            $query = "SELECT * FROM doctors WHERE id = :userId LIMIT 1";
 
             try {
 

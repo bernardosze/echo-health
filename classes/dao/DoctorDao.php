@@ -11,11 +11,9 @@ namespace classes\dao {
     use \classes\database\Database as Database;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
-    class DoctorDao
-    {
+    class DoctorDao {
 
-        public function getDoctorById($userId)
-        {
+        public function getDoctorByUserId($userId) {
 
             $query = "SELECT * FROM doctors WHERE user_profile_user_id = :userId LIMIT 1";
 
@@ -33,6 +31,71 @@ namespace classes\dao {
                     throw new NoDataFoundException();
                 }
 
+            } finally {
+                if (isset($stmt)) {
+                    $stmt->closeCursor();
+                }
+            }
+
+        }
+
+        public function insertDoctor($doctorModel) {
+
+            $query = "INSERT INTO doctors (user_profile_user_id, user_profile_profile_id, 
+                            primary_phone, secondary_phone, cspo) 
+                            VALUES (:userId, :profileId, :primaryPhone, :secondaryPhone, :cspo)";
+
+            try {
+
+                $db = Database::getConnection();
+                $db->beginTransaction();
+
+                $stmt = $db->prepare($query);
+                foreach ($doctorModel as $doctor) {
+                    $stmt->bindValue(":userId", $doctor->getUserId());
+                    $stmt->bindValue(":profileId", $doctor->getProfileId());
+                    $stmt->bindValue(":primaryPhone", $doctor->getPrimaryPhone());
+                    $stmt->bindValue(":secondaryPhone", $doctor->getSecondaryPhone());
+                    $stmt->bindValue(":cspo", $doctor->getCspo());
+                    $stmt->execute();
+                }
+
+                $db->commit();
+
+            } catch (PDOException $e) {
+                $db->rollback();
+                throw $e;
+            } finally {
+                if (isset($stmt)) {
+                    $stmt->closeCursor();
+                }
+            }
+
+        }
+
+        public function updateDoctorByUserId($doctorId, $doctorModel) {
+
+            $query = "UPDATE doctors SET primary_phone=:primaryPhone, secondary_phone=:secondaryPhone, cspo=:cspo WHERE id=:id";
+
+            try {
+
+                $db = Database::getConnection();
+                $db->beginTransaction();
+
+                $stmt = $db->prepare($query);
+                $stmt->bindValue(":id", $doctorId);
+                foreach ($doctorModel as $doctor) {
+                    $stmt->bindValue(":primaryPhone", $doctor->getPrimaryPhone());
+                    $stmt->bindValue(":secondaryPhone", $doctor->getSecondaryPhone());
+                    $stmt->bindValue(":cspo", $doctor->getCspo());
+                    $stmt->execute();
+                }
+
+                $db->commit();
+
+            } catch (PDOException $e) {
+                $db->rollback();
+                throw $e;
             } finally {
                 if (isset($stmt)) {
                     $stmt->closeCursor();
