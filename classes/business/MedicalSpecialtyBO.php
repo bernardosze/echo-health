@@ -7,6 +7,7 @@ namespace classes\business {
 
     use \classes\dao\MedicalSpecialtyDao as MedicalSpecialtyDao;
     use \classes\models\MedicalSpecialtyModel as MedicalSpecialtyModel;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
     class MedicalSpecialtyBO
     {
@@ -80,7 +81,14 @@ namespace classes\business {
             if (count($itensToDelete) > 0 || count($itensToUpdate) > 0 || count($itensToInsert) > 0) {
                 $msDao->saveMedicalSpecialties($itensToUpdate, $itensToInsert, $itensToDelete);
             }
-            return $msDao->getAllMedicalSpecialties();
+
+            $medicalSpecialtiesList;
+            try {
+                $medicalSpecialtiesList = $msDao->getAllMedicalSpecialties();
+            } catch (NoDataFoundException $e) {
+                $medicalSpecialtiesList = [];
+            }
+            return $medicalSpecialtiesList;
 
         }
     }
