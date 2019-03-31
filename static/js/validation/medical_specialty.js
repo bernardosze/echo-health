@@ -190,6 +190,9 @@ const submitFormAjax = () => {
             $("#alertErrorMessage").removeAttr("hidden").text(json.message);
         }
 
+    }).done(() => {
+        $("input").removeClass("is-valid");
+        $("input").removeClass("is-invalid");
     }).fail((error) => {
         console.error(error);
     });

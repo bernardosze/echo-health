@@ -16,6 +16,8 @@ namespace classes\controllers {
     class MedicalSpecialtyController extends AppBaseController
     {
 
+        private const EMPTY_LIST_MSG = "Cannot save an empty list. Set at least one Medical Specialty before click on Save.";
+
         public function __construct()
         {
             parent::__construct(
@@ -53,32 +55,43 @@ namespace classes\controllers {
         protected function doPost()
         {
 
-            $jsonArray = $_POST["medicalSpecialty"];
-
+            $data = [];
             try {
 
-                $medicalSpecialtiesArray = [];
-                $data = [];
-                foreach ($jsonArray as $specialty) {
-                    if ($specialty["name"] !== "") {
-                        $ms = new MedicalSpecialtyModel();
-                        $ms->setId($specialty["id"]);
-                        $ms->setName($specialty["name"]);
-                        if (\array_key_exists("action", $specialty)) {
-                            $ms->setAction($specialty["action"]);
+                if (array_key_exists("medicalSpecialty", $_POST)) {
+
+                    $jsonArray = $_POST["medicalSpecialty"];
+
+                    $medicalSpecialtiesArray = [];
+                    foreach ($jsonArray as $specialty) {
+                        if ($specialty["name"] !== "") {
+                            $ms = new MedicalSpecialtyModel();
+                            $ms->setId($specialty["id"]);
+                            $ms->setName($specialty["name"]);
+                            if (\array_key_exists("action", $specialty)) {
+                                $ms->setAction($specialty["action"]);
+                            }
+                            $medicalSpecialtiesArray[] = $ms;
                         }
-                        $medicalSpecialtiesArray[] = $ms;
                     }
+
+                    if (\count($medicalSpecialtiesArray) == 0) {
+                        throw new Exception(self::EMPTY_LIST_MSG);
+                    }
+                    $msBO = new MedicalSpecialtyBO();
+                    $result = $msBO->saveMedicalSpecialties($medicalSpecialtiesArray);
+                    $data = ["status" => "ok", "data" => $result, "message" => "Data successfully saved."];
+
+                } else {
+                    $data = ["status" => "error", "message" => self::EMPTY_LIST_MSG];
                 }
 
-                $msBO = new MedicalSpecialtyBO();
-                $result = $msBO->saveMedicalSpecialties($medicalSpecialtiesArray);
-                $data = ["status" => "ok", "data" => $result, "message" => "Data successfully saved."];
             } catch (Exception $e) {
                 $data = ["status" => "error", "message" => $e->getMessage()];
             } finally {
                 header('Content-type: application/json');
                 echo json_encode($data);
+                exit();
             }
         }
 
