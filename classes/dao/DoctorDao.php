@@ -76,7 +76,7 @@ namespace classes\dao {
 
         }
 
-        public function updateDoctorByUserId($doctorId, $doctorModel) {
+        public function updateDoctorByUserId($doctor) {
 
             $query = "UPDATE doctors SET primary_phone=:primaryPhone, secondary_phone=:secondaryPhone, cspo=:cspo WHERE id=:id";
 
@@ -86,13 +86,11 @@ namespace classes\dao {
                 $db->beginTransaction();
 
                 $stmt = $db->prepare($query);
-                $stmt->bindValue(":id", $doctorId);
-                foreach ($doctorModel as $doctor) {
+                $stmt->bindValue(":id", $doctor->getId());
                     $stmt->bindValue(":primaryPhone", $doctor->getPrimaryPhone());
                     $stmt->bindValue(":secondaryPhone", $doctor->getSecondaryPhone());
                     $stmt->bindValue(":cspo", $doctor->getCspo());
                     $stmt->execute();
-                }
 
                 $db->commit();
 

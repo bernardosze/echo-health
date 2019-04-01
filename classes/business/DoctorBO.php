@@ -46,7 +46,7 @@ namespace classes\business {
                 //Doctor object has a database id
                 $doctor = $doctorDao->insertDoctor($doctor);
             } else {
-                $doctorDao->updateDoctorByUserId($doctorId, $doctorModel);
+                $doctorDao->updateDoctorByUserId($doctor);
             }
 
             return $doctor;
