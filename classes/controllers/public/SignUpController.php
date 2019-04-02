@@ -10,9 +10,9 @@ namespace classes\controllers\publicControllers {
     use Exception;
     use \classes\business\UserBO as UserBO;
     use \classes\models\UserModel as UserModel;
-    use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
+    use \classes\util\helpers\Application as Application;
     use \routes\RoutesManager as RoutesManager;
 
     class SignUpController extends AppBaseController
@@ -56,7 +56,7 @@ namespace classes\controllers\publicControllers {
             try {
                 $userBO = new UserBO();
                 $userBO->registerUser($userModel);
-                header("Location: " . AppConstants::HOME_PAGE);
+                header("Location: " . Application::getSetupConfig(Application::HOME_PAGE));
             } catch (RegisterUserException $e) {
                 $this->error_message = "Invalid Registration: " . $e->getMessage();
             } catch (Exception $e) {
@@ -80,7 +80,7 @@ namespace classes\controllers\publicControllers {
             $lastName = $this->lastName;
             $birthday = $this->birthday;
             $error_message = $this->error_message;
-            $moduleName = AppConstants::MODULE_NAME;
+            $moduleName = Application::getSetupConfig(Application::MODULE_NAME);
 
             foreach ($views as $view) {
                 require_once $view;
