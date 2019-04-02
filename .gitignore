@@ -3,4 +3,4 @@
 wordcounter.ts
 /vendor/
 .idea
-/app.ini
+./app.ini
