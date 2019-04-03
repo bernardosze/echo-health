@@ -3,13 +3,13 @@ use \classes\database\Database as Database;
 $db=Database::getConnection();
 $doctor="select  first_name, last_name, `name`, doctor.id
 FROM `user`
-INNER JOIN doctor
-ON  user.ID = doctor.USER_PROFILE_USER_ID
-INNER JOIN doctor_medical_specialty
-ON doctor.id = doctor_medical_specialty.doctor_id
-INNER JOIN medical_specialty
-ON doctor_medical_specialty.MEDICAL_SPECIALTY_ID=medical_specialty.ID
-WHERE doctor.USER_PROFILE_PROFILE_ID=2;
+INNER JOIN doctors
+ON  user.ID = doctors.USER_PROFILE_USER_ID
+INNER JOIN doctor_medical_specialties
+ON doctor.id = doctor_medical_specialties.doctor_id
+INNER JOIN medical_specialties
+ON doctor_medical_specialties.MEDICAL_SPECIALTY_ID=medical_specialties.ID
+WHERE doctors.USER_PROFILE_PROFILE_ID=2;
 ";
 
 $statement =$db->prepare($doctor);
