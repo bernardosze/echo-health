@@ -41,9 +41,9 @@ namespace classes\dao {
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
-                    return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\AppointmentDetailModel");
+                    return $stmt->fetchAll(PDO::FETCH_CLASS, "\classes\models\MedicalHistoryModel");
                 } else {
-                    throw new NoDataFoundExceptioN();
+                    throw new NoDataFoundException();
                 }
 
             } finally {
