@@ -11,11 +11,12 @@ namespace classes\controllers {
      *
      * @author: Josh
      */
-    class MedicalHistoryController extends MedicalHistoryController
+    class MedicalHistoryController extends AppBaseController
     {
 
         private $appointments;
         private $todaysappointments;
+        private $patientId;
         public function __construct()
         {
             parent::__construct(
@@ -30,12 +31,12 @@ namespace classes\controllers {
          */
         protected function doGet()
         {
+            $patientId=intval($_GET['id']);
 
             try {
-                $medHistoryBO = new TreatPatientBO();
-                //$todayapptBO = new AppointmentBO();
+                $medHistoryBO = new TreatPatientBO(); 
                 $this->appointments = $medHistoryBO->getMedicalHistory($patientId);
-                //$this->todaysappointments = $todayapptBO->getTodaysAppointments();
+                
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }

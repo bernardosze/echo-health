@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-box bg-white p-4">
         <form id="changeAppointmentForm" method="POST">
-            
+            <div class="col-md-3">
             <div class="form-group">
                     <label for="dob">Appointment Date and Time:</label>
                     <div class="input-group form-group">
@@ -15,8 +15,8 @@
                     </div>
                 <label for="status">
                     Status
-                </label>
-                <select name ="newStatus" >
+                </label><br>
+                <select  class ="form-control"name ="newStatus" >
                         <option value="SCHEDULED">SCHEDULED</option>
                         <option value="RESCHEDULED">RESCHEDULED</option>
                         <option value="CLOSED">CLOSED</option>
@@ -29,6 +29,8 @@
             </div>
             
         </form>
+        </div>
+        <div class="col-md-9"></div>
     </div>
 </div>
 <!-- BOOTSTRAP -->

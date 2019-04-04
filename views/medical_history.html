@@ -15,23 +15,31 @@
 						</th>
 						
 					</tr>
-				</thead>
+                </thead>
+                <?php if(isset($appointments)) : ?>
+
+                <?php foreach ($appointments as $appointment){?>
 				<tbody>
 					<tr>
 						<td>
-							1
+							<?php echo $appointment->getDate()?>
 						</td>
 						<td>
-							TB - Monthly
+							<?php echo $appointment->getAssessment()?>
 						</td>
 						<td>
-							01/04/2012
+							<?php echo $appointment->getPrescription()?>
 						</td>
-						<td>
-							Default
-						</td>
+						
 					
-				</tbody>
+                </tbody>
+                <?php } ?>
+  
+    <?php else: ?>
+    <p>No Medical History</p>
+    <?php endif;?>
+  </div>
+  
 			</table>
 		</div>
 	</div>
