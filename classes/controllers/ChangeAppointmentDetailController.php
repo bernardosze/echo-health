@@ -58,7 +58,7 @@ namespace classes\controllers {
 
                 
                 $json = ["status" => "ok", "message" => self::DATA_SAVED];
-                ob_start();n
+                ob_start();
                 header ("Location: appointmentdetails?id=$apptId ");
 
             } catch (Exception $e) {
