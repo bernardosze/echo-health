@@ -10,8 +10,9 @@ namespace classes\dao {
     use PDOException;
     use \classes\database\Database as Database;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
+    use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
 
-    class AppointmentDetailDao
+    class MedicalRecordsDao
     {
 
         private const EXCEPTION_ENTRY_NAME_EXISTS = "Operation aborted: Cannot save duplicated Specialty Names into the Database.";
@@ -24,18 +25,19 @@ namespace classes\dao {
         /**
          * Get all Appointments from the Database
          */
-        public function getAppointmentDetails($apptId)
+
+         //TODO gets past medical records from database
+        public function getMedicalHistory($patientId)
         {
 
-            $query = "SELECT a.id AS aid, p.id, u.FIRST_NAME, u.LAST_NAME, u.BIRTHDAY, a.STATUS, a.from FROM users u, patients p, 
-            appointments a WHERE a.PATIENT_ID = p.id AND p.USER_PROFILE_USER_ID = u.id and a.id=:aId ;";
+            $query = "SELECT * FROM medical_records where patient_id =:patientId;";
 
             try {
 
                 $db = Database::getConnection();
                 
                 $stmt = $db->prepare($query);
-                $stmt->bindValue(":aId", $apptId);
+                $stmt->bindValue(":patientId", $patientId);
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {
@@ -52,18 +54,22 @@ namespace classes\dao {
 
         }
 
-        public function updateAppointmentDetails($apptId, $newStatus, $newDateTime)
+        public function updateMedicalRecord($apptId,$patientId, $assessment, $prescriptions)
         {
 
-            $updateQuery = "update appointments a set a.status = :status, a.from =:newDateTime, a.to= DATE_ADD(:newDateTime, INTERVAL 30 MINUTE) where id = :apptId";
+            $updateQuery = "replace into medical_records (appointment_id, patient_id, date, assessment, prescription)" . 
+                            "values (:apptId, :patientId, curdate(), :assessment, :prescription)";
+            
 
             try {
                 $db = Database::getConnection();
                 $stmt = $db->prepare($updateQuery);
 
-                $stmt->bindValue(":status", $newStatus);
+                
                 $stmt->bindValue(":apptId", $apptId);
-                $stmt->bindValue(":newDateTime", $newDateTime);
+                $stmt->bindValue(":patientId", $patientId);
+                $stmt->bindValue(":assessment", $assessment);
+                $stmt->bindValue(":prescription", $prescriptions);
                 $stmt->execute();
 
             } catch (Exception $e) {
