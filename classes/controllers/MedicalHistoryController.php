@@ -1,7 +1,7 @@
 <?php
 namespace classes\controllers {
 
-    use \classes\business\AppointmentDetailBO as AppointmentDetailBO;
+    use \classes\business\TreatPatientBO as TreatPatientBO;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
@@ -11,16 +11,17 @@ namespace classes\controllers {
      *
      * @author: Josh
      */
-    class AppointmentDetailController extends AppBaseController
+    class MedicalHistoryController extends AppBaseController
     {
 
-        private $appointmentDetail;
+        private $appointments;
+        private $todaysappointments;
         private $patientId;
         public function __construct()
         {
             parent::__construct(
-                "Appointment Details",
-                ["views/appointment_details.html"]
+                "Medical History",
+                ["views/medical_history.html"]
             );
         }
 
@@ -30,10 +31,12 @@ namespace classes\controllers {
          */
         protected function doGet()
         {
-            $apptId = intval($_GET['id']);
+            $patientId=intval($_GET['id']);
+
             try {
-                $apptDetailBO = new AppointmentDetailBO();
-                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails($apptId);
+                $medHistoryBO = new TreatPatientBO(); 
+                $this->appointments = $medHistoryBO->getMedicalHistory($patientId);
+                
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }
@@ -49,8 +52,8 @@ namespace classes\controllers {
         protected function renderViewPages($views)
         {
 
-            $appointmentDetail = $this->appointmentDetail;
-
+            $appointments = $this->appointments;
+            //$todaysappointments = $this->todaysappointments;
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $firstName = $userSessionProfile->getFirstName();
 
@@ -61,6 +64,6 @@ namespace classes\controllers {
 
     }
 
-    new AppointmentDetailController();
+    new MedicalHistoryController();
 
 }

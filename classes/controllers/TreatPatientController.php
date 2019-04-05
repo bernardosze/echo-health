@@ -1,8 +1,9 @@
 <?php
 namespace classes\controllers {
-
     use \classes\business\AppointmentDetailBO as AppointmentDetailBO;
+    use \classes\business\TreatPatientBO as TreatPatientBO;
     use \classes\util\AppConstants as AppConstants;
+    use Exception;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
@@ -11,16 +12,19 @@ namespace classes\controllers {
      *
      * @author: Josh
      */
-    class AppointmentDetailController extends AppBaseController
+    class TreatPatientController extends AppBaseController
     {
 
-        private $appointmentDetail;
+        public $appointmentDetail;
         private $patientId;
+        private $assessment;
+        private $prescription;
+        private const DATA_SAVED = "Medical Record successfully updated.";
         public function __construct()
         {
             parent::__construct(
-                "Appointment Details",
-                ["views/appointment_details.html"]
+                "Treat Patient",
+                ["views/treat_patient.html"]
             );
         }
 
@@ -34,11 +38,40 @@ namespace classes\controllers {
             try {
                 $apptDetailBO = new AppointmentDetailBO();
                 $this->appointmentDetail = $apptDetailBO->getAppointmentDetails($apptId);
+                
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }
 
             parent::doGet();
+
+        }
+
+        protected function doPost()
+        {
+
+            $userSessionData = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+            $apptId = intval($_GET['id']);
+            $assessment = $_POST['assessment'];
+            $prescriptions = $_POST['prescriptions'];
+            $patientId = intval($_POST['patientId']);
+            
+            
+            try {
+                
+                $treatPatientBO = new TreatPatientBO();
+                $treatPatientBO->updateMedicalRecord($apptId,$patientId,$assessment,$prescriptions);
+
+                
+                parent::setAlertSuccessMessage("Profile successfully saved.");
+            
+                
+            } catch (Exception $e) {
+                parent::setAlertErrorMessage($e->getMessage());
+            } finally {
+                header ("Location: appointmentdetails?id=$apptId");
+
+            }
 
         }
 
@@ -49,8 +82,9 @@ namespace classes\controllers {
         protected function renderViewPages($views)
         {
 
+            
             $appointmentDetail = $this->appointmentDetail;
-
+            
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $firstName = $userSessionProfile->getFirstName();
 
@@ -61,6 +95,6 @@ namespace classes\controllers {
 
     }
 
-    new AppointmentDetailController();
+    new TreatPatientController();
 
 }

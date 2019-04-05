@@ -1,0 +1,38 @@
+<div class="container-fluid">
+        <?php if(isset($appointmentDetail)) : 
+           
+        ?>
+        <?php foreach ($appointmentDetail as $appointment){
+        
+        
+        ?>
+        <div class="row">
+            <div class="col-md-6">
+                <form role="form" method="POST">
+                    <div class="form-group">
+                         
+                        <label for="assessment">
+                            Assessment
+                        </label>
+                        <input type="text" class="form-control" id="patientID" name="patientId" value="<?=$appointment->getId()?>" hidden/>
+                        <textarea class="form-control" rows="5" id="assessment" name= "assessment" required></textarea>
+                    </div>
+                    <div class="form-group">
+                         
+                            <label for="prescriptions">
+                                    Prescriptions
+                                </label>
+                                <textarea name="prescriptions" id="prescriptions" class="form-control" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        Update Appointment 
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6">
+            </div>
+            <?php }?>
+            <?php endif;?>
+        </div>
+    </div>
