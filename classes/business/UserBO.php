@@ -5,6 +5,7 @@
  */
 namespace classes\business {
 
+    use \Exception;
     use \classes\dao\ProfileDao as ProfileDao;
     use \classes\dao\UserDao as UserDao;
     use \classes\database\Database as Database;
@@ -16,6 +17,7 @@ namespace classes\business {
     use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
     use \classes\util\UserSessionProfile as UserSessionProfile;
     use \classes\util\validators\FormValidators as FormValidators;
+    use \classes\models\UserModel as UserModel;
 
     class UserBO
     {
@@ -29,6 +31,8 @@ namespace classes\business {
 
         private const UPDATE_USER_DATA_INVALID_ARGUMENTS = "Impossible to update data. Data is missing.";
         private const DUPLICATED_EMAIL_EXCEPTION = "Informed email is already in use. Please choose another one.";
+
+        private const ERROR_MSG_CANNOT_REMOVE_DOCTOR_PROFILE = "Cannot remove Doctor profile beacause the User is already a doctor.";
 
         /**
          * Default constructor
@@ -277,5 +281,25 @@ namespace classes\business {
 
         }
 
+        /**
+         * Main method used to update a given user and his respective profiles
+         */
+        public function setUserProfile(UserModel $user, array $profileModel){
+
+            try{
+                $this->updateUser($user);
+                $this->updateUserProfile($user->getId(), $profileModel);
+            } catch (Exception $e) {
+                if($e->getCode() == 23000){
+                    throw new Exception(self::ERROR_MSG_CANNOT_REMOVE_DOCTOR_PROFILE);
+                } else {
+                    throw $e;
+                }
+            }
+
+        }
+
     }
+
+
 }
