@@ -64,7 +64,7 @@ namespace classes\controllers {
                 
                 $appointmentDetailBO = new appointmentDetailBO();
                 $appointmentDetailBO->updateAppointmentDetails($apptId,$newStatus,$newDateTime);
-                $this->notifyAppointmentChange();
+                $this->notifyAppointmentChange($newStatus,$newDateTime);
                 
                 
                 $json = ["status" => "ok", "message" => self::DATA_SAVED];
@@ -79,7 +79,7 @@ namespace classes\controllers {
             }
 
         }
-        private function notifyAppointmentChange()
+        private function notifyAppointmentChange($newStatus,$newDateTime)
         {
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $firstName = $userSessionProfile->getFirstName();
@@ -95,6 +95,8 @@ namespace classes\controllers {
                     $message = \file_get_contents('./static/email_template/changeappt.html');
                     $message = str_replace("%username%", "{$row[1]}" , $message);
                     $message = str_replace("%system_time%", date("Y-m-d h:i:s a"), $message);
+                    $message = str_replace("%datetime%", $newDateTime , $message);
+                    $message = str_replace("%status%", $newStatus , $message);
 
                     $emailSender = new EmailSender();
                     $emailSender->sendSystemEmail("{$row[0]}", "Appointment Changed", $message);
