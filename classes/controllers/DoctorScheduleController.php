@@ -16,6 +16,7 @@ namespace classes\controllers {
 
         private $appointments;
         private $todaysappointments;
+        
         public function __construct()
         {
             parent::__construct(
@@ -32,9 +33,11 @@ namespace classes\controllers {
         {
 
             try {
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $userId = $userSessionProfile->getUserId();
                 $apptBO = new AppointmentBO();
                 //$todayapptBO = new AppointmentBO();
-                $this->appointments = $apptBO->getAllAppointments();
+                $this->appointments = $apptBO->getAllAppointments($userId);
                 //$this->todaysappointments = $todayapptBO->getTodaysAppointments();
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
