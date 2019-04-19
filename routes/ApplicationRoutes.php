@@ -35,6 +35,11 @@ namespace routes {
             "appointmentdetails" => ["classes/controllers/AppointmentDetailController.php", [ISecurityProfile::DOCTOR]],
             "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
             "SetSchedule" =>["classes/controllers/SetScheduleController.php", [ISecurityProfile::DOCTOR]],
+
+            "schedule" =>["classes/controllers/Schedule.php", [ISecurityProfile::DOCTOR]],
+            "update" =>["classes/controllers/updateController.php", [ISecurityProfile::DOCTOR]],
+
+
             "changeappointment"=>["classes/controllers/ChangeAppointmentDetailController.php", [ISecurityProfile::DOCTOR]],
             "doctor-profile" =>["classes/controllers/DoctorProfileController.php", [ISecurityProfile::DOCTOR]],
             "treatpatient" =>["classes/controllers/TreatPatientController.php", [ISecurityProfile::DOCTOR]],
