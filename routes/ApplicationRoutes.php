@@ -36,7 +36,7 @@ namespace routes {
             "teste3" => ["classes/controllers/MustDefineOne.php", [ISecurityProfile::DOCTOR]],
             "SetSchedule" =>["classes/controllers/SetScheduleController.php", [ISecurityProfile::DOCTOR]],
 
-            "schedule" =>["classes/controllers/Schedule.php", [ISecurityProfile::DOCTOR]],
+            "schedule" =>["classes/controllers/ScheduleController.php", [ISecurityProfile::DOCTOR]],
             "update" =>["classes/controllers/updateController.php", [ISecurityProfile::DOCTOR]],
 
 
