@@ -1,0 +1,46 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							Date
+						</th>
+						<th>
+							Assessment
+						</th>
+						<th>
+							Prescription
+						</th>
+						
+					</tr>
+                </thead>
+                <?php if(isset($appointments)) : ?>
+
+                <?php foreach ($appointments as $appointment){?>
+				<tbody>
+					<tr>
+						<td>
+							<?php echo $appointment->getDate()?>
+						</td>
+						<td>
+							<?php echo $appointment->getAssessment()?>
+						</td>
+						<td>
+							<?php echo $appointment->getPrescription()?>
+						</td>
+						
+					
+                </tbody>
+                <?php } ?>
+  
+    <?php else: ?>
+    <p>No Medical History</p>
+    <?php endif;?>
+  </div>
+  
+			</table>
+		</div>
+	</div>
+</div>

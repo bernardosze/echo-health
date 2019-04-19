@@ -1,7 +1,7 @@
 <?php
 namespace classes\controllers {
 
-    use \classes\business\AppointmentBO as AppointmentBO;
+    use \classes\business\TreatPatientBO as TreatPatientBO;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
@@ -11,17 +11,17 @@ namespace classes\controllers {
      *
      * @author: Josh
      */
-    class DoctorScheduleController extends AppBaseController
+    class MedicalHistoryController extends AppBaseController
     {
 
         private $appointments;
         private $todaysappointments;
-        
+        private $patientId;
         public function __construct()
         {
             parent::__construct(
-                "Schedule",
-                ["views/appointment_list.html"]
+                "Medical History",
+                ["views/medical_history.html"]
             );
         }
 
@@ -31,14 +31,12 @@ namespace classes\controllers {
          */
         protected function doGet()
         {
+            $patientId=intval($_GET['id']);
 
             try {
-                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
-                $userId = $userSessionProfile->getUserId();
-                $apptBO = new AppointmentBO();
-                //$todayapptBO = new AppointmentBO();
-                $this->appointments = $apptBO->getAllAppointments($userId);
-                //$this->todaysappointments = $todayapptBO->getTodaysAppointments();
+                $medHistoryBO = new TreatPatientBO(); 
+                $this->appointments = $medHistoryBO->getMedicalHistory($patientId);
+                
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }
@@ -66,6 +64,6 @@ namespace classes\controllers {
 
     }
 
-    new DoctorScheduleController();
+    new MedicalHistoryController();
 
 }

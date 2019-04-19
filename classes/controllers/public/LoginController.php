@@ -11,6 +11,7 @@ namespace classes\controllers\publicControllers {
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\AuthenticationException as AuthenticationException;
+    use \classes\util\helpers\Application as Application;
     use \classes\util\SecurityFilter as SecurityFilter;
 
     class LoginController extends AppBaseController
@@ -41,7 +42,7 @@ namespace classes\controllers\publicControllers {
 
             if (SecurityFilter::isUserLogged() && !SecurityFilter::isExpiredSession()) {
                 //User is already authenticated, so dispatch to the intranet home.
-                header("Location: " . AppConstants::HOME_PAGE_INTRANET);
+                header("Location: " . Application::getSetupConfig(Application::HOME_PAGE_INTRANET));
             }
 
             parent::doGet();
@@ -65,8 +66,8 @@ namespace classes\controllers\publicControllers {
                 session_start();
                 $_SESSION[AppConstants::USER_SESSION_DATA] = serialize($userSessionData);
                 $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME] = $_SERVER["REQUEST_TIME"];
-                //header("Location: " . AppConstants::HOME_PAGE_INTRANET);
-                $json = ["status" => "ok", "message" => "Authenticated", "url" => AppConstants::HOME_PAGE_INTRANET];
+                $homePageIntranet = Application::getSetupConfig(Application::HOME_PAGE_INTRANET);
+                $json = ["status" => "ok", "message" => "Authenticated", "url" => $homePageIntranet];
             } catch (AuthenticationException $e) {
                 //User could not be authenticated
                 $json = ["status" => "error", "message" => AppConstants::USER_AUTHENTICATION_ERROR_MSG];

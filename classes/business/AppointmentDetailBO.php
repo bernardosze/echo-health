@@ -13,10 +13,18 @@ namespace classes\business {
         {
         }
 
-        public function getAppointmentDetails($patientId)
+        public function getAppointmentDetails($apptId)
         {
             $apptDetailDao = new AppointmentDetailDao();
-            return $apptDetailDao->getAppointmentDetails($patientId);
+            return $apptDetailDao->getAppointmentDetails($apptId);
+
+        }
+
+        public function updateAppointmentDetails($apptId, $newStatus, $newDateTime)
+        {
+
+            $appointmentDetailDao = new AppointmentDetailDao();
+            return $appointmentDetailDao->updateAppointmentDetails($apptId, $newStatus, $newDateTime);
 
         }
 
