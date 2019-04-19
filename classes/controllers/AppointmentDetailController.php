@@ -30,10 +30,10 @@ namespace classes\controllers {
          */
         protected function doGet()
         {
-            $apptId = intval($_GET['id']);
+            $patientId = intval($_GET['id']);
             try {
                 $apptDetailBO = new AppointmentDetailBO();
-                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails($apptId);
+                $this->appointmentDetail = $apptDetailBO->getAppointmentDetails($patientId);
             } catch (NoDataFoundException $e) {
                 parent::setAlertErrorMessage($e->getMessage());
             }

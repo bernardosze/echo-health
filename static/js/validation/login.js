@@ -81,7 +81,6 @@ const submitFormAjax = () => {
         $("#password-error").remove();
     }).fail((error) => {
         $("#alertErrorMessage").removeAttr("hidden").text("Impossible to authenticate. Server unreached.");
-        $("#password").val("");
         console.error(error);
     });
 

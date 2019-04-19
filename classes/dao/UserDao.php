@@ -10,10 +10,11 @@ namespace classes\dao {
     use PDOException;
     use \classes\database\Database as Database;
     use \classes\models\UserModel as UserModel;
+    use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
     use \classes\util\exceptions\RegisterUserException as RegisterUserException;
     use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
-    use \classes\util\helpers\Application as Application;
+    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
     use \classes\util\UserSeachParams as UserSearchParams;
 
     class UserDao
@@ -49,7 +50,7 @@ namespace classes\dao {
                 }
 
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -81,7 +82,7 @@ namespace classes\dao {
                 }
 
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -126,7 +127,7 @@ namespace classes\dao {
                 if (count($preparedParams) > 0) {
                     foreach ($preparedParams as $param => $value) {
                         $value = (strlen($value) > 1 ? strtolower($value) : $value);
-                        $stmt->bindValue($param, $value . "%");
+                        $stmt->bindValue($param, $value."%");
                     }
                 }
 
@@ -140,7 +141,7 @@ namespace classes\dao {
                 }
 
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -162,8 +163,7 @@ namespace classes\dao {
 
             $dbLoginAttempts = $userModel->getLoginAttempt();
             $loginAttempts = isset($dbLoginAttempts) ? $dbLoginAttempts + 1 : 1;
-            $maxLoginAttempts = Application::getSetupConfig(Application::MAX_LOGIN_ATTEMPS);
-            $blocked = ($loginAttempts < $maxLoginAttempts ? "N" : "Y");
+            $blocked = ($loginAttempts < AppConstants::MAX_LOGIN_ATTEMPS ? "N" : "Y");
 
             try {
 
@@ -178,7 +178,7 @@ namespace classes\dao {
                 $stmt->execute();
 
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -266,7 +266,7 @@ namespace classes\dao {
                 $db->rollBack();
                 throw $e;
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -293,7 +293,7 @@ namespace classes\dao {
             } catch (Exception $e) {
                 throw new UpdateUserDataException(self::UPDATE_USER_PASSWD_ERROR . $e->getMessage());
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -313,15 +313,15 @@ namespace classes\dao {
                 $stmt->execute();
 
             } catch (PDOException $e) {
-                if ($e->getCode() === "23000") {
+                if($e->getCode() === "23000"){
                     //Integrity constraint violation
                     throw new UpdateUserDataException(self::UPDATE_USER_ERROR_EMAIL);
                 } else {
                     throw new UpdateUserDataException(self::UPDATE_USER_EMAIL_ERROR . $e->getMessage());
                 }
-
+                
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }
@@ -352,7 +352,7 @@ namespace classes\dao {
             } catch (PDOException $e) {
                 throw new UpdateUserDataException(self::UPDATE_USER_ERROR . $e->getMessage());
             } finally {
-                if (isset($stmt)) {
+                if(isset($stmt)){
                     $stmt->closeCursor();
                 }
             }

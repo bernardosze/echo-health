@@ -24,20 +24,18 @@ namespace classes\dao {
         /**
          * Get all Appointments from the Database
          */
-        public function getAllAppointments($userId)
+        public function getAllAppointments()
         {
 
             $query = "
             
-            SELECT a.id, a.from, a.to, a.patient_id, a.doctor_id,a.status, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime, DATE_FORMAT(a.from,'%W') AS dayName  from appointments a,doctors d,users u where a.doctor_id = d.id and d.user_profile_user_id = u.id and u.id=:userId order by niceTime asc;
-
+                    SELECT *, DATE_FORMAT(a.from,'%d/%m/%Y') AS niceDate, DATE_FORMAT(a.from,'%h:%i %p') AS niceTime, DATE_FORMAT(a.from,'%W') AS dayName  from appointments a;
             ";
 
             try {
 
                 $db = Database::getConnection();
                 $stmt = $db->prepare($query);
-                $stmt->bindParam(":userId", $userId);
                 $stmt->execute();
 
                 if ($stmt->rowCount() > 0) {

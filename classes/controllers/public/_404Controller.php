@@ -2,13 +2,11 @@
 
 namespace classes\controllers\publicControllers {
 
-    use \classes\util\helpers\Application as Application;
+    use \classes\util\AppConstants as AppConstants;
 
     //Metadata used by the _404.html file
-    $moduleName = Application::getSetupConfig(Application::MODULE_NAME);
-    $homePage = Application::getSetupConfig(Application::HOME_PAGE);
-    $urlHomePage = $moduleName . $homePage;
-    $backgroundImage = $moduleName . "static/img/404_background.jpg";
+    $urlHomePage = AppConstants::MODULE_NAME . AppConstants::HOME_PAGE;
+    $backgroundImage = AppConstants::MODULE_NAME . "static/img/404_background.jpg";
     require_once "views/errors/_404.html";
 
 }

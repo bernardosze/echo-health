@@ -1,7 +1,7 @@
 <?php
 use \classes\database\Database as Database;
 $db=Database::getConnection();
-$fromTime="select * FROM schedules WHERE doctor_id=1 AND day_of_week='Mon';";
+$fromTime="select * FROM schedule WHERE doctor_id=1 AND day_of_week='Mon';";
 $statement =$db->prepare($fromTime);
 $statement->execute();
 $TimeMon=$statement->fetchAll();
@@ -11,7 +11,7 @@ $statement->closeCursor();
 
 <?php
 try {
-    $query = "SELECT * FROM schedules limit 6; ";
+    $query = "SELECT * FROM schedule limit 6; ";
     $statement = $db->prepare($query);
     $statement->execute();
     $schedule = $statement->fetchAll();
@@ -97,12 +97,12 @@ if(isset($_POST['insert']))
 
     //-----------------------------------------------------------------------------
 
-    $query1="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Mon','$format_Mon','$To_format_Mon',1);";
-    $query2="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Tue','$format_Tue','$To_format_Tue',1);";
-    $query3="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Wed','$format_Wed','$To_format_Wed',1);";
-    $query4="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Thu','$format_Thu','$To_format_Thu',1);";
-    $query5="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Fri','$format_Fri','$To_format_Fri',1);";
-    $query6="insert ignore into schedules (day_of_week,`FROM`,`TO`,doctor_id) values('Sat','$format_Sat','$To_format_Sat',1);";
+    $query1="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Mon','$format_Mon','$To_format_Mon',1);";
+    $query2="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Tue','$format_Tue','$To_format_Tue',1);";
+    $query3="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Wed','$format_Wed','$To_format_Wed',1);";
+    $query4="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Thu','$format_Thu','$To_format_Thu',1);";
+    $query5="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Fri','$format_Fri','$To_format_Fri',1);";
+    $query6="insert ignore into schedule (day_of_week,`FROM`,`TO`,doctor_id) values('Sat','$format_Sat','$To_format_Sat',1);";
 
 
     $pdostm1=$db->prepare($query1);
@@ -140,7 +140,7 @@ else if(isset($_POST['updateMon']))
     $To_Mon_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Mon);
     $To_format_Mon = $To_Mon_Time->format( 'H:i:s');
 
-    $query="update schedules set `FROM`='$format_Mon', `To` = '$To_format_Mon' WHERE doctor_id=1 AND day_of_week='Mon';";
+    $query="update schedule set `FROM`='$format_Mon', `To` = '$To_format_Mon' WHERE doctor_id=1 AND day_of_week='Mon';";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }
@@ -159,7 +159,7 @@ else if(isset($_POST['updateTue']))
     $To_Tue_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Tue);
     $To_format_Tue = $To_Tue_Time->format( 'H:i:s');
 
-    $query="update schedules set `FROM`='$format_Tue' , `To` = '$To_format_Tue' WHERE doctor_id=1 AND day_of_week='Tue';";
+    $query="update schedule set `FROM`='$format_Tue' , `To` = '$To_format_Tue' WHERE doctor_id=1 AND day_of_week='Tue';";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }
@@ -177,7 +177,7 @@ else if(isset($_POST['updateWed']))
     $To_time_input_Wed = $ToTimeWed;
     $To_Wed_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Wed);
     $To_format_Wed = $To_Wed_Time->format( 'H:i:s');
-    $query="update schedules set `FROM`='$format_Wed' ,`To` = '$To_format_Wed' WHERE doctor_id=1 AND day_of_week='Wed';";
+    $query="update schedule set `FROM`='$format_Wed' ,`To` = '$To_format_Wed' WHERE doctor_id=1 AND day_of_week='Wed';";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }
@@ -197,7 +197,7 @@ else if(isset($_POST['updateThu']))
     $To_Thu_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Thu);
     $To_format_Thu = $To_Thu_Time->format( 'H:i:s');
 
-    $query="update schedules set `FROM`='$format_Thu' , `To` = '$To_format_Thu' WHERE doctor_id=1 AND day_of_week='Thu';";
+    $query="update schedule set `FROM`='$format_Thu' , `To` = '$To_format_Thu' WHERE doctor_id=1 AND day_of_week='Thu';";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }
@@ -214,7 +214,7 @@ else if(isset($_POST['updateFri']))
     $To_time_input_Fri = $ToTimeFri;
     $To_Fri_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Fri);
     $To_format_Fri = $To_Fri_Time->format( 'H:i:s');
-    $query="update schedules set `FROM`='$format_Fri' , `To` = '$To_format_Fri' WHERE doctor_id=1 AND day_of_week='Fri';";
+    $query="update schedule set `FROM`='$format_Fri' , `To` = '$To_format_Fri' WHERE doctor_id=1 AND day_of_week='Fri';";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }
@@ -233,7 +233,7 @@ else if(isset($_POST['updateSat']))
     $To_time_input_Sat = $ToTimeSat;
     $To_Sat_Time = DateTime::createFromFormat( 'H:i', $To_time_input_Sat);
     $To_format_Sat = $To_Sat_Time->format( 'H:i:s');
-    $query="update schedules set `FROM`='$format_Sat' , `To` = '$To_format_Sat' WHERE doctor_id=1; AND day_of_week='Sat'";
+    $query="update schedule set `FROM`='$format_Sat' , `To` = '$To_format_Sat' WHERE doctor_id=1; AND day_of_week='Sat'";
     $pdostm=$db->prepare($query);
     $pdostm->execute();
 }

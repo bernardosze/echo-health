@@ -19,11 +19,10 @@
                     <form role="form">
                         <div class="form-group">
 
-                            <!-- <label for="patientID">
+                            <label for="patientID">
                                 Patient ID
-                            </label> -->
-                            <input type="text" class="form-control" id="patientID" value="<?=$appointment->getId()?>" hidden/>
-                            <input type="text" class="form-control" id="apptID" value="<?=$appointment->getApptId()?>" hidden/>
+                            </label>
+                            <input type="text" class="form-control" id="patientID" value="<?=$appointment->getId()?>" disabled/>
                         </div>
 
                         <div class="form-group">
@@ -31,21 +30,21 @@
                             <label for="firstname">
                                 First Name
                             </label>
-                            <input type="text" class="form-control" id="firstname" value="<?=$appointment->getFirstName()?>"disabled/>
+                            <input type="text" class="form-control" id="firstname" value="<?=$appointment->getFirstName()?>"/>
                         </div>
                         <div class="form-group">
 
                             <label for="lastname">
                                 Last Name
                             </label>
-                            <input type="text" class="form-control" id="lastname"value="<?=$appointment->getLastName()?>" disabled/>
+                            <input type="text" class="form-control" id="lastname"value="<?=$appointment->getLastName()?>" />
                         </div>
                         <div class="form-group">
 
                             <label for="birthday">
                                 Birthday
                             </label>
-                            <input type="text" class="form-control" id="birthday" value="<?=$appointment->getBirthday()?>" disabled/>
+                            <input type="text" class="form-control" id="birthday" value="<?=$appointment->getBirthday()?>" />
                         </div>
 
                         <div class="form-group">
@@ -53,24 +52,24 @@
                             <label for="status">
                                 Status
                             </label>
-                            <input type="text" class="form-control" id="stuats" value="<?=$appointment->getStatus()?>" disabled/>
+                            <select class="form-control" id="status">
+                                    <option value="SCHEDULED">SCHEDULED</option>
+                                    <option value="RESCHEDULED">RESCHEDULED</option>
+                                    <option value="CLOSED">CLOSED</option>
+                                    <option value="CANCLED">CANCLED</option>
+                                  </select>
                             
                         </div>
                         
-                        <div class="from-group">
-                            
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='treatpatient?id=<?=$appointment->getApptId()?>'>Treat Patient</a>
-                       
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='changeappointment?id=<?=$appointment->getApptId()?>&from=<?=$appointment->getFrom()?>'>Change Appointment Details</a>
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='medicalhistory?id=<?=$appointment->getId()?>'>View Medical History</a>
-                    </div>
-                   
+                        
+                       <a class='btn btn-block btn-lg btn-primary' role='button' href='somewhere?id=<?=$appointment->getId()?>'>Treat Patient</a>
                       
+                   
+                      ?>
                     </form>
                 </div>
                 <div class="col-md-6">
                 </div>
-                
             </div>
             <?php }?>
             <?php endif;?>

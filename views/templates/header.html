@@ -48,11 +48,7 @@
 <body class="bg-light">
     <header class="mb-1">
         <nav class="navbar navbar-expand-md navbar-dark echo-blue-bg">
-            <?php 
-                use \classes\util\helpers\Application as Application;
-                $intranet = Application::getSetupConfig(Application::HOME_PAGE_INTRANET);
-            ?>
-            <a class="navbar-brand" href="<?=$intranet?>">
+            <a class="navbar-brand" href="<?php use \classes\util\AppConstants as AppConstants; echo AppConstants::HOME_PAGE_INTRANET; ?>">
                 <img src="static/img/icons/hospital.png" width="30" height="30" class="d-inline-block align-top" alt="App Logo">
                 EchoHealth
             </a>
@@ -85,7 +81,6 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?php
-                                use \classes\util\AppConstants as AppConstants;
                                 $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
                                 $userFirstName = $userSessionProfile->getFirstName();
                                 $userProfiles = $userSessionProfile->getProfiles();

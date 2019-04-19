@@ -2,8 +2,6 @@
 
 namespace classes\util {
 
-    use \classes\util\helpers\Application as Application;
-
     /**
      * Singleton Security filter that verify the user session status.
      * Only authenticated users with a valid session can survive :)
@@ -75,7 +73,7 @@ namespace classes\util {
             //User logged in, now checks if session is expired
             $userRequestTime = $_SERVER["REQUEST_TIME"];
             $userLastActivityTime = $_SESSION[AppConstants::USER_LAST_ACTIVITY_TIME];
-            $sessionDuration = Application::getSetupConfig(Application::SESSION_DURATION_IN_SECONDS);
+            $sessionDuration = AppConstants::SESSION_DURATION_IN_SECONDS;
             return ($userRequestTime - $userLastActivityTime > $sessionDuration) ? true : false;
         }
 
@@ -93,9 +91,7 @@ namespace classes\util {
          */
         public static function forceUserLogin()
         {
-            $moduleName = Application::getSetupConfig(Application::MODULE_NAME);
-            $loginPage = Application::getSetupConfig(Application::LOGIN_PAGE);
-            header("Location: " . $moduleName . $loginPage);
+            header("Location: " . AppConstants::LOGIN_PAGE);
         }
 
         /**

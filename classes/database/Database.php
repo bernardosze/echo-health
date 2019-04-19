@@ -8,8 +8,8 @@
 namespace classes\Database {
 
     use PDOException;
+    use \classes\util\AppConstants as AppConstants;
     use \classes\util\exceptions\FatalException as FatalException;
-    use \classes\util\helpers\Application as Application;
     use \PDO;
 
     class Database
@@ -26,9 +26,10 @@ namespace classes\Database {
         private function __construct()
         {
             //Load the Applicaton Setup file to get Database connection info
-            self::$dbDSN = Application::getSetupConfig(Application::DB_DSN);
-            self::$dbUsername = Application::getSetupConfig(Application::DB_USERNAME);
-            self::$dbPassword = Application::getSetupConfig(Application::DB_PASSWORD);
+            $appIni = parse_ini_file("./app.ini");
+            self::$dbDSN = $appIni[AppConstants::DB_DSN_KEY];
+            self::$dbUsername = $appIni[AppConstants::DB_USERNAME_KEY];
+            self::$dbPassword = $appIni[AppConstants::DB_PASSWORD_KEY];
         }
 
         /**

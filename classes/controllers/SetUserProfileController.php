@@ -116,7 +116,8 @@ namespace classes\controllers {
             $json = [];
             try {
                 $userBO = new UserBO();
-                $userBO->setUserProfile($userModel, $profileModelArray);
+                $userBO->updateUser($userModel);
+                $userBO->updateUserProfile($userModel->getId(), $profileModelArray);
                 $json = ["status" => "ok", "message" => self::DATA_SAVED];
             } catch (Exception $e) {
                 $json = ["status" => "error", "message" => $e->getMessage()];

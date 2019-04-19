@@ -12,12 +12,11 @@ require_once 'vendor/autoload.php';
 
 use classes\util\AppConstants as AppConstants;
 use \classes\util\AuthorizationFilter as AuthorizationFilter;
-use \classes\util\helpers\Application as Application;
 use \classes\util\MenuManager as MenuManager;
 use \classes\util\SecurityFilter as SecurityFilter;
 use \routes\RoutesManager as RoutesManager;
 
-date_default_timezone_set(Application::getSetupConfig(Application::DEFAULT_TIME_ZONE));
+date_default_timezone_set(AppConstants::DEFAULT_TIME_ZONE);
 
 $requestURI = removeModuleNameFromRoute($_SERVER['REQUEST_URI']);
 $route = removeQueryString($requestURI);
@@ -28,9 +27,9 @@ dispatchRoute($route);
  */
 function removeModuleNameFromRoute($requestURI)
 {
-    $moduleName = Application::getSetupConfig(Application::MODULE_NAME);
+    $moduleName = AppConstants::MODULE_NAME;
     $requestURI = str_replace($moduleName, "", $requestURI);
-    return (!empty($requestURI) ? $requestURI : Application::getSetupConfig(Application::HOME_PAGE));
+    return (!empty($requestURI) ? $requestURI : AppConstants::HOME_PAGE);
 }
 
 /**
