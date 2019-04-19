@@ -10,6 +10,7 @@ namespace classes\util {
     final class AppConstants
     {
 
+<<<<<<< HEAD
         //Defines the module name. It must start and end with /
         //public const MODULE_NAME = "/echo-health/";
         public const MODULE_NAME = "/~bernardosze/humber-college/ite-5330/echo-health/";
@@ -31,6 +32,8 @@ namespace classes\util {
         //The session lifespan limit in seconds. Default 300 seconds (5 min).
         public const SESSION_DURATION_IN_SECONDS = 300;
 
+=======
+>>>>>>> 3c7d34c2f275d9c8b8945189c7c4a8dd96c1731f
         //User authenticated data [id, email]
         public const USER_SESSION_DATA = "USER_SESSION_DATA";
 
@@ -49,10 +52,6 @@ namespace classes\util {
         public const STATIC_CONTENT = "static/";
 
         public const INVALID_SESSION_JSON = ["status" => "Invalid_Session"];
-
-        public const DB_DSN_KEY = "DB_HOST";
-        public const DB_PASSWORD_KEY = "DB_PASSWORD";
-        public const DB_USERNAME_KEY = "DB_USERNAME";
 
     }
 

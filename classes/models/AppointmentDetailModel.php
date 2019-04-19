@@ -6,11 +6,13 @@ namespace classes\models {
 
     class AppointmentDetailModel 
     {
+        private $aid;
         private $id;
         private $first_name;
         private $last_name;
         private $birthday;
         private $status;
+        private $from;
         
         public function __construct()
         {
@@ -19,6 +21,15 @@ namespace classes\models {
         public function __toString()
         {
             
+        }
+        public function getApptId()
+        {
+            return $this->aid;
+        }
+
+        public function setApptId($value)
+        {
+            $this->aid = $value;
         }
         public function getId()
         {
@@ -79,7 +90,15 @@ namespace classes\models {
         {
             $this->status = $value;
         }
+        public function getFrom()
+        {
+            return $this->from;
+        }
 
+        public function setFrom($value)
+        {
+            $this->from = $value;
+        }
     }
 
 }
