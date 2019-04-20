@@ -5,6 +5,7 @@ namespace classes\controllers {
     use \classes\business\DoctorBO as DoctorBO;
     use \classes\business\MedicalSpecialtyBO as MedicalSpecialtyBO;
     use \classes\models\DoctorModel as DoctorModel;
+    use \classes\models\DoctorSpecialtyModel as DoctorSpecialtyModel;
     use \classes\util\AppConstants as AppConstants;
     use \classes\util\base\AppBaseController as AppBaseController;
     use \classes\util\exceptions\NoDataFoundException as NoDataFoundExcpetion;
@@ -15,15 +16,13 @@ namespace classes\controllers {
      *
      * @author: Bernardo Sze
      */
-    class DoctorProfileController extends AppBaseController
-    {
+    class DoctorProfileController extends AppBaseController {
 
         private $doctor;
         private $medicalSpecialties;
         private $doctorMedicalSpecialties;
 
-        public function __construct()
-        {
+        public function __construct() {
             parent::__construct(
                 "Doctor Profile Page",
                 ["views/doctor_profile.html"],
@@ -34,8 +33,7 @@ namespace classes\controllers {
             );
         }
 
-        protected function doGet()
-        {
+        protected function doGet() {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
@@ -61,9 +59,10 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost()
-        {
+        protected function doPost() {
             $doctor = new DoctorModel();
+            $doctorBO = new DoctorBO();
+
             $doctor->setId(filter_input(INPUT_POST, "doctorId", FILTER_SANITIZE_NUMBER_INT));
 
             $userId = filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT);
@@ -86,17 +85,19 @@ namespace classes\controllers {
             $doctor->setSecondaryPhone(filter_input(INPUT_POST, "secondaryPhone", FILTER_SANITIZE_NUMBER_INT));
 
             ///
-            $filhosDoBernardo =$_POST["medicalSpecialtySelection"];//filter_input(INPUT_POST, "medicalSpecialtySelection");
-            $doctorMedicalSpecialties=[];  
-            foreach ($filhosDoBernardo as $key) {
-                # code...
-                //$obj = new DoctorMedicalSpecialtyModel()
-                //$obj->setDoctorId()
-                //$obj->setMedicalSpecialtyId($key)
-                //$doctorMedicalSpecialties[] = $obj;
+            if(!empty($_POST["medicalSpecialtySelection"])) {
+                $selectedMedicalSpecialties = $_POST["medicalSpecialtySelection"];//filter_input(INPUT_POST, "medicalSpecialtySelection");
+                $doctorMedicalSpecialties=[];  
+                foreach ($selectedMedicalSpecialties as $key) {
+                    $doctorSpecialties = new DoctorSpecialtyModel();
+                    $doctorSpecialties->setDoctorId($doctor->getId());
+                    $doctorSpecialties->setMedicalSpecialtyId($key);
+                    $doctorMedicalSpecialties[] = $doctorSpecialties;
+                }
+                $doctorBO->InsertDoctorSpecialty($doctorMedicalSpecialties);
             }
+
             try {
-                $doctorBO = new DoctorBO();
                 $this->doctor = $doctorBO->SaveDoctor($doctor);
 
                 ///
@@ -108,8 +109,7 @@ namespace classes\controllers {
             parent::doPost();
         }
 
-        protected function renderViewPages($views)
-        {
+        protected function renderViewPages($views) {
             //page scope variables
             $doctorId = $this->doctor->getId();
             $userId = $this->doctor->getUserId();

@@ -5,6 +5,7 @@ $(document).ready(function () {
         $("#alertSuccessMessage").attr("hidden", true);
         $("#alertErrorMessage").attr("hidden", true);
         $("#alertWarningMessage").attr("hidden", true);
+        $('#medicalSpecialtySelection option').prop('selected', true);
 
         $("#setDoctorProfileForm").submit();
     });

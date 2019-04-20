@@ -5,9 +5,10 @@ namespace classes\models {
     //use \classes\models\ProfileModel as ProfileModel;
     use JsonSerializable;
 
-    class PatientModel implements JsonSerializable
-    {
+    class PatientModel implements JsonSerializable {
         private $id;
+        private $userId;
+        private $userProfile;
         private $emergency_contact;
         private $emergency_relationship;
         private $emergency_phone;
@@ -17,97 +18,88 @@ namespace classes\models {
 
         //aux UserProfileModel entity
 
-        private $userProfile;
+        //private $userProfile;
         
 
-        public function __construct()
-        {
+        public function __construct() {
             //$userProfile = new ProfileModel();
         }
 
-        public function getId()
-        {
+        public function getId() {
             return $this->id;
         }
 
-        public function setId($value)
-        {
+        public function setId($value) {
             $this->id = $value;
         }
 
-        public function getUserProfile()
-        {
+        public function getUserId() {
+            
+            return $this->userId;
+        }
+
+        public function setUserId($value) {
+            $this->userId = $value;
+        }
+
+        public function getUserProfile() {
             
             return $this->userProfile;
         }
 
-        public function setUserProfile($value)
-        {
+        public function setUserProfile($value) {
             $this->userProfile = $value;
         }
 
-        public function getEmergencyContact()
-        {
+        public function getEmergencyContact() {
             return $this->emergency_contact;
         }
 
-        public function setEmergencyContact($value)
-        {
+        public function setEmergencyContact($value) {
             $this->emergency_contact = $value;
         }
 
-        public function getEmergencyRelationship()
-        {
+        public function getEmergencyRelationship() {
             return $this->emergency_relationship;
         }
 
-        public function setEmergencyRelationship($value)
-        {
+        public function setEmergencyRelationship($value) {
             $this->emergency_relationship = $value;
         }
 
-        public function getEmergencyPhone()
-        {
+        public function getEmergencyPhone() {
             return $this->emergency_phone;
         }
 
-        public function setEmergencyPhone($value)
-        {
+        public function setEmergencyPhone($value) {
             $this->emergency_phone = $value;
         }
 
-        public function getInsuranceCompany()
-        {
+        public function getInsuranceCompany() {
             return $this->insurance_company;
         }
 
-        public function setInsuranceCompany($value)
-        {
+        public function setInsuranceCompany($value) {
             $this->insurance_company = $value;
         }
 
-        public function getInsuranceCertificate()
-        {
+        public function getInsuranceCertificate() {
             return $this->insurance_certificate;
         }
 
-        public function setInsuranceCertificate($value)
-        {
+        public function setInsuranceCertificate($value) {
             $this->insurance_certificate = $value;
         }
 
-        public function getInsuranceGroupPolicy()
-        {
+        public function getInsuranceGroupPolicy() {
             return $this->insurance_group_policy;
         }
 
-        public function setInsuranceGroupPolicy($value)
-        {
+        public function setInsuranceGroupPolicy($value) {
             $this->insurance_group_policy = $value;
         }
 
-        public function jsonSerialize()
-        {
+        public function jsonSerialize() {
 
             $json = [];
             if (!empty($this->getUserProfileUserId())) {

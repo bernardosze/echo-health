@@ -1,4 +1,6 @@
 <?php
+
+
 namespace classes\controllers
 {
     require_once "views/templates/header.html";
