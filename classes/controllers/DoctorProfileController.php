@@ -16,15 +16,13 @@ namespace classes\controllers {
      *
      * @author: Bernardo Sze
      */
-    class DoctorProfileController extends AppBaseController
-    {
+    class DoctorProfileController extends AppBaseController {
 
         private $doctor;
         private $medicalSpecialties;
         private $doctorMedicalSpecialties;
 
-        public function __construct()
-        {
+        public function __construct() {
             parent::__construct(
                 "Doctor Profile Page",
                 ["views/doctor_profile.html"],
@@ -35,8 +33,7 @@ namespace classes\controllers {
             );
         }
 
-        protected function doGet()
-        {
+        protected function doGet() {
 
             $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
             $userId = $userSessionProfile->getUserId();
@@ -62,8 +59,7 @@ namespace classes\controllers {
 
         }
 
-        protected function doPost()
-        {
+        protected function doPost() {
             $doctor = new DoctorModel();
             $doctorBO = new DoctorBO();
 
@@ -113,8 +109,7 @@ namespace classes\controllers {
             parent::doPost();
         }
 
-        protected function renderViewPages($views)
-        {
+        protected function renderViewPages($views) {
             //page scope variables
             $doctorId = $this->doctor->getId();
             $userId = $this->doctor->getUserId();

@@ -10,49 +10,95 @@ namespace classes\controllers {
     use \classes\models\PatientModel as PatientModel;
     use \classes\models\UserProfileModel as UserProfileModel;
     use \classes\util\AppConstants as AppConstants;
-    use \classes\util\exceptions\UpdateUserDataException as UpdateUserDataException;
+    use \classes\util\base\AppBaseController as AppBaseController;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundExcpetion;
+    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
 
-    $pageTitle = "Profile";
+    class UserPatientController extends AppBaseController{
 
-    $emergencyContact = $emergencyRelationship = $emergencyPhone = "";
-    $insuranceCompany = $insuranceCertificate = $insuranceGroupPolicy = "";
+        private $patient;
+        private $medicalSpecialties;
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        $patientModel = new PatientModel();
-        $patientModel->setEmergencyContact(filter_input(INPUT_POST, "emergencyContact", FILTER_SANITIZE_STRING));
-        $patientModel->setEmergencyRelationship(filter_input(INPUT_POST, "emergencyRelationship", FILTER_SANITIZE_STRING));
-        $patientModel->setEmergencyPhone(filter_input(INPUT_POST, "emergencyPhone", FILTER_SANITIZE_STRING));
-        $patientModel->setInsuranceCompany(filter_input(INPUT_POST, "insuranceCompany", FILTER_SANITIZE_STRING));
-        $patientModel->setInsuranceCertificate(filter_input(INPUT_POST, "insuranceCertificate", FILTER_SANITIZE_STRING));
-        $patientModel->setInsuranceGroupPolicy(filter_input(INPUT_POST, "insuranceGroupPolicy", FILTER_SANITIZE_STRING));
-
-        $userSessionData = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
-        $userProfile = new UserProfileModel();
-        $userProfile->setUserId($userSessionData->getUserId());
-        $patientModel->setUserProfile($userProfile);
-
-        try {
-            var_dump("error0");
-            $patientBO = new PatientBO();
-            var_dump("error1");
-            $patientBO->savePatientProfile($patientModel);
-            var_dump("error2");
-            $alertSuccessMessage = "Profile successfully updated.";
-            var_dump("error3");
-        } catch (UpdateUserDataException $e) {
-            //Set the error message to appear on screen
-            $alertErrorMessage = $e->getMessage();
-        } catch (\Exception $e) {
-            var_dump($userSessionData);
-            //require_once RoutesManager::_500_CONTROLLER;
-            exit();
+        public function __construct()
+        {
+            parent::__construct(
+                "Patient Profile Page",
+                ["views/patient_profile.html"],
+                null,
+                null,
+                null,
+                false
+            );
         }
 
+        protected function doGet() {
+            
+            $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+            $userId = $userSessionProfile->getUserId();
+
+            try {
+                $patientBO = new PatientBO();
+                $this->patient = $patientBO->fetchPatientByUserId($userId);
+                //$this->id = $doctor->getId();
+            } catch (Exception $e) {
+                throw $e;
+            }
+
+            parent::doGet();
+
+        }
+
+        protected function doPost() {
+            $patient = new PatientModel();
+            $patientBO = new PatientBO();
+
+            $userId = filter_input(INPUT_POST, "userId", FILTER_SANITIZE_NUMBER_INT);
+            if (empty($userId)) {
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $userId = $userSessionProfile->getUserId();
+            }
+
+            $profileId = filter_input(INPUT_POST, "profileId", FILTER_SANITIZE_NUMBER_INT);
+            if (empty($profileId)) {
+                $userSessionProfile = unserialize($_SESSION[AppConstants::USER_SESSION_DATA]);
+                $profiles = $userSessionProfile->getProfiles();
+                $profileId = array_search(ISecurityProfile::PATIENT, $profiles);
+            }
+
+            $patient->setUserId($userId);
+            $patient->setUserProfile($profileId);
+            $patient->setEmergencyContact(filter_input(INPUT_POST, "emergencyContact", FILTER_SANITIZE_STRING));
+            $patient->setEmergencyRelationship(filter_input(INPUT_POST, "emergencyRelationship", FILTER_SANITIZE_STRING));
+            $patient->setEmergencyPhone(filter_input(INPUT_POST, "emergencyPhone", FILTER_SANITIZE_STRING));
+            $patient->setInsuranceCompany(filter_input(INPUT_POST, "insuranceCompany", FILTER_SANITIZE_STRING));
+            $patient->setInsuranceCertificate(filter_input(INPUT_POST, "insuranceCertificate", FILTER_SANITIZE_STRING));
+            $patient->setInsuranceGroupPolicy(filter_input(INPUT_POST, "insuranceGroupPolicy", FILTER_SANITIZE_STRING));
+
+            try {
+                $this->patient = $patientBO->SavePatient($patient);
+                parent::setAlertSuccessMessage("Profile successfully saved.");
+            } catch (Exception $e) {
+                parent::setAlertErrorMessage("Error trying to save data:" . $e->getMessage());
+            }
+            parent::doPost();
+        }
+        protected function renderViewPages($views) {
+            //page scope variables
+            $patientId = $this->patient->getId();
+            $userId = $this->patient->getUserId();
+            $userProfile = $this->patient->getUserProfile();
+            $emergencyContact = $this->patient->getEmergencyContact();
+            $emergencyRelationship = $this->patient->getEmergencyRelationship();
+            $emergencyPhone = $this->patient->getEmergencyPhone();
+            $insuranceCompany = $this->patient->getInsuranceCompany();
+            $insuranceCertificate = $this->patient->getInsuranceCertificate();
+            $insuranceGroupPolicy = $this->patient->getInsuranceGroupPolicy();
+
+            foreach ($views as $view) {
+                require_once $view;
+            }
+
+        }
     }
-
-    require_once "views/templates/header.html";
-    require_once "views/patient_profile.html";
-    require_once "views/templates/footer.html";
-
+    new UserPatientController();
 }
