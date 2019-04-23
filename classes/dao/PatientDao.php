@@ -69,14 +69,14 @@ namespace classes\dao {
             $db->beginTransaction();
 
             $stmt = $db->prepare($query);
-            $stmt->bindValue(":userId", $patientModel->getUserId());
-            $stmt->bindValue(":userProfileId", $patientModel->getUserProfile());
-            $stmt->bindValue(":emergencyContact", $patientModel->getEmergencyContact());
-            $stmt->bindValue(":emergencyRelationship", $patientModel->getEmergencyRelationship());
-            $stmt->bindValue(":emergencyPhone", $patientModel->getEmergencyPhone());
-            $stmt->bindValue(":insuranceCompany", $patientModel->getInsuranceCompany());
-            $stmt->bindValue(":insuranceCertificate", $patientModel->getInsuranceCertificate());
-            $stmt->bindValue(":insuranceGroupPolicy", $patientModel->getInsuranceGroupPolicy());
+            $stmt->bindValue(":userId", $patient->getUserId());
+            $stmt->bindValue(":userProfileId", $patient->getUserProfile());
+            $stmt->bindValue(":emergencyContact", $patient->getEmergencyContact());
+            $stmt->bindValue(":emergencyRelationship", $patient->getEmergencyRelationship());
+            $stmt->bindValue(":emergencyPhone", $patient->getEmergencyPhone());
+            $stmt->bindValue(":insuranceCompany", $patient->getInsuranceCompany());
+            $stmt->bindValue(":insuranceCertificate", $patient->getInsuranceCertificate());
+            $stmt->bindValue(":insuranceGroupPolicy", $patient->getInsuranceGroupPolicy());
                 $stmt->execute();
 
                 $patient->setId($db->lastInsertId());
@@ -112,13 +112,13 @@ namespace classes\dao {
                 $db->beginTransaction();
 
                 $stmt = $db->prepare($query);
-                $stmt->bindValue(":id", $patients->getId());
-                    $stmt->bindValue(":emergencyContact", $patients->getEmergencyContact());
-                    $stmt->bindValue(":emergencyRelationship", $patients->getEmergencyRelationship());
-                    $stmt->bindValue(":emergencyPhone", $patients->getEmergencyPhone());
-                    $stmt->bindValue(":insuranceCompany", $patients->getInsuranceCompany());
-                    $stmt->bindValue(":insuranceCertificate", $patients->getInsuranceCertificate());
-                    $stmt->bindValue(":insuranceGroupPolicy", $patients->getInsuranceGroupPolicy());
+                $stmt->bindValue(":id", $patient->getId());
+                    $stmt->bindValue(":emergencyContact", $patient->getEmergencyContact());
+                    $stmt->bindValue(":emergencyRelationship", $patient->getEmergencyRelationship());
+                    $stmt->bindValue(":emergencyPhone", $patient->getEmergencyPhone());
+                    $stmt->bindValue(":insuranceCompany", $patient->getInsuranceCompany());
+                    $stmt->bindValue(":insuranceCertificate", $patient->getInsuranceCertificate());
+                    $stmt->bindValue(":insuranceGroupPolicy", $patient->getInsuranceGroupPolicy());
                     $stmt->execute();
 
                 $db->commit();

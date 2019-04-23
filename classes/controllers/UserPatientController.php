@@ -65,6 +65,10 @@ namespace classes\controllers {
                 $profileId = array_search(ISecurityProfile::PATIENT, $profiles);
             }
 
+            if(!empty($_POST["patientId"])) {
+                $patient->setId(filter_input(INPUT_POST, "patientId", FILTER_SANITIZE_STRING));  
+            }
+
             $patient->setUserId($userId);
             $patient->setUserProfile($profileId);
             $patient->setEmergencyContact(filter_input(INPUT_POST, "emergencyContact", FILTER_SANITIZE_STRING));
