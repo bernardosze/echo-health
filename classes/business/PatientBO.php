@@ -3,12 +3,13 @@
 namespace classes\business {
 
     use \classes\dao\PatientDao as PatientDao;
-    use \classes\dao\ProfileDao as ProfileDao;
     use \classes\models\PatientModel as PatientModel;
-    use \classes\util\interfaces\ISecurityProfile as ISecurityProfile;
+    use \classes\util\exceptions\NoDataFoundException as NoDataFoundException;
 
-    class PatientBO {
-        public function __construct() {
+    class PatientBO
+    {
+        public function __construct()
+        {
         }
 
         /**
@@ -16,7 +17,8 @@ namespace classes\business {
          *
          * @param $patientModel - Patient Model data
          */
-        public function fetchPatientByUserId($userId) {
+        public function fetchPatientByUserId($userId)
+        {
             $patient;
             try {
                 $patientDao = new PatientDao();
@@ -27,7 +29,8 @@ namespace classes\business {
             return $patient;
         }
 
-        public function SavePatient(PatientModel $patient) {
+        public function SavePatient(PatientModel $patient)
+        {
             $patientDao = new PatientDao();
 
             if (empty($patient->getId())) {
