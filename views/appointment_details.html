@@ -57,12 +57,12 @@
                             
                         </div>
                         
-                        <div class="from-group">
-                            
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='treatpatient?id=<?=$appointment->getApptId()?>'>Treat Patient</a>
+                        <div class="tpbutton">
+                        
+                       <a  class="btn btn-success" href='treatpatient?id=<?=$appointment->getApptId()?>'><span class="fa fa-plus-square"></span>     Treat Patient</a>
                        
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='changeappointment?id=<?=$appointment->getApptId()?>&from=<?=$appointment->getFrom()?>'>Change Appointment Details</a>
-                       <a class='btn btn-block btn-lg btn-primary' role='button' href='medicalhistory?id=<?=$appointment->getId()?>'>View Medical History</a>
+                       <a class="btn  btn-primary" href='changeappointment?id=<?=$appointment->getApptId()?>&from=<?=$appointment->getFrom()?>'><span class="far fa-edit"></span>  Change Appointment Details</a>
+                       <a  class="btn  btn-secondary" href='medicalhistory?id=<?=$appointment->getId()?>'><span class="far fa-eye"></span> View Medical History</a>
                     </div>
                    
                       
